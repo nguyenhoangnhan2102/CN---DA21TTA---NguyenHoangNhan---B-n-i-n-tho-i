@@ -1,0 +1,10 @@
+services:
+  db-mysql:
+    image: mysql:5.7.40
+    container_name: shopphone
+    restart: always
+    environment:
+      - MYSQL_DATABASE=shopphone
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "3301:3302"
