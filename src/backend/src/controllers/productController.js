@@ -3,13 +3,10 @@ const connection = require("../config/dataBase");
 
 const getAllProduct = async (req, res) => {
     try {
-        const query = `
-        SELECT sp.*,
-             l.tenloai, nsx.tennhasanxuat
-             FROM SANPHAM sp
-             JOIN LOAISANPHAM l ON sp.maloai = l.maloai
-             JOIN NHASANXUAT nsx ON sp.manhasanxuat = nsx.manhasanxuat
-             `;
+        const query =
+            `
+        SELECT * FROM SANPHAM
+        `;
         //Thêm đường dẫn đầy đủ cho mỗi sản phẩm
         const [results] = await connection.query(query);
         return res.status(200).json({
@@ -31,11 +28,20 @@ const getDetailProduct = async (req, res) => {
     let masanpham = req.params.masanpham;
     try {
         const query = `
-        SELECT sp.masanpham, sp.tensanpham, sp.gia, sp.soluong, sp.mota, sp.hinhanh,
-               l.tenloai, nsx.tennhasanxuat
-        FROM SANPHAM sp
-        JOIN LOAISANPHAM l ON sp.maloai = l.maloai
-        JOIN NHASANXUAT nsx ON sp.manhasanxuat = nsx.manhasanxuat
+        SELECT 
+            sp.*, 
+            th.tenthuonghieu,
+            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
+            GROUP_CONCAT(DISTINCT ms.hinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.tenhinhanh) AS danhsachhinhanh
+        FROM 
+            SANPHAM sp
+        LEFT JOIN
+            THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
+        LEFT JOIN
+            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
+        LEFT JOIN
+            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE sp.masanpham = ?
         `;
 
@@ -66,29 +72,86 @@ const getDetailProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     const {
+        mathuonghieu,
         tensanpham,
-        gia,
-        soluong,
-        mota,
-        hinhanh,
-        maloai,
-        manhasanxuat,
+        giasanpham,
+        soluongsanpham,
+        hedieuhanh,
+        cpu,
+        gpu,
+        ram,
+        dungluong,
+        cameratruoc,
+        camerasau,
+        congnghemanhinh,
+        dophangiaimanhinh,
+        pin,
+        motasanpham,
+        hinhanhchinh
     } = req.body;
 
     try {
         const result = await connection.query(
-            "INSERT INTO SANPHAM (tensanpham, gia, soluong, mota, hinhanh, maloai, manhasanxuat) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            `INSERT INTO SANPHAM (
+            mathuonghieu, 
+            tensanpham, 
+            giasanpham, 
+            soluongsanpham,
+            hedieuhanh,
+            cpu, 
+            gpu,
+            ram, 
+            dungluong,
+            cameratruoc,
+            camerasau, 
+            congnghemanhinh,
+            dophangiaimanhinh,
+            pin, 
+            motasanpham,
+            hinhanhchinh)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `,
             [
+                mathuonghieu,
                 tensanpham,
-                gia,
-                soluong,
-                mota,
-                hinhanh,
-                maloai,
-                manhasanxuat,
+                giasanpham,
+                soluongsanpham,
+                hedieuhanh,
+                cpu,
+                gpu,
+                ram,
+                dungluong,
+                cameratruoc,
+                camerasau,
+                congnghemanhinh,
+                dophangiaimanhinh,
+                pin,
+                motasanpham,
+                hinhanhchinh,
             ]
         );
-        res.status(201).json({ message: "Product created", masanpham: result[0].insertId });
+        // res.status(201).json({ message: "Product created", masanpham: result[0].insertId });
+        return res.status(201).json({
+            message: 'Sản phẩm đã được tạo thành công',
+            product: {
+                masanpham: result.insertId,
+                mathuonghieu,
+                tensanpham,
+                giasanpham,
+                soluongsanpham,
+                hedieuhanh,
+                cpu,
+                gpu,
+                ram,
+                dungluong,
+                cameratruoc,
+                camerasau,
+                congnghemanhinh,
+                dophangiaimanhinh,
+                pin,
+                motasanpham,
+                hinhanhchinh
+            }
+        });
     } catch (err) {
         console.error("Error creating product:", err.message);
         res.status(500).json({ message: err.message });
@@ -98,27 +161,65 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     const { masanpham } = req.params;
     const {
+        mathuonghieu,
         tensanpham,
-        gia,
-        soluong,
-        mota,
-        hinhanh,
-        maloai,
-        manhasanxuat,
+        giasanpham,
+        soluongsanpham,
+        hedieuhanh,
+        cpu,
+        gpu,
+        ram,
+        dungluong,
+        cameratruoc,
+        camerasau,
+        congnghemanhinh,
+        dophangiaimanhinh,
+        pin,
+        motasanpham,
+        hinhanhchinh
     } = req.body;
 
     try {
         const result = await connection.query(
-            "UPDATE SANPHAM SET tensanpham = ?, gia = ?, soluong = ?, mota = ?, hinhanh = ?, maloai = ?, manhasanxuat = ? WHERE masanpham = ?",
+            `
+                UPDATE SANPHAM
+                SET
+                mathuonghieu = ?,
+                tensanpham = ?,
+                giasanpham = ?,
+                soluongsanpham = ?,
+                hedieuhanh = ?,
+                cpu = ?,
+                gpu = ?,
+                ram = ?,
+                dungluong = ?,
+                cameratruoc = ?,
+                camerasau = ?,
+                congnghemanhinh = ?,
+                dophangiaimanhinh = ?,
+                pin = ?,
+                motasanpham = ?,
+                hinhanhchinh = ?
+                WHERE masanpham = ?
+            `,
             [
+                mathuonghieu,
                 tensanpham,
-                gia,
-                soluong,
-                mota,
-                hinhanh,
-                maloai,
-                manhasanxuat,
-                masanpham,
+                giasanpham,
+                soluongsanpham,
+                hedieuhanh,
+                cpu,
+                gpu,
+                ram,
+                dungluong,
+                cameratruoc,
+                camerasau,
+                congnghemanhinh,
+                dophangiaimanhinh,
+                pin,
+                motasanpham,
+                hinhanhchinh,
+                masanpham
             ]
         );
 
@@ -132,28 +233,6 @@ const updateProduct = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 }
-
-// const UploadFile = async (req, res) => {
-//     try {
-//         // Multer sẽ lưu file trong `req.file`
-//         if (!req.file) {
-//             return res.status(400).send("No file uploaded.");
-//         }
-
-//         // Lấy thông tin file đã upload
-//         console.log(req.file);
-
-//         // Trả về response thành công
-//         return res.status(200).json({
-//             message: "File uploaded successfully",
-//             file: req.file.filename,
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send("Server error");
-//     }
-// };
-
 
 const deleteProduct = async (req, res) => {
     try {
