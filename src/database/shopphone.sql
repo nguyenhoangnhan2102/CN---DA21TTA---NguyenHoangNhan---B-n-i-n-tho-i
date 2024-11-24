@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      SAP SQL Anywhere 17                          */
-/* Created on:     11/22/2024 2:35:05 PM                        */
+/* Created on:     11/24/2024 8:37:52 PM                        */
 /*==============================================================*/
 
 
@@ -243,7 +243,8 @@ create or replace table MAUSACSANPHAM
 (
    MAMAU                integer                        not null,
    MASANPHAM            integer                        not null,
-   TENMAUSANPHAM        long varchar                   null,
+   TENMAUSANPHAM        varchar(50)                    null,
+   HINHANH              long varchar                   null,
    constraint PK_MAUSACSANPHAM primary key clustered (MAMAU)
 );
 
