@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      SAP SQL Anywhere 17                          */
-/* Created on:     11/24/2024 8:37:52 PM                        */
+/* Created on:     11/26/2024 11:17:33 PM                       */
 /*==============================================================*/
 
 
@@ -164,7 +164,6 @@ create or replace table GIOHANG
    MAGIOHANG            integer                        not null,
    MASANPHAM            integer                        not null,
    ID                   integer                        not null,
-   SOLUONG              integer                        null,
    constraint PK_GIOHANG primary key clustered (MAGIOHANG)
 );
 
@@ -196,7 +195,7 @@ create or replace table HINHANHSANPHAM
 (
    MAHINHANH            integer                        not null,
    MASANPHAM            integer                        not null,
-   TENHINHANH           long varchar                   null,
+   HINHANHSANPHAM       long varchar                   null,
    constraint PK_HINHANHSANPHAM primary key clustered (MAHINHANH)
 );
 
@@ -244,7 +243,7 @@ create or replace table MAUSACSANPHAM
    MAMAU                integer                        not null,
    MASANPHAM            integer                        not null,
    TENMAUSANPHAM        varchar(50)                    null,
-   HINHANH              long varchar                   null,
+   MAUSACSANPHAM        long varchar                   null,
    constraint PK_MAUSACSANPHAM primary key clustered (MAMAU)
 );
 
