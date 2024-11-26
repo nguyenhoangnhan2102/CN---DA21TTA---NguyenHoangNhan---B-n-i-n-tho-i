@@ -1,6 +1,6 @@
 import { useRoutes, Navigate } from "react-router-dom";
-import Product from "./page/Product";
 import Dashboard from "./page/Dashboard";
+import Product from "./page/Product";
 
 const AdminRoute = () => {
     const element = useRoutes([
