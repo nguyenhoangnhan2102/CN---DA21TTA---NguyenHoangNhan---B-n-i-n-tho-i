@@ -43,10 +43,10 @@ const productRouter = require("./src/route/product");
 const manufacturerRouter = require("./src/route/manufacturer");
 // const categoryRouter = require("./src/routes/category");
 // const manufacturerRouter = require("./src/routes/manufacturer");
-// const fileRouter = require("./src/routes/fileRouter");
+const fileRouter = require("./src/route/fileService");
 
 // app.use("/api", userRouter);
-// app.use("/api", fileRouter);
+app.use("/api", fileRouter);
 app.use("/api/products", productRouter);
 app.use("/api/manufactureres", manufacturerRouter);
 // app.use("/api/categories", categoryRouter);

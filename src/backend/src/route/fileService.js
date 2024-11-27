@@ -1,94 +1,95 @@
-const fs = require("fs");
+const express = require("express");
+const multer = require("multer");
+const fileService = require("../service/fileService");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid"); // Sử dụng uuid để tạo GUID
 
-// Hàm kiểm tra và tạo folder nếu chưa tồn tại
-const checkAndCreateFolder = (folderPath) => {
-    if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath, { recursive: true });
-    }
-};
+const router = express.Router();
+// Cấu hình Multer
+const storage = multer.memoryStorage(); // Sử dụng bộ nhớ tạm để lưu file trước khi xử lý
+const upload = multer({ storage: storage });
 
-// Hàm xóa folder nếu tồn tại
-const deleteFileIfExists = (filePath) => {
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath); // Xóa file nếu tồn tại
-    }
-};
+// Kiểm tra các thuộc tính đầu vào
+const validateRequest = (req, res, next) => {
+    const { folderPath, id } = req.body;
+    const file = req.file || req.files;
 
-const uploadSingleFile = (file, folderPath, imgName) => {
-    let newFileName;
-
-    // Kiểm tra imgName, nếu có, sử dụng tên file đó
-    if (!imgName || imgName.trim() === "") {
-        newFileName = uuidv4() + path.extname(file.originalname); // Tạo file mới với UUID
-    } else {
-        newFileName = imgName; // Giữ nguyên tên file nếu imgName được cung cấp
-        const oldFilePath = path.join(
-            __dirname,
-            "../../public",
-            folderPath,
-            imgName
-        );
-
-        // Kiểm tra nếu file cũ tồn tại thì xóa
-        deleteFileIfExists(oldFilePath); // Xóa file cũ nếu tồn tại
-        newFileName = uuidv4() + path.extname(file.originalname);
+    if (!folderPath) {
+        return res.status(400).json({ error: "folderPath is missing or empty" });
     }
 
-    return new Promise((resolve, reject) => {
-        const newFullFolderPath = path.join(__dirname, "../../public", folderPath); // Đường dẫn tới thư mục
+    // if (!id) {
+    //   return res.status(400).json({ error: 'id is missing or empty' });
+    // }
 
-        checkAndCreateFolder(newFullFolderPath); // Tạo thư mục nếu chưa tồn tại
+    if (!file || file.length === 0) {
+        return res.status(400).json({ error: "file is missing or empty" });
+    }
 
-        const filePath = path.join(newFullFolderPath, newFileName); // Đường dẫn đầy đủ tới file mới
-
-        // Lưu file vào hệ thống
-        fs.writeFile(filePath, file.buffer, (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve({
-                    message: "File uploaded successfully!",
-                    fileName: newFileName,
-                    folderPath,
-                });
-            }
-        });
-    });
+    next(); // Nếu tất cả đều hợp lệ, tiếp tục tới xử lý tiếp theo
 };
 
-// Hàm xử lý upload nhiều file với GUID
-const uploadMultipleFiles = (files, folderPath) => {
-    return new Promise((resolve, reject) => {
-        // deleteFolderIfExists(folderPath); // Xóa folder cũ nếu tồn tại
-        checkAndCreateFolder(folderPath); // Tạo folder mới
+// Upload file đơn với kiểm tra đầu vào
+router.post(
+    "/uploadSingleFile",
+    upload.single("file"),
+    validateRequest,
+    async (req, res) => {
+        try {
+            const { folderPath, imgName } = req.body;
 
-        const uploadPromises = files.map((file) => {
-            // Tạo tên file mới với GUID
-            const newFileName = uuidv4() + path.extname(file.originalname);
-            const filePath = path.join(folderPath, newFileName);
+            const result = await fileService.uploadSingleFile(
+                req.file,
+                folderPath,
+                imgName
+            );
 
-            return new Promise((resolve, reject) => {
-                fs.writeFile(filePath, file.buffer, (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve({
-                            fileName: newFileName,
-                            message: `File ${file.originalname} uploaded successfully!`,
-                            folderPath,
-                        });
-                    }
-                });
+            res.status(200).json({
+                status: true,
+                fileName: result.fileName,
+                folderPath,
             });
-        });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+);
 
-        // Sử dụng Promise.all để chờ tất cả các file được upload xong
-        Promise.all(uploadPromises)
-            .then((results) => resolve(results))
-            .catch((error) => reject(error));
-    });
-};
+// Upload nhiều file với kiểm tra đầu vào
+// Route upload nhiều file
+router.post(
+    "/uploadMultipleFiles",
+    upload.array("files", 10),
+    validateRequest,
+    async (req, res) => {
+        try {
+            const { folderPath, id } = req.body;
+            const fullFolderPath = path.join(
+                __dirname,
+                "../../public",
+                folderPath,
+                id
+            );
 
-module.exports = { uploadSingleFile, uploadMultipleFiles };
+            // Gọi service để upload các file
+            const newFiles = await fileService.uploadMultipleFiles(
+                req.files,
+                fullFolderPath
+            );
+
+            // Lấy danh sách tên file từ kết quả trả về
+            const fileNames = newFiles.map((file) => file.fileName);
+
+            // Trả về kết quả theo định dạng yêu cầu
+            res.status(200).json({
+                status: true,
+                listfileName: `[${fileNames.join(",")}]`,
+                folderPath,
+                id,
+            });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+);
+module.exports = router;

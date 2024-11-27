@@ -3,6 +3,7 @@ import { getAllProducts, deleteProduct, createProduct, updateProduct } from "../
 // import { getAllCategory } from "../../service/categoryService";
 // import { getAllManufacturer } from "../../service/manufacturerService";
 import ModalProduct from "../../modal/modalProduct";
+import '../css/product.scss';
 import {
     Typography,
     Dialog,
@@ -12,6 +13,7 @@ import {
     DialogActions,
 } from "@mui/material";
 import { toast } from 'react-toastify';
+import ProductDetailModal from "../../modal/detailProduct";
 // import { uploadSingleFile } from "../../service/fileService";
 const imgURL = process.env.REACT_APP_IMG_URL;
 
@@ -20,6 +22,7 @@ const Product = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [oldImgUrl, setImgUrl] = useState([]);
     const [openModal, setOpenModal] = useState(false);
+    const [openDetailModal, setOpenDetailModal] = useState(false);
     const [isDelete, checkDelete] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
 
@@ -49,6 +52,11 @@ const Product = () => {
     const handleCreate = () => {
         setSelectedProduct(null);
         setOpenModal(true);
+    };
+
+    const handleViewDetails = (product) => {
+        setSelectedProduct(product);
+        setOpenDetailModal(true);
     };
 
     const handleEdit = (product) => {
@@ -198,29 +206,38 @@ const Product = () => {
                                 <tr key={product.id}>
                                     <td>{(currentPage - 1) * productsPerPage + index + 1}</td>
                                     <td>{product.tensanpham || "Không có tên"}</td>
-                                    <td>{product.tenloai || "Không có thể loại"}</td>
-                                    <td>{product.tennhasanxuat || "Không có nhà sản xuất"}</td>
-                                    <td>{product.soluong || "Không có số lượng"}</td>
-                                    <td>{product.gia || "Không có giá"}</td>
-                                    <td>{product.mota || "Không có mô tả"}</td>
+                                    <td>{product.tenthuonghieu || "Không có thể loại"}</td>
+                                    <td>{product.giasanpham || "Không có nhà sản xuất"}</td>
+                                    <td>{product.soluongsanpham || "Không có số lượng"}</td>
+                                    <td>{product.hedieuhanh || "Không có giá"}</td>
+                                    <td>{product.ram || "Không có giá"}</td>
+                                    <td>{product.dungluong || "Không có mô tả"}</td>
                                     <td>
                                         <img
-                                            width={`50px`}
-                                            src={`${imgURL}${product.hinhanh}`}
+                                            width={`70px`}
+                                            height={`70px`}
+                                            src={`${imgURL}${product.hinhanhchinh}`}
                                             alt={product.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    <td className="d-flex gap-2">
+                                    <td className="d-flex align-items-center justify-content-between">
+                                        <button
+                                            className="btn btn-sm btn-info"
+                                            style={{ padding: "0.5rem", width: '70px' }}
+                                            onClick={() => handleViewDetails(product)}
+                                        >
+                                            Xem
+                                        </button>
                                         <button
                                             className="btn btn-sm btn-primary"
-                                            style={{ padding: "0.5rem", width: '100px' }}
+                                            style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => handleEdit(product)}
                                         >
-                                            Chỉnh sửa
+                                            Sửa
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            style={{ width: '100px' }}
+                                            style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => openModalDelete(product)}
                                         >
                                             Xóa
@@ -283,6 +300,11 @@ const Product = () => {
                 open={openModal}
                 //onSave={handleSave}
                 onClose={() => setOpenModal(false)}
+            />
+            <ProductDetailModal
+                product={selectedProduct}
+                open={openDetailModal}
+                onClose={() => setOpenDetailModal(false)}
             />
         </>
     );

@@ -5,7 +5,22 @@ const getAllProduct = async (req, res) => {
     try {
         const query =
             `
-        SELECT * FROM SANPHAM
+        SELECT
+            sp.*,
+            th.tenthuonghieu,
+            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+        FROM
+            SANPHAM sp
+        LEFT JOIN
+            THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
+        LEFT JOIN
+            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
+        LEFT JOIN
+            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
+        GROUP BY
+            sp.masanpham;
         `;
         //Thêm đường dẫn đầy đủ cho mỗi sản phẩm
         const [results] = await connection.query(query);
@@ -32,8 +47,8 @@ const getDetailProduct = async (req, res) => {
             sp.*, 
             th.tenthuonghieu,
             GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.hinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ha.tenhinhanh) AS danhsachhinhanh
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
         FROM 
             SANPHAM sp
         LEFT JOIN
