@@ -15,8 +15,8 @@ const Orders = () => {
         try {
             const response = await getAllOrders();
             if (response.EC === 1) {
-                console.log(response.DT);
                 setOrders(response.DT || []);
+                console.log(response.DT);
             }
             else {
                 console.error("Failed");
@@ -37,10 +37,10 @@ const Orders = () => {
     const indexOfFirstUser = indexOfLastUser - ordersPerPage;
 
     const currentOrders = orders
-        .filter(
-            (order) =>
-                order.tensanpham.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        // .filter(
+        //     (order) =>
+        //         order.tensanpham.toLowerCase().includes(searchTerm.toLowerCase())
+        // )
         .slice(indexOfFirstUser, indexOfLastUser);
 
     const totalPages = Math.ceil(orders.length / ordersPerPage);
@@ -82,7 +82,7 @@ const Orders = () => {
                 <tbody>
                     {currentOrders.length > 0 ? (
                         currentOrders.map((order, index) => (
-                            <tr key={order.machitietdonhang}>
+                            <tr key={order.id}>
                                 <td>{order.machitietdonhang}</td>
                                 <td>{order.tensanpham || "Không có tên"}</td>
                                 <td>{order.hotenkhachhang || "Không có email"}</td>
@@ -90,14 +90,14 @@ const Orders = () => {
                                 <td>{order.soluong}</td>
                                 <td>{order.tongtien}</td>
                                 <td>{order.tenmausanpham}</td>
-                                <td>
+                                {/* <td>
                                     <img
                                         width={`70px`}
                                         height={`70px`}
                                         src={`${imgURL}${order.mausachinhanh}`}
                                         alt={order.tensanpham || "Hình ảnh sản phẩm"}
                                     />
-                                </td>
+                                </td> */}
                                 <td>{order.ngaylap}</td>
                                 <td>{order.trangthaidonhang}</td>
                                 <td className="d-flex align-items-center justify-content-between gap-1">

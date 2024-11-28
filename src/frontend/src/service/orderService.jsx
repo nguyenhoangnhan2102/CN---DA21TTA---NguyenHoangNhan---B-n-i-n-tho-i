@@ -6,7 +6,7 @@ const apiOrders = apiUrl + '/orders';
 
 export const getAllOrders = async () => {
     try {
-        const response = await axiosInstance.get(`${apiOrders}`);
+        const response = await axiosInstance.get(`http://localhost:3333/api/orders`);
         return response.data;
     } catch (error) {
         console.error("Error!!!");
