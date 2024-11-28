@@ -80,12 +80,6 @@ const ProductDetailModal = ({ product, open, onClose }) => {
         }
     };
 
-    // if (
-    //     !products.length
-    // ) {
-    //     return <div>Loading...</div>;
-    // }
-
     return (
         <Modal
             open={open}
@@ -114,32 +108,34 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 </div>
                 <div className="d-flex align-items-center justify-content-between text-center mb-3">
                     <label>Màu</label>
-                    {form.danhsachmausacsanpham.map((img, index) => (
-                        <img
-                            key={index}
-                            src={`${imgURL}/${img}`}
-                            alt={`Màu sản phẩm ${index + 1}`}
-                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                        />
-                    ))}
+                    {Array.isArray(form.danhsachmausacsanpham) &&
+                        form.danhsachmausacsanpham.map((img, index) => (
+                            <img
+                                key={index}
+                                src={`${imgURL}/${img}`}
+                                alt={`Màu sản phẩm ${index + 1}`}
+                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                            />
+                        ))}
                 </div>
                 <div className="d-flex align-items-center justify-content-between text-center mb-3">
                     <label>Hình ảnh khác</label>
-                    {form.danhsachhinhanh.map((img, index) => (
-                        <img
-                            key={index}
-                            src={`${imgURL}/${img}`}
-                            alt={`Màu sản phẩm ${index + 1}`}
-                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                        />
-                    ))}
+                    {Array.isArray(form.danhsachhinhanh) &&
+                        form.danhsachhinhanh.map((img, index) => (
+                            <img
+                                key={index}
+                                src={`${imgURL}/${img}`}
+                                alt={`Màu sản phẩm ${index + 1}`}
+                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                            />
+                        ))}
                 </div>
                 <FormControl fullWidth margin="normal">
                     <TextField
                         id="product-text-field"
                         value={form.tensanpham}
                         label="Tên"
-                        disabled
+                        //disabled
                         sx={{
                             '& .MuiInputBase-input': {
                                 height: '10px', // Chỉnh độ cao của input
@@ -153,7 +149,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.tenthuonghieu}
                             label="Thương hiệu"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -166,7 +162,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.hedieuhanh}
                             label="Hệ điều hành"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -181,7 +177,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.giasanpham}
                             label="Giá"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -195,7 +191,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.soluongsanpham}
                             label="Số lượng"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -210,7 +206,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.cpu}
                             label="CPU"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -224,7 +220,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.gpu}
                             label="GPU"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -237,7 +233,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.pin}
                             label="Pin"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -252,7 +248,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.cameratruoc}
                             label="Camera trước"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -266,7 +262,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.camerasau}
                             label="Camera sau"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -281,7 +277,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.congnghemanhinh}
                             label="Công nghệ màn hình"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -295,7 +291,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             id="product-text-field"
                             value={form.dophangiaimanhinh}
                             label="Độ phân giải màn hình"
-                            disabled
+                            //disabled
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px', // Chỉnh độ cao của input
@@ -309,10 +305,12 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                         id="product-text-field"
                         value={form.motasanpham}
                         label="Mô tả"
-                        disabled
+                        multiline
+                        rows={4} // Số dòng tối thiểu hiển thị
                         sx={{
                             '& .MuiInputBase-input': {
-                                height: '10px', // Chỉnh độ cao của input
+                                height: 'auto', // Để textarea tự điều chỉnh chiều cao
+                                resize: 'vertical', // Cho phép thay đổi chiều cao
                             },
                         }}
                     />

@@ -12,7 +12,7 @@ import {
     Select,
     MenuItem,
 } from "@mui/material";
-import axios from "axios";
+import { getAllManufacturer } from "../service/manufacturerService";
 
 const modalStyle = {
     position: "absolute",
@@ -32,15 +32,23 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
     const [listCategory, setListCategory] = useState([]);
     const [listManufacturer, setListManufacturer] = useState([]);
     const [form, setForm] = useState({
+        mathuonghieu: "",
         tensanpham: "",
-        gia: "",
-        soluong: "",
-        mota: "",
-        hinhanh: "",
-        maloai: "",
-        manhasanxuat: "",
-        tenloai: "",
-        tennhasanxuat: "",
+        giasanpham: "",
+        soluongsanpham: "",
+        hedieuhanh: "",
+        cpu: "",
+        gpu: "",
+        ram: "",
+        dungluong: "",
+        cameratruoc: "",
+        camerasau: "",
+        congnghemanhinh: "",
+        dophangiaimanhinh: "",
+        pin: "",
+        motasanpham: "",
+        hinhanhchinh: "",
+        tenthuonghieu: "",
     });
 
     useEffect(() => {
@@ -49,48 +57,41 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
             setForm(product);
         } else {
             setForm({
+                mathuonghieu: "",
                 tensanpham: "",
-                gia: "",
-                soluong: "",
-                mota: "",
-                hinhanh: null,
-                maloai: "",
-                manhasanxuat: "",
-                tenloai: "",
-                tennhasanxuat: "",
+                giasanpham: "",
+                soluongsanpham: "",
+                hedieuhanh: "",
+                cpu: "",
+                gpu: "",
+                ram: "",
+                dungluong: "",
+                cameratruoc: "",
+                camerasau: "",
+                congnghemanhinh: "",
+                dophangiaimanhinh: "",
+                pin: "",
+                motasanpham: "",
+                hinhanhchinh: "",
+                tenthuonghieu: "",
             });
         }
-        // getAllCategoryData();
-        // getAllManufacturerData();
+        getAllManufacturerData();
     }, [product]);
 
-    // const getAllCategoryData = async () => {
-    //     try {
-    //         const response = await getAllCategory();
-    //         if (response.EC === 1) {
-    //             setListCategory(response.DT || []); // Đảm bảo rằng `DT` luôn là một mảng
-    //             console.log("dt", response.DT);
-    //         } else {
-    //             console.error("Failed to fetch");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error occurred", error);
-    //     }
-    // };
-
-    // const getAllManufacturerData = async () => {
-    //     try {
-    //         const response = await getAllManufacturer();
-    //         if (response) {
-    //             setListManufacturer(response.DT || []); // Đảm bảo rằng `DT` luôn là một mảng
-    //             console.log("dt", response.DT);
-    //         } else {
-    //             console.error("Failed to fetch");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error occurred", error);
-    //     }
-    // };
+    const getAllManufacturerData = async () => {
+        try {
+            const response = await getAllManufacturer();
+            if (response) {
+                setListManufacturer(response.DT || []); // Đảm bảo rằng `DT` luôn là một mảng
+                console.log("dt", response.DT);
+            } else {
+                console.error("Failed to fetch");
+            }
+        } catch (error) {
+            console.error("Error occurred", error);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -99,22 +100,30 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setForm((prev) => ({ ...prev, hinhanh: file }));
+        setForm((prev) => ({ ...prev, hinhanhchinh: file }));
     };
 
 
     const handleSubmit = () => {
         onSave(form);
         setForm({
+            mathuonghieu: "",
             tensanpham: "",
-            gia: "",
-            soluong: "",
-            mota: "",
-            hinhanh: null,
-            maloai: "",
-            manhasanxuat: "",
-            tenloai: "",
-            tennhasanxuat: "",
+            giasanpham: "",
+            soluongsanpham: "",
+            hedieuhanh: "",
+            cpu: "",
+            gpu: "",
+            ram: "",
+            dungluong: "",
+            cameratruoc: "",
+            camerasau: "",
+            congnghemanhinh: "",
+            dophangiaimanhinh: "",
+            pin: "",
+            motasanpham: "",
+            hinhanhchinh: "",
+            tenthuonghieu: "",
         });
     };
 
@@ -129,7 +138,6 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                 <Typography id="modal-title" variant="h6" component="h2">
                     {product ? "Cập nhật" : "Thêm mới"}
                 </Typography>
-
                 <TextField
                     fullWidth
                     margin="normal"
@@ -138,73 +146,151 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                     value={form.tensanpham}
                     onChange={handleChange}
                 />
-                <FormControl fullWidth margin="normal">
-                    <InputLabel id="select-maloai-label">Loại</InputLabel>
-                    <Select
-                        labelId="select-maloai-label"
-                        name="maloai"
-                        label="Loại"
-                        value={form.maloai}
+                <div className="d-flex gap-2">
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel id="select-mathuonghieu-label">Thương hiệu</InputLabel>
+                        <Select
+                            labelId="select-mathuonghieu-label"
+                            name="mathuonghieu"
+                            label="Thương hiệu"
+                            value={form.mathuonghieu}
+                            onChange={handleChange}
+                        >
+                            {listManufacturer.map((manufacturer) => (
+                                <MenuItem key={manufacturer.mathuonghieu} value={manufacturer.mathuonghieu}>
+                                    {manufacturer.tenthuonghieu}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Hệ điều hành"
+                        type="text"
+                        name="hedieuhanh"
+                        value={form.hedieuhanh}
                         onChange={handleChange}
-                    >
-                        {listCategory.map((category) => (
-                            <MenuItem key={category.maloai} value={category.maloai}>
-                                {category.tenloai}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <FormControl fullWidth margin="normal">
-                    <InputLabel id="select-maloai-label">Nhà sản xuất</InputLabel>
-                    <Select
-                        labelId="select-manhasanxuat-label"
-                        label="Nhà sản xuất"
-                        name="manhasanxuat"
-                        value={form.manhasanxuat}
+                    />
+                </div>
+                <div className="d-flex gap-2">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Giá"
+                        type="number"
+                        name="giasanpham"
+                        value={form.giasanpham}
                         onChange={handleChange}
-                    >
-                        {listManufacturer.map((manufacturer) => (
-                            <MenuItem key={manufacturer.manhasanxuat} value={manufacturer.manhasanxuat}>
-                                {manufacturer.tennhasanxuat}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Giá"
-                    type="number"
-                    name="gia"
-                    value={form.gia}
-                    onChange={handleChange}
-                />
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Số lượng"
-                    type="number"
-                    name="soluong"
-                    value={form.soluong}
-                    onChange={handleChange}
-                />
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Số lượng"
+                        type="number"
+                        name="soluongsanpham"
+                        value={form.soluongsanpham}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="d-flex gap-2">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="CPU"
+                        type="text"
+                        name="cpu"
+                        value={form.cpu}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="GPU"
+                        type="text"
+                        name="gpu"
+                        value={form.gpu}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="d-flex gap-2">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="RAM"
+                        type="text"
+                        name="ram"
+                        value={form.ram}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Dung lượng"
+                        type="text"
+                        name="dungluong"
+                        value={form.dungluong}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="d-flex gap-2">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Camera trước"
+                        type="text"
+                        name="cameratruoc"
+                        value={form.cameratruoc}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Camera sau"
+                        type="text"
+                        name="camerasau"
+                        value={form.camerasau}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="d-flex gap-2">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Công nghệ màn hình"
+                        type="text"
+                        name="congnghemanhinh"
+                        value={form.congnghemanhinh}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Độ phân giải màn hình"
+                        type="text"
+                        name="dophangiaimanhinh"
+                        value={form.dophangiaimanhinh}
+                        onChange={handleChange}
+                    />
+                </div>
                 <TextField
                     fullWidth
                     margin="normal"
                     label="Mô tả"
                     type="text"
-                    name="mota"
-                    value={form.mota}
+                    name="motasanpham"
+                    value={form.motasanpham}
                     onChange={handleChange}
+                    multiline
+                    rows={4}
                 />
 
                 <Box sx={{ marginTop: 1, marginBottom: 1 }}>
                     <input
                         type="file"
-                        id="hinhanh"
-                        name="hinhanh"
-                        accept="hinhanh/*"
+                        id="hinhanhchinh"
+                        name="hinhanhchinh"
+                        accept="hinhanhchinh/*"
                         onChange={handleFileChange}
                         required
                         style={{

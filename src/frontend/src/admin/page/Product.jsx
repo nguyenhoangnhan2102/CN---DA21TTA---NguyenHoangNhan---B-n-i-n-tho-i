@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getAllProducts, deleteProduct, createProduct, updateProduct } from "../../service/productService";
-// import { getAllCategory } from "../../service/categoryService";
-// import { getAllManufacturer } from "../../service/manufacturerService";
 import ModalProduct from "../../modal/modalProduct";
+import ProductDetailModal from "../../modal/detailProduct";
+import { uploadSingleFile } from "../../service/fileService";
 import '../css/product.scss';
 import {
     Typography,
@@ -13,8 +13,7 @@ import {
     DialogActions,
 } from "@mui/material";
 import { toast } from 'react-toastify';
-import ProductDetailModal from "../../modal/detailProduct";
-// import { uploadSingleFile } from "../../service/fileService";
+
 const imgURL = process.env.REACT_APP_IMG_URL;
 
 const Product = () => {
@@ -61,40 +60,40 @@ const Product = () => {
 
     const handleEdit = (product) => {
         console.log("pro", product)
-        setImgUrl(product.hinhanh);
+        setImgUrl(product.hinhanhchinh);
         setSelectedProduct(product);
         setOpenModal(true);
     };
 
-    // const handleSave = async (product) => {
-    //     try {
-    //         let imageUrl = oldImgUrl;
-    //         if (product.hinhanh instanceof File) {
-    //             const uploadResponse = await uploadSingleFile(
-    //                 imageUrl,
-    //                 "image",
-    //                 product.hinhanh
-    //             );
-    //             imageUrl = uploadResponse.fileName;
-    //         }
-    //         const productData = {
-    //             ...product,
-    //             hinhanh: imageUrl, // Cập nhật đường dẫn ảnh mới
-    //         };
-    //         if (selectedProduct) {
-    //             await updateProduct(selectedProduct.masanpham, productData); // Gọi API cập nhật
+    const handleSave = async (product) => {
+        try {
+            let imageUrl = oldImgUrl;
+            if (product.hinhanhchinh instanceof File) {
+                const uploadResponse = await uploadSingleFile(
+                    imageUrl,
+                    "image_product",
+                    product.hinhanhchinh
+                );
+                imageUrl = uploadResponse.fileName;
+            }
+            const productData = {
+                ...product,
+                hinhanhchinh: imageUrl, // Cập nhật đường dẫn ảnh mới
+            };
+            if (selectedProduct) {
+                await updateProduct(selectedProduct.masanpham, productData); // Gọi API cập nhật
 
-    //         } else {
-    //             await createProduct(productData); // Gọi API tạo mới
-    //         }
+            } else {
+                await createProduct(productData); // Gọi API tạo mới
+            }
 
-    //         setSelectedProduct(null);
-    //         setOpenModal(false);
-    //         getAllProductData(); // Lấy lại danh sách 
-    //     } catch (error) {
-    //         console.error("Error saving hotel:", error);
-    //     }
-    // };
+            setSelectedProduct(null);
+            setOpenModal(false);
+            getAllProductData(); // Lấy lại danh sách 
+        } catch (error) {
+            console.error("Error saving hotel:", error);
+        }
+    };
 
     const openModalDelete = (product) => {
         checkDelete(true);
@@ -298,7 +297,7 @@ const Product = () => {
             <ModalProduct
                 product={selectedProduct}
                 open={openModal}
-                //onSave={handleSave}
+                onSave={handleSave}
                 onClose={() => setOpenModal(false)}
             />
             <ProductDetailModal
