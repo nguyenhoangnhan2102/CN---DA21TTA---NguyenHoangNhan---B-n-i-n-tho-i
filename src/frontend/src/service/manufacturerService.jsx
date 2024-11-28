@@ -20,22 +20,22 @@ export const createManufacturer = async (manufacturer) => {
     }
 };
 
-export const updateManufacturer = async (manhasanxuat, manufacturer) => {
+export const updateManufacturer = async (mathuonghieu, manufacturer) => {
     try {
-        const response = await axiosInstance.put(`${apiManufacturer}/${manhasanxuat}`, manufacturer);
+        const response = await axiosInstance.put(`${apiManufacturer}/${mathuonghieu}`, manufacturer);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-export const deleteManufacturer = async (manhasanxuat) => {
-    console.log("manhasanxuat", manhasanxuat)
+export const deleteManufacturer = async (mathuonghieu) => {
+    console.log("mathuonghieu", mathuonghieu)
     try {
-        const response = await axiosInstance.delete(`${apiManufacturer}/${manhasanxuat}`);
+        const response = await axiosInstance.delete(`${apiManufacturer}/${mathuonghieu}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting manufacturer with id ${manhasanxuat}:`, error);
+        console.error(`Error deleting manufacturer with id ${mathuonghieu}:`, error);
         throw error;
     }
 };

@@ -32,7 +32,32 @@ const Dashboard = () => {
                         }}
                     >
                         <a href="">Sản phẩm</a>
-                    </li>{" "}
+                    </li>
+                    <li
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onNavigateRouter("/admin/manufacturers");
+                        }}
+                    >
+                        <a href="">Thương hiệu</a>
+                    </li>
+                    <li
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onNavigateRouter("/admin/orders");
+                        }}
+                    >
+                        <a href="">Đơn hàng</a>
+                    </li>
+                    <li
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onNavigateRouter("/admin/users");
+                        }}
+                    >
+                        <a href="">Khách hàng</a>
+                    </li>
+
                     {/* <li
                         onClick={(e) => {
                             e.preventDefault();

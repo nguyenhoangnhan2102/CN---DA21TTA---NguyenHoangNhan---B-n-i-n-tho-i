@@ -203,7 +203,7 @@ const Product = () => {
                         {currentProducts.length > 0 ? (
                             currentProducts.map((product, index) => (
                                 <tr key={product.id}>
-                                    <td>{(currentPage - 1) * productsPerPage + index + 1}</td>
+                                    <td>{product.masanpham}</td>
                                     <td>{product.tensanpham || "Không có tên"}</td>
                                     <td>{product.tenthuonghieu || "Không có thể loại"}</td>
                                     <td>{product.giasanpham || "Không có nhà sản xuất"}</td>
@@ -219,7 +219,7 @@ const Product = () => {
                                             alt={product.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    <td className="d-flex align-items-center justify-content-between">
+                                    <td className="d-flex align-items-center justify-content-between gap-1">
                                         <button
                                             className="btn btn-sm btn-info"
                                             style={{ padding: "0.5rem", width: '70px' }}
