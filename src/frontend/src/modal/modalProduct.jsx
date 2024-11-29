@@ -28,8 +28,6 @@ const modalStyle = {
 };
 
 const ModalProduct = ({ product, onSave, open, onClose }) => {
-
-    const [listCategory, setListCategory] = useState([]);
     const [listManufacturer, setListManufacturer] = useState([]);
     const [form, setForm] = useState({
         mathuonghieu: "",

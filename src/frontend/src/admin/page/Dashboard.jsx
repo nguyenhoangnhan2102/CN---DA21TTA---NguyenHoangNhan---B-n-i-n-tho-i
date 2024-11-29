@@ -36,6 +36,14 @@ const Dashboard = () => {
                     <li
                         onClick={(e) => {
                             e.preventDefault();
+                            onNavigateRouter("/admin/colorproducts");
+                        }}
+                    >
+                        <a href="">Màu</a>
+                    </li>
+                    <li
+                        onClick={(e) => {
+                            e.preventDefault();
                             onNavigateRouter("/admin/manufacturers");
                         }}
                     >
