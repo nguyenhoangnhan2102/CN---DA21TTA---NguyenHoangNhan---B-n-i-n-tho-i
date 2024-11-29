@@ -49,14 +49,14 @@ const Dashboard = () => {
                     >
                         <a href="">Thương hiệu</a>
                     </li>
-                    <li
+                    {/* <li
                         onClick={(e) => {
                             e.preventDefault();
                             onNavigateRouter("/admin/orders");
                         }}
                     >
                         <a href="">Đơn hàng</a>
-                    </li>
+                    </li> */}
                     <li
                         onClick={(e) => {
                             e.preventDefault();

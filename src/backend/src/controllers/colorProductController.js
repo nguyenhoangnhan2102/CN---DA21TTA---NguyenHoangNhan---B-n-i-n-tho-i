@@ -45,137 +45,137 @@ const createColorProduct = async (req, res) => {
 
     try {
         const result = await connection.query(
-            `INSERT INTO SANPHAM (
-            masanpham, 
-            tenmausanpham,
-            mausachinhanh,
-            VALUES(?, ?, ?) `,
+            `INSERT INTO MAUSACSANPHAM (
+                masanpham, 
+                tenmausanpham,
+                mausachinhanh
+            ) VALUES (?, ?, ?)`,
             [
                 masanpham,
                 tenmausanpham,
                 mausachinhanh,
             ]
         );
-        // res.status(201).json({ message: "Product created", masanpham: result[0].insertId });
         return res.status(201).json({
-            message: 'Sản phẩm đã được tạo thành công',
+            message: 'Màu sản phẩm đã được tạo thành công',
             product: {
-                mamau: result.insertId,
+                mamau: result.insertId, // Lấy ID tự động tăng của bản ghi
                 masanpham,
                 tenmausanpham,
                 mausachinhanh,
             }
         });
     } catch (err) {
-        console.error("Error creating product:", err.message);
+        console.error("Error creating color product:", err.message);
         res.status(500).json({ message: err.message });
-    }
-}
-
-const updateColorProduct = async (req, res) => {
-    const { masanpham } = req.params;
-    const {
-        mathuonghieu,
-        tensanpham,
-        giasanpham,
-        soluongsanpham,
-        hedieuhanh,
-        cpu,
-        gpu,
-        ram,
-        dungluong,
-        cameratruoc,
-        camerasau,
-        congnghemanhinh,
-        dophangiaimanhinh,
-        pin,
-        motasanpham,
-        hinhanhchinh
-    } = req.body;
-
-    try {
-        const result = await connection.query(
-            `
-                UPDATE SANPHAM
-                SET
-                mathuonghieu = ?,
-                tensanpham = ?,
-                giasanpham = ?,
-                soluongsanpham = ?,
-                hedieuhanh = ?,
-                cpu = ?,
-                gpu = ?,
-                ram = ?,
-                dungluong = ?,
-                cameratruoc = ?,
-                camerasau = ?,
-                congnghemanhinh = ?,
-                dophangiaimanhinh = ?,
-                pin = ?,
-                motasanpham = ?,
-                hinhanhchinh = ?
-                WHERE masanpham = ?
-            `,
-            [
-                mathuonghieu,
-                tensanpham,
-                giasanpham,
-                soluongsanpham,
-                hedieuhanh,
-                cpu,
-                gpu,
-                ram,
-                dungluong,
-                cameratruoc,
-                camerasau,
-                congnghemanhinh,
-                dophangiaimanhinh,
-                pin,
-                motasanpham,
-                hinhanhchinh,
-                masanpham
-            ]
-        );
-
-        if (result[0].affectedRows > 0) {
-            res.json({ message: "Product updated" });
-        } else {
-            res.status(404).json({ message: "product not found" });
-        }
-    } catch (err) {
-        console.error("Error updating product:", err.message);
-        res.status(500).json({ message: err.message });
-    }
-}
-
-const deleteColorProduct = async (req, res) => {
-    try {
-        const query = "DELETE FROM SANPHAM WHERE masanpham = ?";
-        const [result] = await connection.query(query, [req.params.masanpham]);
-        console.log("result", result);
-        if (result.affectedRows === 0) {
-            return res.status(400).json({
-                EM: "Product not found",
-                EC: 0,
-                DT: [],
-            });
-        }
-        const [data_deleted, filed_data] = await connection.query(`SELECT * FROM SANPHAM`);
-        console.log("data_deleted", data_deleted);
-        return res.status(200).json({
-            EM: "Xóa sản phẩm thành công",
-            EC: 1,
-            DT: data_deleted,
-        });
-    } catch (err) {
-        console.error("Error deleting product:", err);
-        return res.status(500).json({
-            EM: `Lỗi controller deleteMovieById: ${err.message}`,
-            EC: -1,
-            DT: [],
-        });
     }
 };
+
+
+// const updateColorProduct = async (req, res) => {
+//     const { masanpham } = req.params;
+//     const {
+//         mathuonghieu,
+//         tensanpham,
+//         giasanpham,
+//         soluongsanpham,
+//         hedieuhanh,
+//         cpu,
+//         gpu,
+//         ram,
+//         dungluong,
+//         cameratruoc,
+//         camerasau,
+//         congnghemanhinh,
+//         dophangiaimanhinh,
+//         pin,
+//         motasanpham,
+//         hinhanhchinh
+//     } = req.body;
+
+//     try {
+//         const result = await connection.query(
+//             `
+//                 UPDATE SANPHAM
+//                 SET
+//                 mathuonghieu = ?,
+//                 tensanpham = ?,
+//                 giasanpham = ?,
+//                 soluongsanpham = ?,
+//                 hedieuhanh = ?,
+//                 cpu = ?,
+//                 gpu = ?,
+//                 ram = ?,
+//                 dungluong = ?,
+//                 cameratruoc = ?,
+//                 camerasau = ?,
+//                 congnghemanhinh = ?,
+//                 dophangiaimanhinh = ?,
+//                 pin = ?,
+//                 motasanpham = ?,
+//                 hinhanhchinh = ?
+//                 WHERE masanpham = ?
+//             `,
+//             [
+//                 mathuonghieu,
+//                 tensanpham,
+//                 giasanpham,
+//                 soluongsanpham,
+//                 hedieuhanh,
+//                 cpu,
+//                 gpu,
+//                 ram,
+//                 dungluong,
+//                 cameratruoc,
+//                 camerasau,
+//                 congnghemanhinh,
+//                 dophangiaimanhinh,
+//                 pin,
+//                 motasanpham,
+//                 hinhanhchinh,
+//                 masanpham
+//             ]
+//         );
+
+//         if (result[0].affectedRows > 0) {
+//             res.json({ message: "Product updated" });
+//         } else {
+//             res.status(404).json({ message: "product not found" });
+//         }
+//     } catch (err) {
+//         console.error("Error updating product:", err.message);
+//         res.status(500).json({ message: err.message });
+//     }
+// }
+
+// const deleteColorProduct = async (req, res) => {
+//     try {
+//         const query = "DELETE FROM SANPHAM WHERE masanpham = ?";
+//         const [result] = await connection.query(query, [req.params.masanpham]);
+//         console.log("result", result);
+//         if (result.affectedRows === 0) {
+//             return res.status(400).json({
+//                 EM: "Product not found",
+//                 EC: 0,
+//                 DT: [],
+//             });
+//         }
+//         const [data_deleted, filed_data] = await connection.query(`SELECT * FROM SANPHAM`);
+//         console.log("data_deleted", data_deleted);
+//         return res.status(200).json({
+//             EM: "Xóa sản phẩm thành công",
+//             EC: 1,
+//             DT: data_deleted,
+//         });
+//     } catch (err) {
+//         console.error("Error deleting product:", err);
+//         return res.status(500).json({
+//             EM: `Lỗi controller deleteMovieById: ${err.message}`,
+//             EC: -1,
+//             DT: [],
+//         });
+//     }
+// };
 
 
 
@@ -183,6 +183,6 @@ const deleteColorProduct = async (req, res) => {
 module.exports = {
     getAllColorProduct,
     createColorProduct,
-    updateColorProduct,
-    deleteColorProduct,
+    // updateColorProduct,
+    // deleteColorProduct,
 }

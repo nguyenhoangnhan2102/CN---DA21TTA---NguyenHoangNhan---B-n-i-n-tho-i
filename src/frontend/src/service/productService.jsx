@@ -40,12 +40,12 @@ export const updateProduct = async (masanpham, product) => {
 };
 
 export const deleteProduct = async (masanpham) => {
-    console.log("ma", masanpham)
+    console.log("masanpham", masanpham)
     try {
         const response = await axiosInstance.delete(`${apiProduct}/${masanpham}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting movie category with id ${masanpham}:`, error);
+        console.error(`Error deleting with id ${masanpham}:`, error);
         throw error;
     }
 };

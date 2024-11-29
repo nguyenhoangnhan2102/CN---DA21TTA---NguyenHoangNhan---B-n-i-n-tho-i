@@ -14,6 +14,7 @@ import { createColorProduct, getAllColorProduct, updateColorProduct } from "../.
 import ModalColorProduct from "../../modal/modalColorProduct";
 import { uploadSingleFile } from "../../service/fileService";
 const imgURL = process.env.REACT_APP_IMG_URL;
+const imgColorURL = process.env.REACT_APP_IMG_COLOR_URL;
 
 const ColorProduct = () => {
     const [colorproducts, setColorProducts] = useState([]);
@@ -63,7 +64,7 @@ const ColorProduct = () => {
             if (colorproduct.mausachinhanh instanceof File) {
                 const uploadResponse = await uploadSingleFile(
                     imageUrl,
-                    "image_color_product",
+                    "image_product",
                     colorproduct.mausachinhanh
                 );
                 imageUrl = uploadResponse.fileName;
