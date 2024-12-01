@@ -50,22 +50,33 @@ const Users = () => {
     return (
         <div>
             <div className="group-header">
-                <h2>Danh sách người dùng</h2>
-                <div className="filterGroup">
+                <h2>Danh sách</h2>
+                <div className="filterGroup" style={{ position: 'relative' }}>
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Tìm kiếm người dùng"
+                        placeholder="Tìm kiếm"
                         value={searchTerm}
                         onChange={handleSearch}
+                        style={{ paddingRight: '30px' }} // Chừa khoảng trống cho icon
                     />
+                    <i
+                        className="fa-solid fa-magnifying-glass"
+                        style={{
+                            position: 'absolute',
+                            right: '10px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            pointerEvents: 'none',
+                            color: '#000'
+                        }}
+                    ></i>
                 </div>
             </div>
 
-            {/* Users Table */}
             <table className="table table-striped">
                 <thead className="thead-dark">
-                    <tr>
+                    <tr className="table-title">
                         <th scope="col">STT</th>
                         <th scope="col">Tên người dùng</th>
                         <th scope="col">Email</th>

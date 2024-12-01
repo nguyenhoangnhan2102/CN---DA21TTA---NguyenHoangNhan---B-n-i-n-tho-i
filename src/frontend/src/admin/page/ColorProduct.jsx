@@ -166,20 +166,32 @@ const ColorProduct = () => {
                 </Dialog>
                 <div className="group-header">
                     <h2>Danh sách</h2>
-                    <div className="filterGroup">
+                    <div className="filterGroup" style={{ position: 'relative' }}>
                         <input
                             type="text"
                             className="form-control"
                             placeholder="Tìm kiếm"
                             value={searchTerm}
                             onChange={handleSearch}
+                            style={{ paddingRight: '30px' }} // Chừa khoảng trống cho icon
                         />
+                        <i
+                            className="fa-solid fa-magnifying-glass"
+                            style={{
+                                position: 'absolute',
+                                right: '10px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                pointerEvents: 'none',
+                                color: '#000'
+                            }}
+                        ></i>
                     </div>
                 </div>
 
                 <div className="btn-header-table">
                     <button className="btn btn-sm btn-success mr-2" onClick={handleCreate}>
-                        Thêm mới
+                        <i class="fa-solid fa-plus"></i> Thêm mới
                     </button>
                 </div>
 
@@ -223,14 +235,14 @@ const ColorProduct = () => {
                                             style={{ padding: "0.5rem", width: '100px' }}
                                         // onClick={() => handleEdit(colorproduct)}
                                         >
-                                            Chỉnh sửa
+                                            <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
                                             style={{ width: '100px' }}
                                         //onClick={() => openModalDelete(colorproduct)}
                                         >
-                                            Xóa
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>

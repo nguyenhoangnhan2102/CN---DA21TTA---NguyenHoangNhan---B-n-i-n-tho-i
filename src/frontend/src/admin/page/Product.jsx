@@ -3,6 +3,7 @@ import { getAllProducts, deleteProduct, createProduct, updateProduct } from "../
 import ModalProduct from "../../modal/modalProduct";
 import ProductDetailModal from "../../modal/detailProduct";
 import { uploadSingleFile } from "../../service/fileService";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../css/product.scss';
 import {
     Typography,
@@ -155,38 +156,49 @@ const Product = () => {
                             color="primary"
                             className="btn btn-danger"
                         >
-                            Không
+                            <i class="fa-solid fa-x"></i> Không
                         </div>
                         <div
                             onClick={handleDeleteProduct}
                             className="btn btn-success"
                         >
-                            Có
+                            <i class="fa-solid fa-check"></i> Có
                         </div>
                     </DialogActions>
                 </Dialog>
                 <div className="group-header">
                     <h2>Danh sách</h2>
-                    <div className="filterGroup">
+                    <div className="filterGroup" style={{ position: 'relative' }}>
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Tìm kiếm tên phim"
+                            placeholder="Tìm kiếm"
                             value={searchTerm}
                             onChange={handleSearch}
+                            style={{ paddingRight: '30px' }} // Chừa khoảng trống cho icon
                         />
+                        <i
+                            className="fa-solid fa-magnifying-glass"
+                            style={{
+                                position: 'absolute',
+                                right: '10px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                pointerEvents: 'none',
+                                color: '#000'
+                            }}
+                        ></i>
                     </div>
                 </div>
-
                 <div className="btn-header-table">
                     <button className="btn btn-sm btn-success mr-2" onClick={handleCreate}>
-                        Thêm mới
+                        <i class="fa-solid fa-plus"></i> Thêm mới
                     </button>
                 </div>
 
                 <table className="table table-striped">
                     <thead className="thead-dark">
-                        <tr>
+                        <tr className="table-title">
                             <th scope="col">STT</th>
                             <th scope="col">Tên</th>
                             <th scope="col">Thương hiệu</th>
@@ -196,7 +208,7 @@ const Product = () => {
                             <th scope="col">RAM</th>
                             <th scope="col">Dung lượng</th>
                             <th scope="col">Hình ảnh</th>
-                            <th scope="col">Chức năng</th>
+                            <th scope="col">Hành động   </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -225,21 +237,21 @@ const Product = () => {
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => handleViewDetails(product)}
                                         >
-                                            Xem
+                                            <i class="fa-regular fa-eye"></i>
                                         </button>
                                         <button
                                             className="btn btn-sm btn-primary"
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => handleEdit(product)}
                                         >
-                                            Sửa
+                                            <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => openModalDelete(product)}
                                         >
-                                            Xóa
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
