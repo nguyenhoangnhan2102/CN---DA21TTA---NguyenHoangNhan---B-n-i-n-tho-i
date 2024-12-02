@@ -26,6 +26,7 @@ const modalStyle = {
     p: 4,
     overflowY: "auto", // Thêm thuộc tính này để có thanh cuộn dọc khi cần
 };
+const imgURL = process.env.REACT_APP_IMG_URL;
 
 const ModalProduct = ({ product, onSave, open, onClose }) => {
     const [listManufacturer, setListManufacturer] = useState([]);
@@ -50,7 +51,6 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
     });
 
     useEffect(() => {
-        console.log("pro", product)
         if (product) {
             setForm(product);
         } else {
@@ -96,11 +96,19 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    // const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     setForm((prev) => ({ ...prev, hinhanhchinh: file })); // Cập nhật ảnh mới và xóa ảnh cũ
+    // };
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setForm((prev) => ({ ...prev, hinhanhchinh: file }));
+        setForm((prev) => ({ ...prev, hinhanhchinh: file })); // Cập nhật ảnh mới và xóa ảnh cũ
     };
 
+    const imageSrc = form.hinhanhchinh instanceof File
+        ? URL.createObjectURL(form.hinhanhchinh)
+        : `${imgURL}${form.hinhanhchinh}`;
 
     const handleSubmit = () => {
         onSave(form);
@@ -131,6 +139,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
             onClose={onClose}
             aria-labelledby="modal-title"
             aria-describedby="modal-description"
+            hideBackdrop
         >
             <Box sx={modalStyle}>
                 <Typography id="modal-title" variant="h6" component="h2">
@@ -283,7 +292,13 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                     multiline
                     rows={4}
                 />
-
+                <img
+                    src={product && form.hinhanhchinh ? imageSrc : ""}
+                    alt={form.tensanpham}
+                    width="100px"
+                    height="100px"
+                    style={product ? {} : { display: "none" }} // Ẩn ảnh nếu không phải cập nhật
+                />
                 <Box sx={{ marginTop: 1, marginBottom: 1 }}>
                     <input
                         type="file"
@@ -313,8 +328,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
 
                 <Box mt={2} display="flex" justifyContent="flex-end" gap="5px">
                     <button className="btn btn-primary admin-btn" onClick={handleSubmit}>
-                        <i className="fa-solid fa-check" style={{ marginRight: '5px' }}></i>
-                        {product ? "Cập nhật" : "Tạo mới"}
+                        <i class="fa-regular fa-floppy-disk" style={{ marginRight: '5px' }}></i>Lưu
                     </button>
                     <button className="btn btn-danger admin-btn" onClick={onClose} style={{ width: '15%' }}>
                         <i className="fa-solid fa-x" style={{ marginRight: '5px' }}></i>
@@ -322,7 +336,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                     </button>
                 </Box>
             </Box>
-        </Modal>
+        </Modal >
     );
 };
 
