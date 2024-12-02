@@ -60,7 +60,7 @@ const Dashboard = () => {
                     <li
                         onClick={(e) => {
                             e.preventDefault();
-                            onNavigateRouter("/admin/users");
+                            onNavigateRouter("/admin/accounts");
                         }}
                     >
                         <a href="">Tài khoản</a>

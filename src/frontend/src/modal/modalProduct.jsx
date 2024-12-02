@@ -313,9 +313,11 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
 
                 <Box mt={2} display="flex" justifyContent="flex-end" gap="5px">
                     <button className="btn btn-primary admin-btn" onClick={handleSubmit}>
+                        <i className="fa-solid fa-check" style={{ marginRight: '5px' }}></i>
                         {product ? "Cập nhật" : "Tạo mới"}
                     </button>
                     <button className="btn btn-danger admin-btn" onClick={onClose} style={{ width: '15%' }}>
+                        <i className="fa-solid fa-x" style={{ marginRight: '5px' }}></i>
                         Huỷ
                     </button>
                 </Box>

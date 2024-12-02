@@ -12,7 +12,6 @@ import {
     Select,
     MenuItem,
 } from "@mui/material";
-import { getAllManufacturer } from "../service/manufacturerService";
 import { getAllProducts } from "../service/productService";
 
 const modalStyle = {
@@ -27,6 +26,7 @@ const modalStyle = {
     p: 4,
     overflowY: "auto", // Thêm thuộc tính này để có thanh cuộn dọc khi cần
 };
+const imgURL = process.env.REACT_APP_IMG_URL;
 
 const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
     const [listProducts, setListProducts] = useState([]);
@@ -35,6 +35,7 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
         tenmausanpham: "",
         tensanpham: "",
         mausachinhanh: "",
+        hinhanhchinh: "",
     });
 
     useEffect(() => {
@@ -56,7 +57,7 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
         try {
             const response = await getAllProducts();
             if (response) {
-                setListProducts(response.DT || []); // Đảm bảo rằng `DT` luôn là một mảng
+                setListProducts(response.DT.activeProducts || []); // Đảm bảo rằng `DT` luôn là một mảng
                 console.log("dt", response.DT);
             } else {
                 console.error("Failed to fetch");
@@ -69,6 +70,16 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
+        if (name === "masanpham") {
+            // Tìm sản phẩm được chọn và cập nhật ảnh
+            const selectedProduct = listProducts.find(
+                (product) => product.masanpham === value
+            );
+            setForm((prev) => ({
+                ...prev,
+                hinhanhchinh: selectedProduct?.hinhanhchinh || "", // Cập nhật URL ảnh
+            }));
+        }
     };
 
     const handleFileChange = (e) => {
@@ -114,6 +125,23 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
                         ))}
                     </Select>
                 </FormControl>
+                {form.hinhanhchinh && (
+                    <Box
+                        sx={{
+                            marginTop: 2,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <img
+                            src={`${imgURL}${form.hinhanhchinh}`}
+                            alt="Ảnh sản phẩm"
+                            style={{ maxWidth: "100%", maxHeight: "200px" }}
+                        />
+                    </Box>
+                )}
+
                 <TextField
                     fullWidth
                     margin="normal"

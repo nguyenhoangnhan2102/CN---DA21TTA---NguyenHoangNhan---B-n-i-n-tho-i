@@ -2,10 +2,10 @@ import { useRoutes, Navigate } from "react-router-dom";
 import Dashboard from "./page/Dashboard";
 import Product from "./page/Product";
 import Manufacturer from "./page/Manufacturer";
-import Users from "./page/User";
 import Orders from "./page/Order";
 import ColorProduct from "./page/ColorProduct";
 import AllProduct from "./page/AllProduct";
+import Accounts from "./page/Account";
 
 const AdminRoute = () => {
     const element = useRoutes([
@@ -34,8 +34,8 @@ const AdminRoute = () => {
                     element: <AllProduct />,
                 },
                 {
-                    path: "users", // Khi vào "/admin/users" sẽ render Users
-                    element: <Users />,
+                    path: "accounts", // Khi vào "/admin/users" sẽ render Users
+                    element: <Accounts />,
                 },
                 // {
                 //     path: "users", // Khi vào "/admin/users" sẽ render Users

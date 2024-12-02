@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../service/userAccountService";
 
-const Users = () => {
+const Accounts = () => {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
@@ -156,4 +156,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Accounts;

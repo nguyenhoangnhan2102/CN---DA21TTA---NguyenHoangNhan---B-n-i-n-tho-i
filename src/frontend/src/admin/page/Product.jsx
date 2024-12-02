@@ -190,8 +190,8 @@ const Product = () => {
                     </div>
                 </div>
                 <div className="btn-header-table">
-                    <button className="btn btn-sm btn-success mr-2" onClick={handleCreate}>
-                        <i class="fa-solid fa-plus"></i> Thêm mới
+                    <button className="btn btn-sm btn-success mr-2" onClick={handleCreate} style={{ width: '70px' }}>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
 
@@ -207,7 +207,7 @@ const Product = () => {
                             <th scope="col">RAM</th>
                             <th scope="col">Dung lượng</th>
                             <th scope="col">Hình ảnh</th>
-                            <th scope="col">Hành động   </th>
+                            <th scope="col">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -35,6 +35,7 @@ const ColorProduct = () => {
     const getAllColorProductData = async () => {
         try {
             const response = await getAllColorProduct();
+            console.log("color", response.DT);
             if (response.EC === 1) {
                 setColorProducts(response.DT);
                 console.log(response.DT);
@@ -129,13 +130,12 @@ const ColorProduct = () => {
     const indexOfLast = currentPage * colorProductsPerPage;
     const indexOfFirst = indexOfLast - colorProductsPerPage;
 
-    const currentColorProduct = colorproducts
-        .filter(
-            (colorproduct) =>
-                colorproduct.tensanpham &&
-                colorproduct.tensanpham.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .slice(indexOfFirst, indexOfLast);
+    const currentColorProduct = Array.isArray(colorproducts)
+        ? colorproducts.filter((colorproduct) =>
+            colorproduct.tensanpham?.toLowerCase().includes(searchTerm.toLowerCase())
+        ).slice(indexOfFirst, indexOfLast)
+        : [];
+
     const totalPages = Math.ceil(colorproducts.length / colorProductsPerPage);
 
     return (
