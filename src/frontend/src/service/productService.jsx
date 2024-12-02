@@ -1,5 +1,4 @@
 import axiosInstance from "../authentication/axiosInstance";
-import axios from "axios";
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiProduct = apiUrl + "/products";
 
@@ -40,14 +39,14 @@ export const updateProduct = async (masanpham, product) => {
 };
 
 export const deleteProduct = async (masanpham) => {
-    console.log("masanpham", masanpham)
     try {
         const response = await axiosInstance.delete(`${apiProduct}/${masanpham}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting with id ${masanpham}:`, error);
+        console.error(`Lỗi xóa sản phẩm có id = ${masanpham}:`, error);
         throw error;
     }
 };
+
 
 

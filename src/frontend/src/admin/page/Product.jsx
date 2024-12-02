@@ -26,10 +26,9 @@ const Product = () => {
     const [isDelete, checkDelete] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
 
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const [searchTerm, setSearchTerm] = useState(""); // State cho từ khóa tìm kiếm
-    const productsPerPage = 5; // Số phim hiển thị mỗi trang
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const productsPerPage = 10;
 
     useEffect(() => {
         getAllProductData();
@@ -39,13 +38,13 @@ const Product = () => {
         try {
             const response = await getAllProducts();
             if (response.EC === 1) {
-                setProducts(response.DT);
-                console.log(response.DT);
+                const sortedProducts = response.DT.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                setProducts(sortedProducts);
             } else {
-                console.error("Failed to fetch");
+                console.error("Lỗi tìm kiếm sản phẩm");
             }
         } catch (err) {
-            console.error("Error occurred", err);
+            console.error("Đã xảy ra lỗi", err);
         }
     };
 
@@ -111,14 +110,14 @@ const Product = () => {
             const response = await deleteProduct(selectedProduct.masanpham);
             if (response.EC === 1) {
                 toast.success("Xóa thành công!");
-                setProducts(response.DT);
+                getAllProductData();
             } else {
                 console.log(response.EM);
             }
             setOpenDelete(false);
         } catch (error) {
-            console.error("Error deleting movie:", error);
-            alert("Đã xảy ra lỗi khi xóa phim.");
+            console.error("Lỗi xóa sản phẩm:", error);
+            alert("Đã xảy ra lỗi khi xóa sản phẩm.");
         }
     };
 
@@ -214,8 +213,8 @@ const Product = () => {
                     <tbody>
                         {currentProducts.length > 0 ? (
                             currentProducts.map((product, index) => (
-                                <tr key={product.id}>
-                                    <td>{product.masanpham}</td>
+                                <tr key={product.masanpham}>
+                                    <td>{(currentPage - 1) * productsPerPage + index + 1}</td>
                                     <td>{product.tensanpham || "Không có tên"}</td>
                                     <td>{product.tenthuonghieu || "Không có thể loại"}</td>
                                     <td>{product.giasanpham || "Không có nhà sản xuất"}</td>

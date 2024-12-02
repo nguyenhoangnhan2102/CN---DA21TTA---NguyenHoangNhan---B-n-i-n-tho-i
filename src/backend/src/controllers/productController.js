@@ -3,8 +3,7 @@ const connection = require("../config/dataBase");
 
 const getAllProduct = async (req, res) => {
     try {
-        const query =
-            `
+        const query = `
         SELECT
             sp.*,
             th.tenthuonghieu,
@@ -19,10 +18,13 @@ const getAllProduct = async (req, res) => {
             MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
         LEFT JOIN
             HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
+        WHERE
+            sp.trangthai = 0
         GROUP BY
-            sp.masanpham;
+            sp.masanpham
+        ORDER BY
+            sp.created_at DESC;
         `;
-        //Thêm đường dẫn đầy đủ cho mỗi sản phẩm
         const [results] = await connection.query(query);
         return res.status(200).json({
             EM: "Lấy danh sách sản phẩm thành công",
@@ -32,7 +34,7 @@ const getAllProduct = async (req, res) => {
     } catch (err) {
         console.error("Error fetching products:", err);
         return res.status(500).json({
-            EM: `Lỗi controller getAllProducts: ${err.message}`,
+            EM: `Lỗi lấy danh sách tất cả sản phẩm: ${err.message}`,
             EC: -1,
             DT: [],
         });
@@ -251,32 +253,32 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const query = "DELETE FROM SANPHAM WHERE masanpham = ?";
+        const query = "UPDATE SANPHAM SET trangthai = 1 WHERE masanpham = ?";
         const [result] = await connection.query(query, [req.params.masanpham]);
-        console.log("result", result);
         if (result.affectedRows === 0) {
             return res.status(400).json({
-                EM: "Product not found",
+                EM: "Không tìm thấy sản phẩm",
                 EC: 0,
                 DT: [],
             });
         }
-        const [data_deleted, filed_data] = await connection.query(`SELECT * FROM SANPHAM`);
-        console.log("data_deleted", data_deleted);
+
+        const [data] = await connection.query("SELECT * FROM SANPHAM WHERE trangthai = 0");
         return res.status(200).json({
-            EM: "Xóa sản phẩm thành công",
+            EM: "Ẩn sản phẩm thành công",
             EC: 1,
-            DT: data_deleted,
+            DT: data,
         });
     } catch (err) {
-        console.error("Error deleting product:", err);
+        console.error("Lỗi ẩn sản phẩm:", err);
         return res.status(500).json({
-            EM: `Lỗi controller deleteMovieById: ${err.message}`,
+            EM: `Lỗi xóa sản phẩm: ${err.message}`,
             EC: -1,
             DT: [],
         });
     }
 };
+
 
 
 module.exports = {

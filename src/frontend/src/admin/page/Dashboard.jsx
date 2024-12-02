@@ -80,7 +80,7 @@ const Dashboard = () => {
                             onLogout();
                         }}
                     >
-                        <a href="">Đăng Xuất</a>
+                        <a href="">Đăng xuất</a>
                     </li>
                 </ul>
             </div>

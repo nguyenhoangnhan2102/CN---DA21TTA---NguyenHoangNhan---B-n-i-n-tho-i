@@ -189,14 +189,10 @@ th {
     /* z-index: 10; */
 }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #e9ecef;
-    /* transition: background 0.3s; */
-}
+// tr:hover {
+//     background-color: #e9ecef;
+//     /* transition: background 0.3s; */
+// }
 
 .group-header {
     display: flex;

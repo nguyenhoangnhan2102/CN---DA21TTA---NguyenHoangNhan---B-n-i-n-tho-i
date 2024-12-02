@@ -210,7 +210,7 @@ const ColorProduct = () => {
                         {currentColorProduct && currentColorProduct.length > 0 ? (
                             currentColorProduct.map((colorproduct, index) => (
                                 <tr key={colorproduct.mamau}>
-                                    <td>{colorproduct.mamau}</td>
+                                    <td>{(currentPage - 1) * colorProductsPerPage + index + 1}</td>
                                     <td>{colorproduct.tensanpham || "Không có tên"}</td>
                                     <td>{colorproduct.tenmausanpham || "Không có tên"}</td>
                                     <td>
