@@ -65,15 +65,14 @@ const Dashboard = () => {
                     >
                         <a href="">Khách hàng</a>
                     </li>
-
-                    {/* <li
+                    <li
                         onClick={(e) => {
                             e.preventDefault();
-                            onNavigateRouter("/admin/users");
+                            onNavigateRouter("/admin/all-products");
                         }}
                     >
-                        <a href="">Tài Khoản</a>
-                    </li> */}
+                        <a href="">Tất cả sản phẩm</a>
+                    </li>
                     <li
                         onClick={(e) => {
                             e.preventDefault();

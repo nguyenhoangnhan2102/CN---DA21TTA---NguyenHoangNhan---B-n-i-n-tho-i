@@ -197,7 +197,7 @@ const Manufacturer = () => {
                                     <td>{(currentPage - 1) * manufacturersPerPage + index + 1}</td>
                                     <td>{manufacturer.tenthuonghieu || "Không có tên"}</td>
                                     <td>{manufacturer.sanphams || "Không có sản phẩm"}</td>
-                                    <td>{manufacturer.trangthaithuonghieu == 0 ? "Ngưng hoạt động" : "Hoạt động"}</td>
+                                    <td>{manufacturer.trangthaithuonghieu === 0 ? "Ngưng hoạt động" : "Hoạt động"}</td>
                                     <td className="d-flex gap-2">
                                         <button
                                             className="btn btn-sm btn-primary"

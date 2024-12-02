@@ -3,7 +3,7 @@ const connection = require("../config/dataBase");
 
 const getAllProduct = async (req, res) => {
     try {
-        const query = `
+        const queryInactive = `
         SELECT
             sp.*,
             th.tenthuonghieu,
@@ -25,11 +25,40 @@ const getAllProduct = async (req, res) => {
         ORDER BY
             sp.created_at DESC;
         `;
-        const [results] = await connection.query(query);
+
+        const queryActive = `
+        SELECT
+            sp.*,
+            th.tenthuonghieu,
+            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+        FROM
+            SANPHAM sp
+        LEFT JOIN
+            THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
+        LEFT JOIN
+            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
+        LEFT JOIN
+            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
+        WHERE
+            sp.trangthai = 1
+        GROUP BY
+            sp.masanpham
+        ORDER BY
+            sp.created_at DESC;
+        `;
+
+        const [inactiveResults] = await connection.query(queryInactive);
+        const [activeResults] = await connection.query(queryActive);
+
         return res.status(200).json({
             EM: "Lấy danh sách sản phẩm thành công",
             EC: 1,
-            DT: results,
+            DT: {
+                inactiveProducts: inactiveResults,
+                activeProducts: activeResults,
+            },
         });
     } catch (err) {
         console.error("Error fetching products:", err);
