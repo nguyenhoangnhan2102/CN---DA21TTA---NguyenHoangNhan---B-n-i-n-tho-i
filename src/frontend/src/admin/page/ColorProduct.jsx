@@ -197,7 +197,7 @@ const ColorProduct = () => {
 
                 <table className="table table-striped">
                     <thead className="thead-dark">
-                        <tr>
+                        <tr className="table-title">
                             <th scope="col">STT</th>
                             <th scope="col">Tên sản phẩm</th>
                             <th scope="col">Màu</th>

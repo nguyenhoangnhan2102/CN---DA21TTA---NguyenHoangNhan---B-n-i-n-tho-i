@@ -134,11 +134,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
         >
             <Box sx={modalStyle}>
                 <Typography id="modal-title" variant="h6" component="h2">
-                    {product ? (
-                        <i className="fa-solid fa-check"></i>
-                    ) : (
-                        <i className="fa-solid fa-x"></i>
-                    )}
+                    {product ? "Cập nhật" : "Tạo mới"}
                 </Typography>
 
                 <TextField

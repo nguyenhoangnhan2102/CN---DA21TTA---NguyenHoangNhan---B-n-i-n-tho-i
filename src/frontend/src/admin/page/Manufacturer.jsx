@@ -185,6 +185,8 @@ const Manufacturer = () => {
                         <tr className="table-title">
                             <th scope="col">STT</th>
                             <th scope="col">Tên nhà sản xuất</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
@@ -194,6 +196,8 @@ const Manufacturer = () => {
                                 <tr key={manufacturer.mathuonghieu}>
                                     <td>{(currentPage - 1) * manufacturersPerPage + index + 1}</td>
                                     <td>{manufacturer.tenthuonghieu || "Không có tên"}</td>
+                                    <td>{manufacturer.sanphams || "Không có sản phẩm"}</td>
+                                    <td>{manufacturer.trangthaithuonghieu == 0 ? "Ngưng hoạt động" : "Hoạt động"}</td>
                                     <td className="d-flex gap-2">
                                         <button
                                             className="btn btn-sm btn-primary"
@@ -214,7 +218,7 @@ const Manufacturer = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="9">
+                                <td colSpan="12">
                                     <h6>Không tìm thấy sản phẩm</h6>
                                 </td>
                             </tr>

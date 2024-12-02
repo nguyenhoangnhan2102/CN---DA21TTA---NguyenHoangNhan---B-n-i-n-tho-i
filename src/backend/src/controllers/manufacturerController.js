@@ -3,11 +3,20 @@ const connection = require("../config/dataBase");
 
 const getAllManufacturer = async (req, res) => {
     try {
-        const query =
-            `
-        SELECT * FROM THUONGHIEU
+        const query = `
+            SELECT 
+                TH.mathuonghieu,
+                TH.tenthuonghieu,
+                GROUP_CONCAT(SP.tensanpham SEPARATOR ', ') AS sanphams
+            FROM 
+                THUONGHIEU TH
+            LEFT JOIN 
+                SANPHAM SP 
+            ON 
+                TH.mathuonghieu = SP.mathuonghieu
+            GROUP BY 
+                TH.mathuonghieu, TH.tenthuonghieu;
         `;
-        //Thêm đường dẫn đầy đủ cho mỗi sản phẩm
         const [results] = await connection.query(query);
         return res.status(200).json({
             EM: "Lấy danh sách thương hiệu thành công",
@@ -23,6 +32,7 @@ const getAllManufacturer = async (req, res) => {
         });
     }
 };
+
 
 const createManufacture = async (req, res) => {
     const {
