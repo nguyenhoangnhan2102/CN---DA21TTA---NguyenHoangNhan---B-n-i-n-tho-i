@@ -38,7 +38,7 @@ const Product = () => {
         try {
             const response = await getAllProducts();
             if (response.EC === 1) {
-                const sortedProducts = response.DT.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                const sortedProducts = response.DT.activeProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 setProducts(sortedProducts);
             } else {
                 console.error("Lỗi tìm kiếm sản phẩm");

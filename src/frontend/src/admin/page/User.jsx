@@ -50,7 +50,7 @@ const Users = () => {
     return (
         <div>
             <div className="group-header">
-                <h2>Danh sách</h2>
+                <h2>Danh sách tài khoản</h2>
                 <div className="filterGroup" style={{ position: 'relative' }}>
                     <input
                         type="text"

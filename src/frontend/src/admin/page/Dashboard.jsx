@@ -63,7 +63,7 @@ const Dashboard = () => {
                             onNavigateRouter("/admin/users");
                         }}
                     >
-                        <a href="">Khách hàng</a>
+                        <a href="">Tài khoản</a>
                     </li>
                     <li
                         onClick={(e) => {

@@ -3,7 +3,7 @@ const connection = require("../config/dataBase");
 
 const getAllProduct = async (req, res) => {
     try {
-        const queryInactive = `
+        const queryActive = `
         SELECT
             sp.*,
             th.tenthuonghieu,
@@ -26,7 +26,7 @@ const getAllProduct = async (req, res) => {
             sp.created_at DESC;
         `;
 
-        const queryActive = `
+        const queryInactive = `
         SELECT
             sp.*,
             th.tenthuonghieu,
@@ -49,15 +49,15 @@ const getAllProduct = async (req, res) => {
             sp.created_at DESC;
         `;
 
-        const [inactiveResults] = await connection.query(queryInactive);
         const [activeResults] = await connection.query(queryActive);
+        const [inactiveResults] = await connection.query(queryInactive);
 
         return res.status(200).json({
             EM: "Lấy danh sách sản phẩm thành công",
             EC: 1,
             DT: {
-                inactiveProducts: inactiveResults,
                 activeProducts: activeResults,
+                inactiveProducts: inactiveResults,
             },
         });
     } catch (err) {
