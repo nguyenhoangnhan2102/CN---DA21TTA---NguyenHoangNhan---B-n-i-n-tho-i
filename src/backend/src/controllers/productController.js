@@ -60,6 +60,7 @@ const getAllProduct = async (req, res) => {
                 inactiveProducts: inactiveResults,
             },
         });
+
     } catch (err) {
         console.error("Error fetching products:", err);
         return res.status(500).json({
