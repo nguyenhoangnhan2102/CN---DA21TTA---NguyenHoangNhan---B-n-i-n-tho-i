@@ -4,4 +4,21 @@
 
 .navbar-logo{
     cursor: pointer;
+    font-family: "Titillium Web", sans-serif;
+}
+
+.btn-login{
+    background-color: #FFD400;
+    font-family: "Karla", sans-serif;
+    color: black;
+    border: none;
+}
+
+.btn-login:hover{
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgb(194, 193, 193);
+    color: black;
 }

@@ -8,7 +8,7 @@ const Header = () => {
             <Navbar expand="lg" className="navbar-container">
                 <Container fluid>
                     <Navbar className='navbar-logo'>
-                        <Link to={`/`} className="text-decoration-none fst-italic" style={{ fontSize: "25px", fontWeight: '500', color: 'black' }}>
+                        <Link to={`/`} className="text-decoration-none fst-italic" style={{ fontSize: "25px", fontWeight: 'bold', color: 'black' }}>
                             <i class="fa-solid fa-phone me-2" style={{ fontSize: "25px" }}></i>
                             SHOPPHONE
                         </Link>
@@ -22,12 +22,17 @@ const Header = () => {
                         >
                         </Nav>
                         <Form className="d-flex">
-                            <i class="fa-solid fa-cart-shopping me-4 d-flex align-items-center" style={{ fontSize: "30px", cursor: 'pointer' }}></i>
-                            <Button variant="secondary" style={{ width: '110px' }}>Đăng nhập</Button>
+                            <i
+                                class="fa-solid fa-cart-shopping me-4 d-flex align-items-center"
+                                style={{ fontSize: "30px", cursor: 'pointer' }}>
+                            </i>
+                            <Button className="btn-login d-flex align-items-center">
+                                Đăng nhập
+                            </Button>
                         </Form>
                     </Navbar.Collapse>
                 </Container>
-            </Navbar>
+            </Navbar >
         </>
     );
 }

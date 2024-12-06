@@ -1,6 +1,7 @@
 .product-container{
     background-color: white;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .product-list {
@@ -23,17 +24,18 @@
   background: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
-
+  position: relative; /* Đảm bảo ảnh được căn theo container */
 }
 
-.product-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.product-card:hover .product-image {
+  transform: translateY(-10px); /* Di chuyển ảnh lên khi hover */
 }
 
 .product-image {
   max-width: 100%;
   height: auto;
   border-radius: 4px;
+  transition: transform 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động cho ảnh */
 }
 
 .product-name {
@@ -70,7 +72,6 @@
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
-  cursor: pointer;
   font-weight: bold;
 }
 
