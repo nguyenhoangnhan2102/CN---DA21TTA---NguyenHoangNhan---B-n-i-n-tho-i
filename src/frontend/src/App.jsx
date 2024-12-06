@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AdminRoute from './admin/route-admin-view';
+import RouterView from "./view/route-views";
 import Header from "./share/component/Nav";
-import Carouseles from "./share/component/Carousel";
+import "./share/style.scss";
 
 function App() {
   return (
     <Router>
       <div className="App" style={{ backgroundColor: '#F2F4F7' }}>
         <div className="App-header">
-          <Header />
-          <Carouseles />
           <Routes>
+            <Route path="/*" element={<MainLayout />} />
             <Route path="/admin/*" element={<AdminLayout />} />
           </Routes>
         </div>
@@ -30,6 +30,15 @@ function App() {
     </Router>
   );
 }
+
+const MainLayout = () => (
+  <>
+    <Header />
+    <Routes>
+      <Route path="/*" element={<RouterView />} />
+    </Routes>
+  </>
+);
 
 const AdminLayout = () => (
   <Routes>

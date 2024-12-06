@@ -22,7 +22,7 @@ const Header = () => {
                         </Nav>
                         <Form className="d-flex">
                             <i class="fa-solid fa-cart-shopping me-4 d-flex align-items-center" style={{ fontSize: "30px", cursor: 'pointer' }}></i>
-                            <Button variant="outline-secondary" style={{ width: '110px' }}>Đăng nhập</Button>
+                            <Button variant="secondary" style={{ width: '110px' }}>Đăng nhập</Button>
                         </Form>
                     </Navbar.Collapse>
                 </Container>

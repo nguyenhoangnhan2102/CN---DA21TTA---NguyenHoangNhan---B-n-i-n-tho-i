@@ -217,7 +217,7 @@ const Product = () => {
                                     <td>{(currentPage - 1) * productsPerPage + index + 1}</td>
                                     <td>{product.tensanpham || "Không có tên"}</td>
                                     <td>{product.tenthuonghieu || "Không có thể loại"}</td>
-                                    <td>{product.giasanpham || "Không có nhà sản xuất"}</td>
+                                    <td>{product.giasanpham ? product.giasanpham.toLocaleString("vi-VN") : "Không có giá"}đ</td>
                                     <td>{product.soluongsanpham || "Không có số lượng"}</td>
                                     <td>{product.hedieuhanh || "Không có giá"}</td>
                                     <td>{product.ram || "Không có giá"}</td>
