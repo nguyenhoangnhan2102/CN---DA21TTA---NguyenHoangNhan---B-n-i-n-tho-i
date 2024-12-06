@@ -1,14 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AdminRoute from './admin/route-admin-view';
-import Nav from "./share/Nav";
+import Header from "./share/component/Nav";
+import Carouseles from "./share/component/Carousel";
 
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="App" style={{ backgroundColor: '#F2F4F7' }}>
         <div className="App-header">
-          <Nav />
+          <Header />
+          <Carouseles />
           <Routes>
             <Route path="/admin/*" element={<AdminLayout />} />
           </Routes>
