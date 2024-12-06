@@ -1,0 +1,81 @@
+.product-container{
+    background-color: white;
+    border-radius: 10px;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  justify-items: center; /* Căn giữa các phần tử theo chiều ngang */
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column; // Canh các phần tử theo chiều dọc
+  align-items: center;
+  width: 250px; // Đặt chiều rộng cố định cho từng card
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  height: 30px;
+}
+
+.current-price {
+  color: #e53935;
+  font-weight: bold;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.discount {
+  color: #f57c00;
+}
+
+.stock-info {
+  background-color: #fff3cd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.buy-now-button {
+  background: #F1F8FE;
+  color: #2A83E9;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    padding: 12px;
+  }
+}

@@ -7,9 +7,10 @@ const Header = () => {
         <>
             <Navbar expand="lg" className="navbar-container">
                 <Container fluid>
-                    <Navbar>
-                        <Link to={`/`} className="text-decoration-none fst-italic" style={{ fontSize: "30px", fontWeight: '500', color: 'black' }}>
-                            Shopphone
+                    <Navbar className='navbar-logo'>
+                        <Link to={`/`} className="text-decoration-none fst-italic" style={{ fontSize: "25px", fontWeight: '500', color: 'black' }}>
+                            <i class="fa-solid fa-phone me-2" style={{ fontSize: "25px" }}></i>
+                            SHOPPHONE
                         </Link>
                     </Navbar>
                     <Navbar.Toggle aria-controls="navbarScroll" />

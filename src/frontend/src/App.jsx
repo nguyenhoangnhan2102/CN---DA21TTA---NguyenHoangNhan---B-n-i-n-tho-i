@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import AdminRoute from './admin/route-admin-view';
 import RouterView from "./view/route-views";
 import Header from "./share/component/Nav";
-import "./share/style.scss";
+import Footer from "./share/component/Footer";
 
 function App() {
   return (
@@ -37,6 +37,7 @@ const MainLayout = () => (
     <Routes>
       <Route path="/*" element={<RouterView />} />
     </Routes>
+    <Footer />
   </>
 );
 
