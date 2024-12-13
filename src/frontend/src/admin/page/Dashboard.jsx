@@ -28,6 +28,14 @@ const Dashboard = () => {
                     <li
                         onClick={(e) => {
                             e.preventDefault();
+                            onNavigateRouter("/admin/thongke");
+                        }}
+                    >
+                        <a href="">Thống kê</a>
+                    </li>
+                    <li
+                        onClick={(e) => {
+                            e.preventDefault();
                             onNavigateRouter("/admin/products");
                         }}
                     >

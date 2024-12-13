@@ -39,14 +39,27 @@ const ProductDetails = () => {
                 <div className="col-md-8">
                     <div className="carousel slide" id="productCarousel" data-bs-ride="carousel">
                         <div className="d-flex mb-4 align-items-center">
-                            <h3>
+                            <h3 className="me-2">
                                 {productdetails.tensanpham}
                             </h3>
-                            <div className="badge bg-warning text-dark text-center d-flex align-items-center h-50">
+                            <label className="badge me-2 bg-warning text-dark d-flex align-items-center">
                                 Chỉ có tại Shopphone
-                            </div>
+                            </label>
                         </div>
                         <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
+                            <div className="carousel-indicators">
+                                {productdetails.danhsachhinhanh.split(",").map((_, index) => (
+                                    <button
+                                        type="button"
+                                        data-bs-target="#productCarousel"
+                                        data-bs-slide-to={index}
+                                        className={index === 0 ? "active" : ""}
+                                        aria-current={index === 0 ? "true" : "false"}
+                                        aria-label={`Slide ${index + 1}`}
+                                        key={index}
+                                    ></button>
+                                ))}
+                            </div>
                             <div className="carousel-inner product-details-image">
                                 {productdetails.danhsachhinhanh.split(",").map((image, index) => (
                                     <div
@@ -115,6 +128,11 @@ const ProductDetails = () => {
                             <div className="feature-list_details">
                                 <strong>Dung lượng:</strong>
                                 <p>{productdetails.dungluong}</p>
+                            </div>
+                            <hr />
+                            <div className="feature-list_details">
+                                <strong>Pin:</strong>
+                                <p>{productdetails.pin}</p>
                             </div>
                             <hr />
                         </div>

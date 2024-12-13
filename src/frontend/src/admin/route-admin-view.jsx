@@ -6,6 +6,7 @@ import Orders from "./page/Order";
 import ColorProduct from "./page/ColorProduct";
 import AllProduct from "./page/AllProduct";
 import Accounts from "./page/Account";
+import Charts from "./page/thongke";
 
 const AdminRoute = () => {
     const element = useRoutes([
@@ -16,6 +17,10 @@ const AdminRoute = () => {
                 {
                     path: "", // Khi vào "/admin/" sẽ render Users
                     element: <Product />,
+                },
+                {
+                    path: "thongke", // Khi vào "/admin/users" sẽ render Users
+                    element: <Charts />,
                 },
                 {
                     path: "products", // Khi vào "/admin/users" sẽ render Users
