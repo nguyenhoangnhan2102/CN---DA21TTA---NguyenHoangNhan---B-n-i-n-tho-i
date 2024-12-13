@@ -46,32 +46,40 @@ const ProductDetails = () => {
                                 Chỉ có tại Shopphone
                             </div>
                         </div>
-                        <div className="carousel-inner product-details-image">
-                            <div className="carousel-item active ">
-                                <img
-                                    src={imgURL + productdetails.hinhanhchinh} alt={productdetails.tensanpham}
-                                    className="d-block w-100"
-                                />
+                        <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
+                            <div className="carousel-inner product-details-image">
+                                {productdetails.danhsachhinhanh.split(",").map((image, index) => (
+                                    <div
+                                        className={`carousel-item ${index === 0 ? "active" : ""}`}
+                                        key={index}
+                                    >
+                                        <img
+                                            src={`${imgURL}${image}`}
+                                            alt={`${productdetails.tensanpham} - ${index + 1}`}
+                                            className="d-block w-100"
+                                        />
+                                    </div>
+                                ))}
                             </div>
+                            <button
+                                className="carousel-control-prev"
+                                type="button"
+                                data-bs-target="#productCarousel"
+                                data-bs-slide="prev"
+                            >
+                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button
+                                className="carousel-control-next"
+                                type="button"
+                                data-bs-target="#productCarousel"
+                                data-bs-slide="next"
+                            >
+                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Next</span>
+                            </button>
                         </div>
-                        <button
-                            className="carousel-control-prev"
-                            type="button"
-                            data-bs-target="#productCarousel"
-                            data-bs-slide="prev"
-                        >
-                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button
-                            className="carousel-control-next"
-                            type="button"
-                            data-bs-target="#productCarousel"
-                            data-bs-slide="next"
-                        >
-                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Next</span>
-                        </button>
                     </div>
                 </div>
                 <div className="col-md-4" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>
