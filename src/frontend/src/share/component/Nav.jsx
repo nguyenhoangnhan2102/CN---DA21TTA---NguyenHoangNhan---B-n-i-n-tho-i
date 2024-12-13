@@ -24,7 +24,7 @@ const Header = () => {
                         <Form className="d-flex">
                             <i
                                 class="fa-solid fa-cart-shopping me-4 d-flex align-items-center"
-                                style={{ fontSize: "30px", cursor: 'pointer' }}>
+                                style={{ fontSize: "25px", cursor: 'pointer' }}>
                             </i>
                             <Button className="btn-login d-flex align-items-center">
                                 Đăng nhập
