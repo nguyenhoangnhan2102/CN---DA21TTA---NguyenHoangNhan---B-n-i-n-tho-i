@@ -240,6 +240,15 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                         value={form.dungluong}
                         onChange={handleChange}
                     />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Pin"
+                        type="text"
+                        name="pin"
+                        value={form.pin}
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className="d-flex gap-2">
                     <TextField

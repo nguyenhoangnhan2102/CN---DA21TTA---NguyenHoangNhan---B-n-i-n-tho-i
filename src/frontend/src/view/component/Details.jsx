@@ -10,8 +10,8 @@ const imgURL = process.env.REACT_APP_IMG_URL;
 const ProductDetails = () => {
     const [productdetails, setProductDetails] = useState([]);
     const { masanpham } = useParams();
-    const [showDetails, setShowDetails] = useState(false);
-    const [showDetailsCamera, setShowDetailsCamera] = useState(false);
+    const [showDetails, setShowDetails] = useState(true);
+    const [showDetailsCamera, setShowDetailsCamera] = useState(true);
 
     useEffect(() => {
         fecthProductDetails();
@@ -34,65 +34,69 @@ const ProductDetails = () => {
     }
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-3">
             <div className="row d-flex">
+                <div className="d-flex mb-3 align-items-center">
+                    <h3 className="me-2">
+                        {productdetails.tensanpham}
+                    </h3>
+                    <label className="badge me-2 bg-warning text-dark d-flex align-items-center">
+                        Chỉ có tại Shopphone
+                    </label>
+                </div>
                 <div className="col-md-8">
                     <div className="carousel slide" id="productCarousel" data-bs-ride="carousel">
-                        <div className="d-flex mb-4 align-items-center">
-                            <h3 className="me-2">
-                                {productdetails.tensanpham}
-                            </h3>
-                            <label className="badge me-2 bg-warning text-dark d-flex align-items-center">
-                                Chỉ có tại Shopphone
-                            </label>
-                        </div>
-                        <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
-                            <div className="carousel-indicators">
-                                {productdetails.danhsachhinhanh.split(",").map((_, index) => (
-                                    <button
-                                        type="button"
-                                        data-bs-target="#productCarousel"
-                                        data-bs-slide-to={index}
-                                        className={index === 0 ? "active" : ""}
-                                        aria-current={index === 0 ? "true" : "false"}
-                                        aria-label={`Slide ${index + 1}`}
-                                        key={index}
-                                    ></button>
-                                ))}
-                            </div>
-                            <div className="carousel-inner product-details-image">
-                                {productdetails.danhsachhinhanh.split(",").map((image, index) => (
-                                    <div
-                                        className={`carousel-item ${index === 0 ? "active" : ""}`}
-                                        key={index}
-                                    >
-                                        <img
-                                            src={`${imgURL}${image}`}
-                                            alt={`${productdetails.tensanpham} - ${index + 1}`}
-                                            className="d-block w-100"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                            <button
-                                className="carousel-control-prev"
-                                type="button"
-                                data-bs-target="#productCarousel"
-                                data-bs-slide="prev"
-                            >
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button
-                                className="carousel-control-next"
-                                type="button"
-                                data-bs-target="#productCarousel"
-                                data-bs-slide="next"
-                            >
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
-                        </div>
+                        {productdetails.danhsachhinhanh && productdetails.danhsachhinhanh.trim() !== "" ? (
+                            <>
+                                <div className="carousel-indicators">
+                                    {productdetails.danhsachhinhanh.split(",").map((_, index) => (
+                                        <button
+                                            type="button"
+                                            data-bs-target="#productCarousel"
+                                            data-bs-slide-to={index}
+                                            className={index === 0 ? "active" : ""}
+                                            aria-current={index === 0 ? "true" : "false"}
+                                            aria-label={`Slide ${index + 1}`}
+                                            key={index}
+                                        ></button>
+                                    ))}
+                                </div>
+                                <div className="carousel-inner product-details-image">
+                                    {productdetails.danhsachhinhanh.split(",").map((image, index) => (
+                                        <div
+                                            className={`carousel-item ${index === 0 ? "active" : ""}`}
+                                            key={index}
+                                        >
+                                            <img
+                                                src={`${imgURL}${image}`}
+                                                alt={`${productdetails.tensanpham} - ${index + 1}`}
+                                                className="d-block w-100"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                                <button
+                                    className="carousel-control-prev"
+                                    type="button"
+                                    data-bs-target="#productCarousel"
+                                    data-bs-slide="prev"
+                                >
+                                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span className="visually-hidden">Previous</span>
+                                </button>
+                                <button
+                                    className="carousel-control-next"
+                                    type="button"
+                                    data-bs-target="#productCarousel"
+                                    data-bs-slide="next"
+                                >
+                                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span className="visually-hidden">Next</span>
+                                </button>
+                            </>
+                        ) : (
+                            <p>Không có hình ảnh để hiển thị.</p>
+                        )}
                     </div>
                 </div>
                 <div className="col-md-4" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>

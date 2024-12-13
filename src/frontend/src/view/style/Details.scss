@@ -28,10 +28,10 @@
 .product-details-image {
   background-color: #ffffff;
   border-radius: 12px;
-  padding: 90px;
+  padding: 120px;
 
-  img {
-    width: 100px;
+  .carousel-item img{
+    height: 120%;
   }
 }
 
@@ -53,10 +53,12 @@
   strong {
     font-weight: 500;
     width: 50%;
+    font-size: 14px;
   }
 
   p {
     width: 50%;
+    font-size: 14px;
   }
 }
 
