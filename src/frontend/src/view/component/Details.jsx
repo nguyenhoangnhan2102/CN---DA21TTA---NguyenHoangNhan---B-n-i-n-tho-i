@@ -40,7 +40,7 @@ const ProductDetails = () => {
                     <h3 className="me-2">
                         {productdetails.tensanpham}
                     </h3>
-                    <label className="badge me-2 bg-warning text-dark d-flex align-items-center" style={{display: 'le}}>
+                    <label className="badge bg-warning text-dark d-flex align-items-center">
                         Chỉ có tại Shopphone
                     </label>
                 </div>
@@ -181,7 +181,7 @@ const ProductDetails = () => {
                         </Link>
                     </div>
                     <div className="contact">
-                        Gọi đặt mua 1900 232 460 (8:00 - 21:00)
+                        Gọi đặt mua <strong>1900 232 460</strong> (8:00 - 21:00)
                     </div>
                 </div>
 
@@ -195,7 +195,7 @@ const ProductDetails = () => {
                     <li>Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cáp Type C...</li>
                 </ul>
             </div>
-        </div >
+        </div>
     );
 };
 
