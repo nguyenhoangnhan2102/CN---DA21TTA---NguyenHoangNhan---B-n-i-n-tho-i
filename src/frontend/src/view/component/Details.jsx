@@ -34,18 +34,18 @@ const ProductDetails = () => {
     }
 
     return (
-        <div className="container mt-3">
+        <div className="container mt-3 product-details">
             <div className="row d-flex">
                 <div className="d-flex mb-3 align-items-center">
                     <h3 className="me-2">
                         {productdetails.tensanpham}
                     </h3>
-                    <label className="badge me-2 bg-warning text-dark d-flex align-items-center">
+                    <label className="badge me-2 bg-warning text-dark d-flex align-items-center" style={{display: 'le}}>
                         Chỉ có tại Shopphone
                     </label>
                 </div>
                 <div className="col-md-8">
-                    <div className="carousel slide" id="productCarousel" data-bs-ride="carousel">
+                    <div className="carousel slide carousel-content" id="productCarousel" data-bs-ride="carousel">
                         {productdetails.danhsachhinhanh && productdetails.danhsachhinhanh.trim() !== "" ? (
                             <>
                                 <div className="carousel-indicators">
@@ -172,7 +172,19 @@ const ProductDetails = () => {
                             <hr />
                         </div>
                     )}
+                    <div className="btn-buy d-flex gap-2">
+                        <Link className="btn btn-secondary">
+                            Thêm vào giỏ hàng
+                        </Link>
+                        <Link className="btn btn-primary">
+                            Mua ngay
+                        </Link>
+                    </div>
+                    <div className="contact">
+                        Gọi đặt mua 1900 232 460 (8:00 - 21:00)
+                    </div>
                 </div>
+
             </div>
 
             <div className="mt-4 bg-light p-3 border rounded">
@@ -183,7 +195,7 @@ const ProductDetails = () => {
                     <li>Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cáp Type C...</li>
                 </ul>
             </div>
-        </div>
+        </div >
     );
 };
 
