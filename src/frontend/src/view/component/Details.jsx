@@ -98,17 +98,31 @@ const ProductDetails = () => {
                             <p>Không có hình ảnh để hiển thị.</p>
                         )}
                     </div>
+                    <div className="my-4 p-3 commit">
+                        <h6>Shopphone cam kết</h6>
+                        <ul className="row">
+                            <li className="col-6 my-2"><i className="fa-solid fa-box-open col-1"></i>
+                                1 đổi 1 trong 30 ngày đối với sản phẩm lỗi
+                            </li>
+                            <li className="col-6 my-2"><i class="fa-solid fa-rotate col-1"></i>
+                                Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cáp Type C...
+                            </li>
+                            <li className="col-6 my-2"><i className="fa-solid fa-shield col-1"></i>
+                                Bảo hành chính hãng điện thoại 1
+                            </li>
+                        </ul>
+                    </div>
                     <div className="description my-4">
-                        {productdetails.motasanpham}
+                        <label>{productdetails.tensanpham}</label> {productdetails.motasanpham}
                     </div>
                 </div>
-                <div className="col-md-4" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>
+                <div className="mb-4 col-md-4" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>
                     <button
                         className="mt-3 btn-show d-flex justify-content-between align-items-center"
                         onClick={() => setShowDetails(!showDetails)}
                     >
                         Cấu hình & Bộ nhớ
-                        <i class="fa-solid fa-caret-down"></i>
+                        <i className="fa-solid fa-caret-down"></i>
                     </button>
                     {showDetails && (
                         <div className="feature-list">
@@ -149,7 +163,7 @@ const ProductDetails = () => {
                         onClick={() => setShowDetailsCamera(!showDetailsCamera)}
                     >
                         Camera & Màn hình
-                        <i class="fa-solid fa-caret-down"></i>
+                        <i className="fa-solid fa-caret-down"></i>
                     </button>
                     {showDetailsCamera && (
                         <div className="feature-list">
@@ -188,15 +202,6 @@ const ProductDetails = () => {
                     </div>
                 </div>
 
-            </div>
-
-            <div className="mt-4 bg-light p-3 border rounded">
-                <h4>Shopphone cam kết</h4>
-                <ul>
-                    <li>1 đổi 1 trong 30 ngày đối với sản phẩm lỗi</li>
-                    <li>Bảo hành chính hãng điện thoại 1 năm</li>
-                    <li>Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cáp Type C...</li>
-                </ul>
             </div>
         </div>
     );
