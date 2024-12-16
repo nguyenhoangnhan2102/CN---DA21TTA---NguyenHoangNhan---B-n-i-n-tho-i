@@ -1,6 +1,5 @@
 .product-details {
-  font-family: "Roboto",
-    serif;
+  font-family: "Roboto", serif;
 }
 
 .feature-list p {
@@ -38,6 +37,28 @@
 
 .btn-buy {
   padding: 12px;
+
+  .button-cart {
+    display       : flex;
+    flex-direction: column;
+    background    : #ffffff;
+    color         : #2270e6;
+    border-color  : #2270e6;
+    font-size     : 14px;
+
+    i {
+      padding: 2px;
+    }
+  }
+
+  .button-buy {
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    background-color: #FC7600;
+    border          : none;
+    font-size       : 14px;
+  }
 }
 
 .contact {
@@ -72,15 +93,33 @@
   li {
     display        : flex;
     align-items    : center;
-    font-size      : 16px;
+    font-size      : 14px;
     text-decoration: none;
+  }
+
+  hr {
+    margin: 0 auto;
+    width : 97%;
+    color : #b4b5b6;
   }
 
   i {
     display    : flex;
     align-items: center;
     font-size  : 20px;
+    color      : #2270e6;
   }
+}
+
+.product-color {
+  background-color: #ffffff;
+  border-radius   : 12px;
+  padding         : 20px;
+}
+
+
+.product-info {
+  height: auto;
 }
 
 .feature-list {

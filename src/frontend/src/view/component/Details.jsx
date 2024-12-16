@@ -98,17 +98,38 @@ const ProductDetails = () => {
                             <p>Không có hình ảnh để hiển thị.</p>
                         )}
                     </div>
+                    <div className="d-flex my-4 product-color">
+                        {productdetails.danhsachmausacsanpham &&
+                            productdetails.danhsachmausacsanpham.split(',').map((image, index) => (
+                                <div className="row" key={index}>
+                                    <div className="my-2 d-flex">
+                                        <img
+                                            src={`${imgURL}${image}`} // Đường dẫn tới ảnh
+                                            alt={`Màu sản phẩm ${index + 1}`}
+                                            style={{
+                                                width: '100px',
+                                                height: '100px',
+                                                marginRight: '10px',
+                                                borderRadius: '5px',
+                                                border: '1px solid #ccc',
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                    </div>
                     <div className="my-4 p-3 commit">
-                        <h6>Shopphone cam kết</h6>
+                        <h5>Shopphone cam kết</h5>
                         <ul className="row">
                             <li className="col-6 my-2"><i className="fa-solid fa-box-open col-1"></i>
                                 1 đổi 1 trong 30 ngày đối với sản phẩm lỗi
                             </li>
                             <li className="col-6 my-2"><i class="fa-solid fa-rotate col-1"></i>
-                                Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cáp Type C...
+                                Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cây lấy sim, Ốp lưng, Cáp Type C, Củ sạc nhanh rời đầu Type A
                             </li>
+                            <hr />
                             <li className="col-6 my-2"><i className="fa-solid fa-shield col-1"></i>
-                                Bảo hành chính hãng điện thoại 1
+                                Bảo hành chính hãng điện thoại 1 năm tại các trung tâm bảo hành hãng
                             </li>
                         </ul>
                     </div>
@@ -116,7 +137,7 @@ const ProductDetails = () => {
                         <label>{productdetails.tensanpham}</label> {productdetails.motasanpham}
                     </div>
                 </div>
-                <div className="mb-4 col-md-4" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>
+                <div className="mb-4 col-md-4 product-info" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>
                     <button
                         className="mt-3 btn-show d-flex justify-content-between align-items-center"
                         onClick={() => setShowDetails(!showDetails)}
@@ -190,10 +211,11 @@ const ProductDetails = () => {
                         </div>
                     )}
                     <div className="btn-buy d-flex gap-2">
-                        <Link className="btn btn-secondary">
-                            Thêm vào giỏ hàng
+                        <Link className="btn btn-secondary button-cart col-6">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            Thêm vào giỏ
                         </Link>
-                        <Link className="btn btn-primary">
+                        <Link className="btn btn-primary button-buy col-6">
                             Mua ngay
                         </Link>
                     </div>

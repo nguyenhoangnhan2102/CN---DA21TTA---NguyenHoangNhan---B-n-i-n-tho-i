@@ -34,7 +34,6 @@ const Home = () => {
             <div className="container product-container my-4">
                 <div className="product-list">
                     {products.map((product, index) => (
-
                         <div key={product.masanpham} className="product-card">
                             <Link to={`/product-details/${product.masanpham}`} className="text-decoration-none ">
                                 <img
