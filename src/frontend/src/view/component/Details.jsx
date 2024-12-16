@@ -98,6 +98,9 @@ const ProductDetails = () => {
                             <p>Không có hình ảnh để hiển thị.</p>
                         )}
                     </div>
+                    <div className="description my-4">
+                        {productdetails.motasanpham}
+                    </div>
                 </div>
                 <div className="col-md-4" style={{ backgroundColor: '#FFFFFF', borderRadius: '12px' }}>
                     <button
