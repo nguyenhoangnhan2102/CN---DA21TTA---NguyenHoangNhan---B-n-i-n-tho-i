@@ -143,7 +143,11 @@ const ProductDetails = () => {
                         onClick={() => setShowDetails(!showDetails)}
                     >
                         Cấu hình & Bộ nhớ
-                        <i className="fa-solid fa-caret-down"></i>
+                        {showDetails ? (
+                            <i className="fa-solid fa-caret-up"></i>
+                        ) : (
+                            <i className="fa-solid fa-caret-down"></i>
+                        )}
                     </button>
                     {showDetails && (
                         <div className="feature-list">
@@ -184,7 +188,11 @@ const ProductDetails = () => {
                         onClick={() => setShowDetailsCamera(!showDetailsCamera)}
                     >
                         Camera & Màn hình
-                        <i className="fa-solid fa-caret-down"></i>
+                        {showDetailsCamera ? (
+                            <i className="fa-solid fa-caret-up"></i>
+                        ) : (
+                            <i className="fa-solid fa-caret-down"></i>
+                        )}
                     </button>
                     {showDetailsCamera && (
                         <div className="feature-list">
