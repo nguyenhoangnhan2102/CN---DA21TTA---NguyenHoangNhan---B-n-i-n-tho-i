@@ -30,6 +30,7 @@ const imgURL = process.env.REACT_APP_IMG_URL;
 
 const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
     const [listProducts, setListProducts] = useState([]);
+    const [preview, setPreview] = useState(null);
     const [form, setForm] = useState({
         masanpham: "",
         tenmausanpham: "",
@@ -39,7 +40,6 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
     });
 
     useEffect(() => {
-        console.log("colorproduct", colorproduct)
         if (colorproduct) {
             setForm(colorproduct);
         } else {
@@ -84,6 +84,13 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
         setForm((prev) => ({ ...prev, mausachinhanh: file }));
     };
 
@@ -155,7 +162,7 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
                         type="file"
                         id="mausachinhanh"
                         name="mausachinhanh"
-                        accept="mausachinhanh/*"
+                        accept="image/*"
                         onChange={handleFileChange}
                         required
                         style={{
@@ -175,6 +182,15 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
                             (e.target.style.border = "1px solid rgba(0, 0, 0, 0.23)")
                         }
                     />
+                    {preview && (
+                        <Box mt={2}>
+                            <img
+                                src={preview}
+                                alt="Preview"
+                                style={{ maxWidth: "100px", height: "100px", borderRadius: "4px" }}
+                            />
+                        </Box>
+                    )}
                 </Box>
 
                 <Box mt={2} display="flex" justifyContent="flex-end" gap="5px">
