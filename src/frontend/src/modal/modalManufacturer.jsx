@@ -71,7 +71,7 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
                 <TextField
                     fullWidth
                     margin="normal"
-                    label="Tên nhà sản xuất"
+                    label="Tên thương hiệu"
                     name="tenthuonghieu"
                     value={form.tenthuonghieu}
                     onChange={handleChange}
