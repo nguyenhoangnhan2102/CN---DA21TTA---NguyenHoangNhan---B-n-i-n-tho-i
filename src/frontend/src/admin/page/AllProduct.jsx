@@ -146,7 +146,7 @@ const AllProduct = () => {
                     </button>
                 </div> */}
 
-                <table className="table table-striped">
+                <table className="table">
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>
@@ -297,7 +297,7 @@ const AllProduct = () => {
                         ></i>
                     </div>
                 </div>
-                <table className="table table-striped">
+                <table className="table">
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>

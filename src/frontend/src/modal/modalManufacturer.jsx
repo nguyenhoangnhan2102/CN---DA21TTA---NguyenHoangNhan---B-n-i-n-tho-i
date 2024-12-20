@@ -30,6 +30,7 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
 
     const [form, setForm] = useState({
         tenthuonghieu: "",
+        trangthaithuonghieu: "",
     });
 
     useEffect(() => {
@@ -39,6 +40,7 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
         } else {
             setForm({
                 tenthuonghieu: "",
+                trangthaithuonghieu: 0,
             });
         }
     }, [manufacturer]);
@@ -53,6 +55,7 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
         onSave(form);
         setForm({
             tennhasanxuat: "",
+            trangthaithuonghieu: 0,
         });
     };
 
@@ -76,6 +79,19 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
                     value={form.tenthuonghieu}
                     onChange={handleChange}
                 />
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="trangthaithuonghieu-label">Trạng thái</InputLabel>
+                    <Select
+                        labelId="trangthaithuonghieu-label"
+                        name="trangthaithuonghieu"
+                        label="Trạng thái"
+                        value={form.trangthaithuonghieu}
+                        onChange={handleChange}
+                    >
+                        <MenuItem value={0}>Hoạt động</MenuItem>
+                        <MenuItem value={1}>Không hoạt động</MenuItem>
+                    </Select>
+                </FormControl>
                 <Box mt={2} display="flex" justifyContent="flex-end" gap="5px">
                     <button className="btn btn-primary admin-btn" onClick={handleSubmit}>
                         {manufacturer ? "Cập nhật" : "Tạo mới"}

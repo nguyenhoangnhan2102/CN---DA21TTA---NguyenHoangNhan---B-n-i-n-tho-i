@@ -195,7 +195,7 @@ const Product = () => {
                     </button>
                 </div>
 
-                <table className="table table-striped">
+                <table className="table">
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>
@@ -230,10 +230,10 @@ const Product = () => {
                                             alt={product.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    <td className="d-flex align-items-center justify-content-between gap-1">
+                                    <td className="d-flex align-items-center justify-content-between gap-1" style={{ border: 'none' }}>
                                         <button
                                             className="btn btn-sm btn-info"
-                                            style={{ padding: "0.5rem", width: '70px' }}
+                                            style={{ padding: "0.5rem", width: '70px', height: '100%' }}
                                             onClick={() => handleViewDetails(product)}
                                         >
                                             <i class="fa-regular fa-eye"></i>

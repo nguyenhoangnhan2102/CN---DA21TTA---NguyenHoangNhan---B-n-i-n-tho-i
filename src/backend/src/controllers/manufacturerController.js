@@ -7,7 +7,8 @@ const getAllManufacturer = async (req, res) => {
             SELECT 
                 TH.mathuonghieu,
                 TH.tenthuonghieu,
-                GROUP_CONCAT(SP.tensanpham SEPARATOR ', ') AS sanphams
+                TH.trangthaithuonghieu,
+                GROUP_CONCAT(SP.tensanpham SEPARATOR ', ') AS sanpham
             FROM 
                 THUONGHIEU TH
             LEFT JOIN 
@@ -37,12 +38,14 @@ const getAllManufacturer = async (req, res) => {
 const createManufacture = async (req, res) => {
     const {
         tenthuonghieu,
+        trangthaithuonghieu,
     } = req.body;
 
     try {
         const result = await connection.query
             (
-                `INSERT INTO THUONGHIEU (tenthuonghieu) VALUES(?) `, [tenthuonghieu,]
+                `INSERT INTO THUONGHIEU (tenthuonghieu, trangthaithuonghieu) VALUES(?, trangthaithuonghieu) `,
+                [tenthuonghieu, trangthaithuonghieu]
             );
         // res.status(201).json({ message: "Product created", masanpham: result[0].insertId });
         return res.status(201).json({
@@ -62,12 +65,14 @@ const updateManufacture = async (req, res) => {
     const { mathuonghieu } = req.params;
     const {
         tenthuonghieu,
+        trangthaithuonghieu,
     } = req.body;
 
     try {
         const result = await connection.query
             (
-                ` UPDATE THUONGHIEU SET tenthuonghieu = ? WHERE mathuonghieu = ? `, [tenthuonghieu, mathuonghieu]
+                ` UPDATE THUONGHIEU SET tenthuonghieu = ?, trangthaithuonghieu = ? WHERE mathuonghieu = ? `,
+                [tenthuonghieu, trangthaithuonghieu, mathuonghieu]
             );
 
         if (result[0].affectedRows > 0) {

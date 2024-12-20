@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { deleteManufacturer, getAllManufacturer, createManufacturer, updateManufacturer } from "../../service/manufacturerService";
 import ModalManufacturer from "../../modal/modalManufacturer";
+import "../css/dashboard.scss";
 
 const Manufacturer = () => {
     const [manufacturers, setManufacturers] = useState([]);
@@ -180,42 +181,50 @@ const Manufacturer = () => {
                     </button>
                 </div>
 
-                <table className="table table-striped">
+                <table className="table">
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>
                             <th scope="col">Tên nhà sản xuất</th>
-                            <th scope="col">Sản phẩm</th>
                             <th scope="col">Trạng thái</th>
+                            <th scope="col">Sản phẩm thuộc</th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentManufacuter && currentManufacuter.length > 0 ? (
-                            currentManufacuter.map((manufacturer, index) => (
-                                <tr key={manufacturer.mathuonghieu}>
-                                    <td>{(currentPage - 1) * manufacturersPerPage + index + 1}</td>
-                                    <td>{manufacturer.tenthuonghieu || "Không có tên"}</td>
-                                    <td>{manufacturer.sanphams || "Không có sản phẩm"}</td>
-                                    <td>{manufacturer.trangthaithuonghieu === 0 ? "Ngưng hoạt động" : "Hoạt động"}</td>
-                                    <td className="d-flex gap-2">
-                                        <button
-                                            className="btn btn-sm btn-primary"
-                                            style={{ padding: "0.5rem", width: '100px' }}
-                                            onClick={() => handleEdit(manufacturer)}
-                                        >
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-danger"
-                                            style={{ width: '100px' }}
-                                            onClick={() => openModalDelete(manufacturer)}
-                                        >
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
+                            currentManufacuter.map((manufacturer, index) => {
+                                const isDisabled = manufacturer.trangthaithuonghieu === 1
+                                return (
+                                    <tr
+                                        key={manufacturer.mathuonghieu}
+                                        className={`${isDisabled ? 'opacity-50' : ''}`}
+                                    >
+                                        <td>{(currentPage - 1) * manufacturersPerPage + index + 1}</td>
+                                        <td>{manufacturer.tenthuonghieu || "Không có tên"}</td>
+                                        <td>
+                                            {manufacturer.trangthaithuonghieu === 0 ? "Hoạt động" : "Không hoạt động"}
+                                        </td>
+                                        <td>{manufacturer.sanpham || "Không có sản phẩm"}</td>
+                                        <td className="d-flex gap-2" style={{ border: 'none' }}>
+                                            <button
+                                                className="btn btn-sm btn-primary"
+                                                style={{ padding: "0.5rem", width: '100px' }}
+                                                onClick={() => handleEdit(manufacturer)}
+                                            >
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <button
+                                                className="btn btn-sm btn-danger"
+                                                style={{ width: '100px' }}
+                                                onClick={() => openModalDelete(manufacturer)}
+                                            >
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
                         ) : (
                             <tr>
                                 <td colSpan="12">
@@ -265,7 +274,7 @@ const Manufacturer = () => {
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div >
             <ModalManufacturer
                 manufacturer={selectedManufacturer}
                 open={openModal}

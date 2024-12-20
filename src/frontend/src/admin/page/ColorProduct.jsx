@@ -13,8 +13,9 @@ import {
 import { createColorProduct, getAllColorProduct, updateColorProduct } from "../../service/colorProductService";
 import ModalColorProduct from "../../modal/modalColorProduct";
 import { uploadSingleFile } from "../../service/fileService";
+import "../css/dashboard.scss";
 const imgURL = process.env.REACT_APP_IMG_URL;
-const imgColorURL = process.env.REACT_APP_IMG_COLOR_URL;
+
 
 const ColorProduct = () => {
     const [colorproducts, setColorProducts] = useState([]);
@@ -195,7 +196,7 @@ const ColorProduct = () => {
                     </button>
                 </div>
 
-                <table className="table table-striped">
+                <table className="table">
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>
@@ -229,7 +230,7 @@ const ColorProduct = () => {
                                             alt={colorproduct.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    <td className="d-flex gap-2">
+                                    <td className="d-flex gap-2" style={{ border: 'none' }}>
                                         <button
                                             className="btn btn-sm btn-primary"
                                             style={{ padding: "0.5rem", width: '100px' }}

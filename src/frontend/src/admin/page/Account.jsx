@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../service/userAccountService";
+import "../css/dashboard.scss";
 
 const Accounts = () => {
     const [users, setUsers] = useState([]);
@@ -74,7 +75,8 @@ const Accounts = () => {
                 </div>
             </div>
 
-            <table className="table table-striped">
+            {/* <table className="table table-striped"> */}
+            <table className="table">
                 <thead className="thead-dark">
                     <tr className="table-title">
                         <th scope="col">STT</th>
