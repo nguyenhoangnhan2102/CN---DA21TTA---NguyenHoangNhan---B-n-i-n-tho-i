@@ -204,9 +204,8 @@ const Product = () => {
                             <th scope="col">Giá</th>
                             <th scope="col">Số lượng</th>
                             <th scope="col">Hệ điều hành</th>
-                            <th scope="col">RAM</th>
-                            <th scope="col">Dung lượng</th>
                             <th scope="col">Hình ảnh</th>
+                            <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
@@ -220,8 +219,7 @@ const Product = () => {
                                     <td>{product.giasanpham ? product.giasanpham.toLocaleString("vi-VN") : "Không có giá"}đ</td>
                                     <td>{product.soluongsanpham || "Không có số lượng"}</td>
                                     <td>{product.hedieuhanh || "Không có giá"}</td>
-                                    <td>{product.ram || "Không có giá"}</td>
-                                    <td>{product.dungluong || "Không có mô tả"}</td>
+                                    <td>{product.trangthai === 0 ? "Hoạt động" : "Không hoạt động"}</td>
                                     <td>
                                         <img
                                             width={`70px`}

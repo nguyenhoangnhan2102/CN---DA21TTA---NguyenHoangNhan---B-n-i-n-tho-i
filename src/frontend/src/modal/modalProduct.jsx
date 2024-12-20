@@ -52,6 +52,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
         motasanpham: "",
         hinhanhchinh: "",
         tenthuonghieu: "",
+        trangthai: "",
     });
 
     useEffect(() => {
@@ -76,6 +77,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                 motasanpham: "",
                 hinhanhchinh: "",
                 tenthuonghieu: "",
+                trangthai: 0,
             });
         }
         getAllManufacturerData();
@@ -85,8 +87,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
         try {
             const response = await getAllManufacturer();
             if (response) {
-                setListManufacturer(response.DT || []); // Đảm bảo rằng `DT` luôn là một mảng
-                console.log("dt", response.DT);
+                setListManufacturer(response.DT.activeManufacturer || []); // Đảm bảo rằng `DT` luôn là một mảng
             } else {
                 console.error("Failed to fetch");
             }
@@ -99,11 +100,6 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
-
-    // const handleFileChange = (e) => {
-    //     const file = e.target.files[0];
-    //     setForm((prev) => ({ ...prev, hinhanhchinh: file })); // Cập nhật ảnh mới và xóa ảnh cũ
-    // };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -134,6 +130,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
             motasanpham: "",
             hinhanhchinh: "",
             tenthuonghieu: "",
+            trangthai: 0,
         });
     };
 
@@ -332,6 +329,21 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                         multiline
                         rows={4}
                     />
+                    {product && (
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel id="trangthai-label">Trạng thái</InputLabel>
+                            <Select
+                                labelId="trangthai-label"
+                                name="trangthai"
+                                label="Trạng thái"
+                                value={form.trangthai}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={0}>Hoạt động</MenuItem>
+                                <MenuItem value={1}>Không hoạt động</MenuItem>
+                            </Select>
+                        </FormControl>
+                    )}
                     <img
                         src={product && form.hinhanhchinh ? imageSrc : ""}
                         alt={form.tensanpham}

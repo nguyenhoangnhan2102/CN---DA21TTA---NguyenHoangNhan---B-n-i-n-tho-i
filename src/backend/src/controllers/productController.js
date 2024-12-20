@@ -134,7 +134,8 @@ const createProduct = async (req, res) => {
         dophangiaimanhinh,
         pin,
         motasanpham,
-        hinhanhchinh
+        hinhanhchinh,
+        trangthai,
     } = req.body;
 
     try {
@@ -155,8 +156,10 @@ const createProduct = async (req, res) => {
             dophangiaimanhinh,
             pin, 
             motasanpham,
-            hinhanhchinh)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `,
+            hinhanhchinh,
+            trangthai
+            )
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `,
             [
                 mathuonghieu,
                 tensanpham,
@@ -174,6 +177,7 @@ const createProduct = async (req, res) => {
                 pin,
                 motasanpham,
                 hinhanhchinh,
+                trangthai,
             ]
         );
         // res.status(201).json({ message: "Product created", masanpham: result[0].insertId });
@@ -196,7 +200,8 @@ const createProduct = async (req, res) => {
                 dophangiaimanhinh,
                 pin,
                 motasanpham,
-                hinhanhchinh
+                hinhanhchinh,
+                trangthai
             }
         });
     } catch (err) {
@@ -223,7 +228,8 @@ const updateProduct = async (req, res) => {
         dophangiaimanhinh,
         pin,
         motasanpham,
-        hinhanhchinh
+        hinhanhchinh,
+        trangthai,
     } = req.body;
 
     try {
@@ -246,7 +252,8 @@ const updateProduct = async (req, res) => {
                 dophangiaimanhinh = ?,
                 pin = ?,
                 motasanpham = ?,
-                hinhanhchinh = ?
+                hinhanhchinh = ?,
+                trangthai = ?
                 WHERE masanpham = ?
             `,
             [
@@ -266,6 +273,7 @@ const updateProduct = async (req, res) => {
                 pin,
                 motasanpham,
                 hinhanhchinh,
+                trangthai,
                 masanpham
             ]
         );

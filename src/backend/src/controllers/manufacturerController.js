@@ -18,7 +18,6 @@ const getAllManufacturer = async (req, res) => {
             GROUP BY 
                 TH.mathuonghieu, TH.tenthuonghieu
             ORDER BY
-                (TH.trangthaithuonghieu = 0) DESC,
                 TH.created_at DESC;
         `;
         const allquery = `
@@ -34,14 +33,15 @@ const getAllManufacturer = async (req, res) => {
             GROUP BY 
                 TH.mathuonghieu, TH.tenthuonghieu
             ORDER BY
+                (TH.trangthaithuonghieu = 0) DESC,
                 TH.created_at DESC;
         `;
-        const [activemanufacturer] = await connection.query(query);
+        const [activeManufacturer] = await connection.query(query);
         const [allManufacturer] = await connection.query(allquery);
         return res.status(200).json({
             EM: "Lấy danh sách thương hiệu thành công",
             EC: 1,
-            DT: { activemanufacturer, allManufacturer },
+            DT: { activeManufacturer, allManufacturer },
         });
     } catch (err) {
         console.error("Error fetching Manufacturer:", err);
