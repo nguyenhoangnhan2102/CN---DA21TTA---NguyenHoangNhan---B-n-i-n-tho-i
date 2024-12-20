@@ -12,17 +12,36 @@ const getAllManufacturer = async (req, res) => {
             FROM 
                 THUONGHIEU TH
             LEFT JOIN 
-                SANPHAM SP 
-            ON 
-                TH.mathuonghieu = SP.mathuonghieu
+                SANPHAM SP ON TH.mathuonghieu = SP.mathuonghieu
+            WHERE
+                TH.trangthaithuonghieu = 0   
             GROUP BY 
-                TH.mathuonghieu, TH.tenthuonghieu;
+                TH.mathuonghieu, TH.tenthuonghieu
+            ORDER BY
+                (TH.trangthaithuonghieu = 0) DESC,
+                TH.created_at DESC;
         `;
-        const [results] = await connection.query(query);
+        const allquery = `
+            SELECT 
+                TH.mathuonghieu,
+                TH.tenthuonghieu,
+                TH.trangthaithuonghieu,
+                GROUP_CONCAT(SP.tensanpham SEPARATOR ', ') AS sanpham
+            FROM 
+                THUONGHIEU TH
+            LEFT JOIN 
+                SANPHAM SP ON TH.mathuonghieu = SP.mathuonghieu
+            GROUP BY 
+                TH.mathuonghieu, TH.tenthuonghieu
+            ORDER BY
+                TH.created_at DESC;
+        `;
+        const [activemanufacturer] = await connection.query(query);
+        const [allManufacturer] = await connection.query(allquery);
         return res.status(200).json({
             EM: "Lấy danh sách thương hiệu thành công",
             EC: 1,
-            DT: results,
+            DT: { activemanufacturer, allManufacturer },
         });
     } catch (err) {
         console.error("Error fetching Manufacturer:", err);
@@ -88,7 +107,7 @@ const updateManufacture = async (req, res) => {
 
 const deleteManufacture = async (req, res) => {
     try {
-        const query = "DELETE FROM THUONGHIEU WHERE mathuonghieu = ?";
+        const query = "UPDATE THUONGHIEU SET trangthaithuonghieu = 1 WHERE mathuonghieu = ?";
         const [result] = await connection.query(query, [req.params.mathuonghieu]);
         console.log("result", result);
         if (result.affectedRows === 0) {

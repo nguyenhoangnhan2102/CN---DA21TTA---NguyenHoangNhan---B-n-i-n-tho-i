@@ -33,8 +33,7 @@ const Manufacturer = () => {
         try {
             const response = await getAllManufacturer();
             if (response.EC === 1) {
-                setManufacturers(response.DT);
-                console.log(response.DT);
+                setManufacturers(response.DT.allManufacturer);
             } else {
                 console.error("Failed to fetch");
             }
