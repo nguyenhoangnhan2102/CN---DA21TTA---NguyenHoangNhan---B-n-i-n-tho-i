@@ -223,7 +223,7 @@ const ProductDetails = () => {
                             <i class="fa-solid fa-cart-shopping"></i>
                             Thêm vào giỏ
                         </Link>
-                        <Link className="btn btn-primary button-buy col-6">
+                        <Link to={`/buy`} className="btn btn-primary button-buy col-6">
                             Mua ngay
                         </Link>
                     </div>
