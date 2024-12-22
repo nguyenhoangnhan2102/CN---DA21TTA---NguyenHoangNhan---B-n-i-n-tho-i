@@ -41,9 +41,8 @@ const Buy = () => {
     return (
         <div className="container py-5">
             <div className="row g-4">
-                {/* Thông tin khách hàng */}
                 <div className="col-md-6">
-                    <div className="info-section">
+                    <div className="info-section" style={{ backgroundColor: 'white' }}>
                         <h4>Thông Tin Khách Hàng</h4>
                         <form>
                             <div className="mb-3">
@@ -81,9 +80,8 @@ const Buy = () => {
                     </div>
                 </div>
 
-                {/* Thông tin sản phẩm */}
                 <div className="col-md-6">
-                    <div className="info-section">
+                    <div className="info-section" style={{ backgroundColor: 'white' }}>
                         <h4>Thông Tin Sản Phẩm</h4>
                         <div className="d-flex justify-content-center my-2">
                             <img src="/iphone-16-pro-max-titan-den-.jpg" alt="iphone-16-pro-max-titan-den-.jpg" width="200px" height="200px" />

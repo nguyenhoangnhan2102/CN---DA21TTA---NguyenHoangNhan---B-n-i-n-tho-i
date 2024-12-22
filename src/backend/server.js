@@ -41,8 +41,6 @@ const userRouter = require("./src/route/user");
 const productRouter = require("./src/route/product");
 const manufacturerRouter = require("./src/route/manufacturer");
 const orderRouter = require("./src/route/order");
-// const categoryRouter = require("./src/routes/category");
-// const manufacturerRouter = require("./src/routes/manufacturer");
 const fileRouter = require("./src/route/fileService");
 const colorProductRouter = require("./src/route/colorProduct");
 
@@ -52,8 +50,6 @@ app.use("/api/products", productRouter);
 app.use("/api/manufactureres", manufacturerRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/colorproducts", colorProductRouter);
-// app.use("/api/categories", categoryRouter);
-// app.use("/api/manufactureres", manufacturerRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

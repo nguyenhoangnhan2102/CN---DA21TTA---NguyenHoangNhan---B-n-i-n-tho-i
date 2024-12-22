@@ -6,26 +6,22 @@
 }
 
 .navbar-logo {
-    font-size: 20px;
-
-    @media (max-width: 768px) {
-        font-size: 18px;
-    }
+    cursor     : pointer;
+    font-family: "Titillium Web", sans-serif;
 }
 
 .btn-login {
-    font-size: 14px;
-
-    @media (max-width: 768px) {
-        font-size: 12px;
-        padding  : 0.5rem;
-    }
+    background-color: #FFD400;
+    font-family     : "Karla", sans-serif;
+    color           : black;
+    border          : none;
 }
 
-.fa-cart-shopping {
-    font-size: 18px;
-
-    @media (max-width: 768px) {
-        font-size: 16px;
-    }
+.btn-login:hover {
+    border-top-left-radius    : 20px;
+    border-top-right-radius   : 20px;
+    border-bottom-left-radius : 20px;
+    border-bottom-right-radius: 20px;
+    background-color          : rgb(194, 193, 193);
+    color                     : black;
 }

@@ -5,48 +5,39 @@ import { MdOutlineSmartphone } from "react-icons/md";
 
 const Header = () => {
     return (
-        <Navbar expand="lg" className="navbar-container shadow-sm py-2" bg="light">
-            <Container fluid>
-                {/* Logo */}
-                <Navbar.Brand>
-                    <Link
-                        to={`/`}
-                        className="d-flex align-items-center text-decoration-none"
-                        style={{ fontSize: "25px", fontWeight: 'bold', color: 'black' }}
-                    >
-                        <MdOutlineSmartphone className="me-2" style={{ fontSize: "35px" }} />
-                        <span className="d-none d-md-block">SHOPPHONE</span>
-                    </Link>
-                </Navbar.Brand>
-
-                {/* Toggler */}
-                <Navbar.Toggle aria-controls="navbarScroll" />
-
-                {/* Links and Actions */}
-                <Navbar.Collapse id="navbarScroll">
-                    <Nav className="me-auto my-2 my-lg-0"></Nav>
-                    <Form className="d-flex align-items-center">
-                        {/* Cart Icon */}
-                        <Link to={`/cart`} className="text-decoration-none text-dark me-3">
-                            <i
-                                className="fa-solid fa-cart-shopping"
-                                style={{ fontSize: "20px", cursor: 'pointer' }}
-                            ></i>
-                            <span className="badge bg-danger rounded-pill ms-1">3</span>
+        <>
+            <Navbar expand="lg" className="navbar-container">
+                <Container fluid>
+                    <Navbar className='navbar-logo'>
+                        <Link to={`/`} className="d-flex align-items-center text-decoration-none fst-italic" style={{ fontSize: "25px", fontWeight: 'bold', color: 'black' }}>
+                            {/* <i class="fa-solid fa-phone me-2" style={{ fontSize: "25px" }}></i> */}
+                            <MdOutlineSmartphone style={{ fontSize: "50px" }} />
+                            SHOPPHONE
                         </Link>
-
-                        {/* Login Button */}
-                        <Link
-                            to={`/profile`}
-                            className="btn btn-outline-primary btn-sm text-decoration-none px-3 py-1"
+                    </Navbar>
+                    <Navbar.Toggle aria-controls="navbarScroll" />
+                    <Navbar.Collapse id="navbarScroll">
+                        <Nav
+                            className="me-auto my-2 my-lg-0"
+                            style={{ maxHeight: '100px' }}
+                            navbarScroll
                         >
-                            Đăng nhập
-                        </Link>
-                    </Form>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+                        </Nav>
+                        <Form className="d-flex">
+                            <Link to={`/cart`} className="text-decoration-none text-dark">
+                                <i
+                                    class="fa-solid fa-cart-shopping me-4 d-flex align-items-center"
+                                    style={{ fontSize: "25px", cursor: 'pointer' }}>
+                                </i>
+                            </Link>
+                            <Link to={`/profile`} className="text-decoration-none btn-login d-flex align-items-center me-2">
+                                Đăng nhập
+                            </Link>
+                        </Form>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar >
+        </>
     );
-};
-
+}
 export default Header;
