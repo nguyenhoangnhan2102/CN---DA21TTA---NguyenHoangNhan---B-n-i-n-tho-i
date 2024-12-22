@@ -19,6 +19,12 @@ function Cart() {
         },
     ]);
 
+    const [customerInfo, setCustomerInfo] = useState({
+        name: "",
+        phone: "",
+        address: "",
+    });
+
     // Tăng số lượng sản phẩm
     const increaseQuantity = (id) => {
         setCartItems((prevItems) =>
@@ -47,6 +53,26 @@ function Cart() {
     // Tính tổng tiền
     const calculateTotal = () =>
         cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    // Xử lý khi người dùng nhập thông tin
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setCustomerInfo({ ...customerInfo, [name]: value });
+    };
+
+    // Xử lý khi nhấn nút "Thanh Toán"
+    const handleCheckout = () => {
+        if (!customerInfo.name || !customerInfo.phone || !customerInfo.address) {
+            alert("Vui lòng điền đầy đủ thông tin người mua!");
+            return;
+        }
+        alert(
+            `Cảm ơn bạn ${customerInfo.name}, đơn hàng đã được đặt thành công!`
+        );
+        // Reset thông tin
+        setCustomerInfo({ name: "", phone: "", address: "" });
+        setCartItems([]);
+    };
 
     return (
         <div className="container py-5">
@@ -98,8 +124,46 @@ function Cart() {
                     ))}
                 </div>
 
-                {/* Phần tổng tiền và nút mua */}
+                {/* Phần thông tin người mua và tóm tắt */}
                 <div className="col-md-4">
+                    <div className="card p-3 shadow-sm mb-3">
+                        <h4 className="text-center mb-3">Thông Tin Người Mua</h4>
+                        <form>
+                            <div className="mb-3">
+                                <label className="form-label">Họ Tên</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    value={customerInfo.name}
+                                    onChange={handleInputChange}
+                                    placeholder="Nhập họ tên"
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label">Số Điện Thoại</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="phone"
+                                    value={customerInfo.phone}
+                                    onChange={handleInputChange}
+                                    placeholder="Nhập số điện thoại"
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label">Địa Chỉ</label>
+                                <textarea
+                                    className="form-control"
+                                    name="address"
+                                    rows="3"
+                                    value={customerInfo.address}
+                                    onChange={handleInputChange}
+                                    placeholder="Nhập địa chỉ giao hàng"
+                                ></textarea>
+                            </div>
+                        </form>
+                    </div>
                     <div className="card p-3 shadow-sm">
                         <h4 className="text-center mb-3">Tóm Tắt Đơn Hàng</h4>
                         <p>
@@ -112,7 +176,12 @@ function Cart() {
                                 {calculateTotal().toLocaleString()} VND
                             </span>
                         </p>
-                        <button className="btn btn-success w-100 mt-3">Thanh Toán</button>
+                        <button
+                            className="btn btn-success w-100 mt-3"
+                            onClick={handleCheckout}
+                        >
+                            Thanh Toán
+                        </button>
                     </div>
                 </div>
             </div>

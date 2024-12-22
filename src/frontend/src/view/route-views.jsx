@@ -4,6 +4,8 @@ import ProductDetails from "./component/Details";
 import Profile from "./component/Profile";
 import Buy from "./component/Buy";
 import Cart from "./component/Cart";
+import Login from "./component/Login";
+import Register from "./component/Register";
 
 const RouterView = () => {
     const element = useRoutes([
@@ -26,6 +28,14 @@ const RouterView = () => {
         {
             path: "/cart",
             element: <Cart />,
+        },
+        {
+            path: "/login",
+            element: <Login />,
+        },
+        {
+            path: "/register",
+            element: <Register />,
         },
         {
             path: "*",
