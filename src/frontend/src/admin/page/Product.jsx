@@ -155,13 +155,13 @@ const Product = () => {
                             color="primary"
                             className="btn btn-danger"
                         >
-                            <i class="fa-solid fa-x"></i> Không
+                            <i className="fa-solid fa-x"></i> Không
                         </div>
                         <div
                             onClick={handleDeleteProduct}
                             className="btn btn-success"
                         >
-                            <i class="fa-solid fa-check"></i> Có
+                            <i className="fa-solid fa-check"></i> Có
                         </div>
                     </DialogActions>
                 </Dialog>
@@ -191,7 +191,7 @@ const Product = () => {
                 </div>
                 <div className="btn-header-table">
                     <button className="btn btn-sm btn-success mr-2" onClick={handleCreate} style={{ width: '70px' }}>
-                        <i class="fa-solid fa-plus"></i>
+                        <i className="fa-solid fa-plus"></i>
                     </button>
                 </div>
 
@@ -234,21 +234,21 @@ const Product = () => {
                                             style={{ padding: "0.5rem", width: '70px', height: '100%' }}
                                             onClick={() => handleViewDetails(product)}
                                         >
-                                            <i class="fa-regular fa-eye"></i>
+                                            <i className="fa-regular fa-eye"></i>
                                         </button>
                                         <button
                                             className="btn btn-sm btn-primary"
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => handleEdit(product)}
                                         >
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <i className="fa-solid fa-pen-to-square"></i>
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => openModalDelete(product)}
                                         >
-                                            <i class="fa-solid fa-trash"></i>
+                                            <i className="fa-solid fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>

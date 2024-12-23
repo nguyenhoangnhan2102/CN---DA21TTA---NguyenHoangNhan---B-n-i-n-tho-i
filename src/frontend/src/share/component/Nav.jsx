@@ -10,7 +10,7 @@ const Header = () => {
                 <Container fluid>
                     <Navbar className='navbar-logo'>
                         <Link to={`/`} className="d-flex align-items-center text-decoration-none fst-italic" style={{ fontSize: "25px", fontWeight: 'bold', color: 'black' }}>
-                            {/* <i class="fa-solid fa-phone me-2" style={{ fontSize: "25px" }}></i> */}
+                            {/* <i className="fa-solid fa-phone me-2" style={{ fontSize: "25px" }}></i> */}
                             <MdOutlineSmartphone style={{ fontSize: "50px" }} />
                             SHOPPHONE
                         </Link>
@@ -26,7 +26,7 @@ const Header = () => {
                         <Form className="d-flex">
                             <Link to={`/cart`} className="text-decoration-none text-dark">
                                 <i
-                                    class="fa-solid fa-cart-shopping me-4 d-flex align-items-center"
+                                    className="fa-solid fa-cart-shopping me-4 d-flex align-items-center"
                                     style={{ fontSize: "25px", cursor: 'pointer' }}>
                                 </i>
                             </Link>

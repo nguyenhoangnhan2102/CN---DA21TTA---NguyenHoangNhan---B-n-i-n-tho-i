@@ -26,7 +26,7 @@ const getAllUser = async (req, res) => {
 
 
 const registerUser = async (req, res) => {
-    const { hoten, email, password, sdt, diachi } = req.body;
+    const { email, hoten, password, sodienthoai, diachi } = req.body;
     // Kiểm tra xem người dùng đã tồn tại chưa
     const [existingUser] = await connection.query(
         "SELECT * FROM `KHACHHANG` WHERE email = ?",
@@ -44,8 +44,8 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         let role = 0;
         connection.query(
-            "INSERT INTO `KHACHHANG` (email, password, role, hoten, sdt, diachi) VALUES (?, ?, ?, ?, ?, ?)",
-            [email, hashedPassword, role, hoten, sdt, diachi]
+            "INSERT INTO `KHACHHANG` (email, password, role, hoten, sodienthoai, diachi) VALUES (?, ?, ?, ?, ?, ?)",
+            [email, hashedPassword, role, sodienthoai, sdt, diachi]
         );
         return res.status(200).json({
             EM: "Đăng ký thành công",

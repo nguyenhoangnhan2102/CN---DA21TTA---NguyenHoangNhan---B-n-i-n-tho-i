@@ -32,7 +32,7 @@ const Footer = () => {
                         <div className="row mt-3">
                             <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                                 <h6 className="text-uppercase fw-bold mb-4 fst-italic">
-                                    <i class="fa-solid fa-phone me-2"></i>Shopphone
+                                    <i className="fa-solid fa-phone me-2"></i>Shopphone
                                 </h6>
                                 <p>
                                     Chào mừng đến với SHOPPHONE. Nơi bạn có thể tìm bất cứ sản phẩm điện thoại thịnh hành nhất!!!

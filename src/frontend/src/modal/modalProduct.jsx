@@ -197,7 +197,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                             </Select>
                         </FormControl>
                         <button className="btn btn-sm btn-success mr-2" onClick={handleCreate} style={{ height: '100%' }}>
-                            <i class="fa-solid fa-plus"></i>
+                            <i className="fa-solid fa-plus"></i>
                         </button>
                         <TextField
                             fullWidth
@@ -380,7 +380,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
 
                     <Box mt={2} display="flex" justifyContent="flex-end" gap="5px">
                         <button className="btn btn-primary admin-btn" onClick={handleSubmit}>
-                            <i class="fa-regular fa-floppy-disk" style={{ marginRight: '5px' }}></i>Lưu
+                            <i className="fa-regular fa-floppy-disk" style={{ marginRight: '5px' }}></i>Lưu
                         </button>
                         <button className="btn btn-danger admin-btn" onClick={onClose} style={{ width: '15%' }}>
                             <i className="fa-solid fa-x" style={{ marginRight: '5px' }}></i>

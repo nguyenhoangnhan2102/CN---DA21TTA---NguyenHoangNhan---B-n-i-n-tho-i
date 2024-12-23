@@ -124,7 +124,7 @@ const ProductDetails = () => {
                             <li className="col-6 my-2"><i className="fa-solid fa-box-open col-1"></i>
                                 1 đổi 1 trong 30 ngày đối với sản phẩm lỗi
                             </li>
-                            <li className="col-6 my-2"><i class="fa-solid fa-rotate col-1"></i>
+                            <li className="col-6 my-2"><i className="fa-solid fa-rotate col-1"></i>
                                 Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cây lấy sim, Ốp lưng, Cáp Type C, Củ sạc nhanh rời đầu Type A
                             </li>
                             <hr />
@@ -220,7 +220,7 @@ const ProductDetails = () => {
                     )}
                     <div className="btn-buy d-flex gap-2">
                         <Link className="btn btn-secondary button-cart col-6">
-                            <i class="fa-solid fa-cart-shopping"></i>
+                            <i className="fa-solid fa-cart-shopping"></i>
                             Thêm vào giỏ
                         </Link>
                         <Link to={`/buy`} className="btn btn-primary button-buy col-6">
