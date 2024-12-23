@@ -30,7 +30,7 @@ const Header = () => {
                                     style={{ fontSize: "25px", cursor: 'pointer' }}>
                                 </i>
                             </Link>
-                            <Link to={`/profile`} className="text-decoration-none btn-login d-flex align-items-center me-2">
+                            <Link to={`/login`} className="text-decoration-none btn-login d-flex align-items-center me-2">
                                 Đăng nhập
                             </Link>
                         </Form>

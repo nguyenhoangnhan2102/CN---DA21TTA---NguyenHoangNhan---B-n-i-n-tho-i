@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import "../style/Form.scss";
 import {
     Box,
@@ -11,31 +12,16 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    Link,
 } from "@mui/material";
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!username || !password) {
-            setError('Please fill in all fields');
-        } else {
-            setError('');
-            // Handle login logic here
-            console.log('Logging in with:', { username, password });
-        }
-    };
 
     return (
         <div className="d-flex align-items-center justify-content-center" style={{ height: '100vh' }}>
-            <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
+            <form className="form-register p-4 border rounded bg-light">
                 <h2 className="mb-4 text-center">ĐĂNG KÝ</h2>
-                {error && <div className="alert alert-danger">{error}</div>}
-                <div className="mb-3">
+                <div className="mb-1">
                     <TextField
                         fullWidth
                         margin="normal"
@@ -43,7 +29,7 @@ const Login = () => {
                         name="email"
                     />
                 </div>
-                <div className="mb-3">
+                <div className="mb-1">
                     <TextField
                         fullWidth
                         margin="normal"
@@ -51,7 +37,7 @@ const Login = () => {
                         name="password"
                     />
                 </div>
-                <div className="mb-3">
+                <div className="mb-1">
                     <TextField
                         fullWidth
                         margin="normal"
@@ -59,19 +45,20 @@ const Login = () => {
                         name="repassword"
                     />
                 </div>
-                <div className='d-flex justify-content-center gap-4 form-button' >
+                <div className='d-flex justify-content-between align-items-center gap-4 form-button' >
                     <Link
-                        className="btn btn-primary"
+                        className='btn btn-primary button-register'
                         variant="link"
-                        style={{ color: 'white', textDecoration: 'none' }}>
+
+                    >
                         ĐĂNG KÝ
                     </Link>
                     <Link
                         to={`/login`}
-                        className="btn btn-primary"
+                        className='button-login'
                         variant="link"
-                        style={{ color: 'white', textDecoration: 'none' }}>
-                        ĐĂNG NHẬP
+                    >
+                        Đã có tài khoản
                     </Link>
                 </div>
             </form>
