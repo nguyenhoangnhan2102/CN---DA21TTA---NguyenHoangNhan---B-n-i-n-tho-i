@@ -1,66 +1,70 @@
-import React, { useState } from "react";
-import "../style/Login.scss";
+import React, { useState } from 'react';
+import "../style/Form.scss";
+import {
+    Box,
+    Button,
+    TextField,
+    Modal,
+    Typography,
+    Input,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Link,
+} from "@mui/material";
 
-function Login() {
-    const [formData, setFormData] = useState({ username: "", password: "" });
-    const [error, setError] = useState("");
+const Login = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleLogin = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formData.username || !formData.password) {
-            setError("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!");
-            return;
+        if (!username || !password) {
+            setError('Please fill in all fields');
+        } else {
+            setError('');
+            // Handle login logic here
+            console.log('Logging in with:', { username, password });
         }
-        setError("");
-        alert(`Đăng nhập thành công! Chào mừng, ${formData.username}`);
-        // Thực hiện các bước xử lý đăng nhập ở đây
     };
 
     return (
-        <div className="container d-flex align-items-center justify-content-center min-vh-100">
-            <div className="card p-4 shadow-sm" style={{ maxWidth: "400px", width: "100%" }}>
-                <h2 className="text-center mb-4">Đăng Nhập</h2>
-                <form onSubmit={handleLogin}>
-                    {error && <div className="alert alert-danger">{error}</div>}
-                    <div className="mb-3">
-                        <label className="form-label">Tên Đăng Nhập</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleInputChange}
-                            placeholder="Nhập tên đăng nhập"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Mật Khẩu</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            placeholder="Nhập mật khẩu"
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100">
-                        Đăng Nhập
-                    </button>
-                </form>
-                <div className="text-center mt-3">
-                    <a href="#!" className="text-decoration-none">
-                        Quên mật khẩu?
-                    </a>
-                </div>
+        <div className="d-flex align-items-center justify-content-center" style={{ height: '100vh' }}>
+            <div className='d-lg-block d-sm-none'>
+                <img src="/login.png" alt="login.png" />
             </div>
+            <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
+                <h2 className="mb-4 text-center">ĐĂNG NHẬP</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <div className="mb-3">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Tên"
+                        name="email"
+                    />
+                </div>
+                <div className="mb-3">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Mật khẩu"
+                        name="password"
+                    />
+                </div>
+                <div className='d-flex justify-content-center gap-4 form-button' >
+                    <Link to={`/login`} type="submit" className="btn btn-primary" style={{ color: 'white', textDecoration: 'none' }}>
+                        ĐĂNG NHẬP
+                    </Link>
+                    <Link to={`/register`} type="submit" className="btn btn-primary" style={{ color: 'white', textDecoration: 'none' }}>
+                        ĐĂNG KÝ
+                    </Link>
+                </div>
+            </form>
         </div>
     );
-}
+};
 
 export default Login;

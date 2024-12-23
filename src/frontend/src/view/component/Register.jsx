@@ -1,101 +1,78 @@
-import React, { useState } from "react";
-import "../style/Register.scss";
+import React, { useState } from 'react';
+import "../style/Form.scss";
+import {
+    Box,
+    Button,
+    TextField,
+    Modal,
+    Typography,
+    Input,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Link,
+} from "@mui/material";
 
-function Register() {
-    const [formData, setFormData] = useState({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-    });
-    const [error, setError] = useState("");
+const Login = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleRegister = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const { username, email, password, confirmPassword } = formData;
-
-        if (!username || !email || !password || !confirmPassword) {
-            setError("Vui lòng điền đầy đủ thông tin!");
-            return;
+        if (!username || !password) {
+            setError('Please fill in all fields');
+        } else {
+            setError('');
+            // Handle login logic here
+            console.log('Logging in with:', { username, password });
         }
-
-        if (password !== confirmPassword) {
-            setError("Mật khẩu không khớp!");
-            return;
-        }
-
-        setError("");
-        alert(`Đăng ký thành công! Chào mừng, ${username}`);
-        // Thực hiện xử lý đăng ký ở đây
     };
 
     return (
-        <div className="container d-flex align-items-center justify-content-center min-vh-100">
-            <div className="card p-4 shadow-sm" style={{ maxWidth: "400px", width: "100%" }}>
-                <h2 className="text-center mb-4">Đăng Ký</h2>
-                <form onSubmit={handleRegister}>
-                    {error && <div className="alert alert-danger">{error}</div>}
-                    <div className="mb-3">
-                        <label className="form-label">Tên Đăng Nhập</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleInputChange}
-                            placeholder="Nhập tên đăng nhập"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            placeholder="Nhập email"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Mật Khẩu</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            placeholder="Nhập mật khẩu"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Xác Nhận Mật Khẩu</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleInputChange}
-                            placeholder="Nhập lại mật khẩu"
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100">
-                        Đăng Ký
-                    </button>
-                </form>
-                <div className="text-center mt-3">
-                    <a href="#!" className="text-decoration-none">
-                        Đã có tài khoản? Đăng nhập
-                    </a>
+        <div className="d-flex align-items-center justify-content-center" style={{ height: '100vh' }}>
+            <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
+                <h2 className="mb-4 text-center">ĐĂNG KÝ</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <div className="mb-3">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Tên đăng nhập"
+                        name="email"
+                    />
                 </div>
+                <div className="mb-3">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Mật khẩu"
+                        name="password"
+                    />
+                </div>
+                <div className="mb-3">
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Nhập lại mật khẩu"
+                        name="repassword"
+                    />
+                </div>
+                <div className='d-flex justify-content-center gap-4 form-button' >
+                    <Link type="submit" className="btn btn-primary" style={{ color: 'white', textDecoration: 'none' }}>
+                        ĐĂNG KÝ
+                    </Link>
+                    <Link type="submit" className="btn btn-primary" style={{ color: 'white', textDecoration: 'none' }}>
+                        ĐĂNG NHẬP
+                    </Link>
+                </div>
+            </form>
+            <div className='d-lg-block d-sm-none'>
+                <img src="/login.png" alt="login.png" />
             </div>
         </div>
     );
-}
+};
 
-export default Register;
+export default Login;

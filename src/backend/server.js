@@ -53,4 +53,5 @@ app.use("/api/colorproducts", colorProductRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
+    console.log("Cơ sở dữ liệu đã chạy!!!");
 });
