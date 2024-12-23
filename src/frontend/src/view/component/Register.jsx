@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import "../style/Form.scss";
-import {
-    Box,
-    Button,
-    TextField,
-    Modal,
-    Typography,
-    Input,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { TextField } from "@mui/material";
+import { toast } from "react-toastify";
 import axiosInstance from '../../authentication/axiosInstance';
+import "../style/Form.scss";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const userUrl = apiUrl + "/users"
@@ -29,7 +19,6 @@ const Register = () => {
         diachi: "",
     });
     const [rePassword, setRePassword] = useState("");
-    const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
 
     const handleChange = (e) => {
@@ -43,11 +32,16 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (rePassword === formData.password) {
+            const dataToSubmit = {
+                ...formData,
+                hoten: formData.hoten || formData.email,
+            };
+
             try {
-                const response = await axiosInstance.post(`${userUrl}/register`, formData);
+                const response = await axiosInstance.post(`${userUrl}/register`, dataToSubmit);
                 console.log(response.data);
                 if (response.data.EC === 1) {
-                    alert("Đăng ký thành công");
+                    toast.success("Đăng ký thành công!!!");
                     setFormData({
                         email: "",
                         password: "",
@@ -59,12 +53,11 @@ const Register = () => {
                     navigate("/login");
                 }
             } catch (error) {
-                console.log("error", error);
                 console.error("Error registering user:", error);
                 setMessage("Error registering user");
             }
         } else {
-            alert("Mật khẩu nhập lại không trùng khớp");
+            toast.error("Mật khẩu không trùng khớp");
         }
     };
 
@@ -105,13 +98,12 @@ const Register = () => {
                     />
                 </div>
                 <div className='d-flex justify-content-between align-items-center gap-4 form-button' >
-                    <Link
+                    <button
                         className='btn btn-primary button-register'
-                        variant="link"
-
+                        type="submit"
                     >
                         ĐĂNG KÝ
-                    </Link>
+                    </button>
                     <Link
                         to={`/login`}
                         className='button-login'
