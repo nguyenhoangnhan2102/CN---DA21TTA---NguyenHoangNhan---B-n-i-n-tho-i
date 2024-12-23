@@ -60,10 +60,17 @@ const Login = () => {
                     />
                 </div>
                 <div className='d-flex justify-content-center gap-4 form-button' >
-                    <Link type="submit" className="btn btn-primary" style={{ color: 'white', textDecoration: 'none' }}>
+                    <Link
+                        className="btn btn-primary"
+                        variant="link"
+                        style={{ color: 'white', textDecoration: 'none' }}>
                         ĐĂNG KÝ
                     </Link>
-                    <Link type="submit" className="btn btn-primary" style={{ color: 'white', textDecoration: 'none' }}>
+                    <Link
+                        to={`/login`}
+                        className="btn btn-primary"
+                        variant="link"
+                        style={{ color: 'white', textDecoration: 'none' }}>
                         ĐĂNG NHẬP
                     </Link>
                 </div>
