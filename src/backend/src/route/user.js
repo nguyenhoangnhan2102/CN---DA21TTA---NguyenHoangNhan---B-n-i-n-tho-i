@@ -9,7 +9,7 @@ router.post("/users/login", userController.loginUser);
 
 router.post("/users/profile", userController.getUserProfile);
 
-router.put("/users/update/:makhachhang", authenticateToken, userController.updateUser);
+router.put("/users/update/:id", authenticateToken, userController.updateUser);
 
 router.post("/verify-admin", userController.verifyAdmin);
 

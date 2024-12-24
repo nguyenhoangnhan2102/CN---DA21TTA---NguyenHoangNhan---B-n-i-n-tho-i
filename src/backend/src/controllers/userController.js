@@ -103,11 +103,11 @@ const loginUser = async (req, res) => {
         }
         const token = jwt.sign(
             {
-                makhachhang: user.makhachhang,
+                id: user.id,
                 email: user.email,
                 role: user.role,
                 hoten: user.hoten,
-                sdt: user.sdt,
+                sodienthoai: user.sodienthoai,
                 diachi: user.diachi,
             },
             JWT_SECRET,
@@ -120,7 +120,7 @@ const loginUser = async (req, res) => {
             DT: {
                 accessToken: token,
                 user: {
-                    makhachhang: user.makhachhang,
+                    id: user.id,
                     email: user.email,
                     role: user.role,
                 },
@@ -138,11 +138,11 @@ const loginUser = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
     try {
-        const userId = req.body.makhachhang; // Lấy ID từ req.body
+        const userId = req.body.id; // Lấy ID từ req.body
         console.log("User ID:", userId);
 
         const results = await connection.query(
-            "SELECT makhachhang, email, password, role, hoten, sdt, diachi FROM `KHACHHANG` WHERE makhachhang = ?",
+            "SELECT id, email, password, role, hoten, sodienthoai, diachi FROM `KHACHHANG` WHERE id = ?",
             [userId]
         );
 
@@ -176,13 +176,13 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-    const { makhachhang } = req.params;
-    const { hoten, sdt, diachi } = req.body;
+    const { id } = req.params;
+    const { hoten, sodienthoai, diachi } = req.body;
 
     try {
         const [existingUser] = await connection.query(
-            "SELECT * FROM `KHACHHANG` WHERE makhachhang = ?",
-            [makhachhang]
+            "SELECT * FROM `KHACHHANG` WHERE id = ?",
+            [id]
         );
         if (existingUser.length === 0) {
             return res.status(404).json({
@@ -192,11 +192,11 @@ const updateUser = async (req, res) => {
             });
         }
 
-        await connection.query("UPDATE `KHACHHANG` SET hoten = ?, sdt = ?, diachi = ? WHERE makhachhang = ?", [
+        await connection.query("UPDATE `KHACHHANG` SET hoten = ?, sodienthoai = ?, diachi = ? WHERE id = ?", [
             hoten,
-            sdt,
+            sodienthoai,
             diachi,
-            makhachhang,
+            id,
         ]);
 
         return res.status(200).json({
@@ -229,10 +229,10 @@ const verifyAdmin = async (req, res) => {
         // Giải mã token
         const decoded = jwt.verify(token, JWT_SECRET);
 
-        const makhachhang = decoded.makhachhang;
+        const id = decoded.id;
         console.log("id", decoded);
         // Truy vấn để lấy thông tin user từ database
-        const [rows] = await connection.query("SELECT role FROM KHACHHANG WHERE makhachhang = ?", [makhachhang]);
+        const [rows] = await connection.query("SELECT role FROM KHACHHANG WHERE id = ?", [id]);
 
         if (rows.length > 0) {
             const user = rows[0];
