@@ -6,6 +6,8 @@ import "../style/Profile.scss";
 import Cookies from "js-cookie"; // Import thư viện js-cookie
 import { jwtDecode } from "jwt-decode"; // Import jwt-decode
 
+const apiUrl = process.env.REACT_APP_API_URL + "/users";
+
 export default function Profile() {
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ export default function Profile() {
     const fetchUserProfile = async () => {
         try {
             const decodedToken = jwtDecode(token);
-            const response = await axiosInstance.post("/users/profile", { id: decodedToken.id });
+            const response = await axiosInstance.post(`${apiUrl}/profile`, { id: decodedToken.id });
             console.log("response", response);
             if (response.data.EC === 200) {
                 setUserInfo(response.data.DT[0]);
