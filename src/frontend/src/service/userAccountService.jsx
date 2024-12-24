@@ -14,6 +14,23 @@ export const getAllUser = async () => {
     }
 }
 
+export const getUserProfile = async (userId) => {
+    try {
+        const response = await axiosInstance.post(`${apiUser}/profile`, { id: userId });
+        if (response.data.EC === 200) {
+            return response.data.DT; // Trả về thông tin người dùng
+        } else {
+            toast.error(response.data.EM); // Hiển thị thông báo lỗi
+            return null;
+        }
+    } catch (error) {
+        toast.error("Xảy ra lỗi khi lấy thông tin người dùng");
+        console.error("Error in getUserProfile:", error.message);
+        return null;
+    }
+};
+
+
 export const login = async (account) => {
     try {
         const response = await axiosInstance.post(`${apiUser}/login`, {
