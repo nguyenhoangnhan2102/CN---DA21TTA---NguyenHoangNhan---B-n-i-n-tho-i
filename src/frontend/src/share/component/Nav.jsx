@@ -41,7 +41,6 @@ const Header = () => {
             if (token) {
                 const decodedToken = jwtDecode(token);
                 const response = await axiosInstance.post(`${userURL}/profile`, { id: decodedToken.id });
-                console.log("Decoded token:", response.data);
                 if (response.data.EC === 200) {
                     setUserData(response.data.DT[0]);
                 } else {

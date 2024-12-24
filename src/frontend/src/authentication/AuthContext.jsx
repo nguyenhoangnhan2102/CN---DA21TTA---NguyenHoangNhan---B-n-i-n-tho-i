@@ -1,11 +1,18 @@
-import React, { createContext, useContext, useState } from "react";
-
+import React, { createContext, useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 // Tạo context
 const AuthContext = createContext();
 
 // Provider component
 export const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const token = Cookies.get("accessToken");
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []); // Chỉ chạy khi component được mount
 
     const loginIs = () => {
         setIsLoggedIn(true);
@@ -21,6 +28,7 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
 
 // Hook để sử dụng context
 export const useAuth = () => {
