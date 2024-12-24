@@ -14,9 +14,9 @@ export const getAllUser = async () => {
     }
 }
 
-export const getUserProfile = async (id) => {
+export const getUserProfile = async () => {
     try {
-        const response = await axiosInstance.post(`${apiUser}/profile`, { id });
+        const response = await axiosInstance.post(`${apiUser}/profile`);
         if (response.data.EC === 200) {
             return response.data.DT; // Trả về thông tin người dùng
         } else {

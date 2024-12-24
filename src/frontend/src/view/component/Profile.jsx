@@ -22,7 +22,6 @@ export default function Profile() {
         try {
             const decodedToken = jwtDecode(token);
             const response = await axiosInstance.post(`${apiUrl}/profile`, { id: decodedToken.id });
-            console.log("response", response);
             if (response.data.EC === 200) {
                 setUserInfo(response.data.DT[0]);
             } else {
