@@ -119,7 +119,7 @@ const Header = () => {
                                     )}</>
                             ) : (
                                 <>
-                                    <div className="nav navbar-right d-flex justify-content-end gap-2 col-3 w-50">
+                                    <div className="nav navbar-right col-3 w-75">
                                         <Link to={`/login`} className='btn btn-primary'>Đăng nhập</Link>
                                     </div></>
                             )}

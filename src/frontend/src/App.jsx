@@ -4,6 +4,7 @@ import AdminRoute from './admin/route-admin-view';
 import RouterView from "./view/route-views";
 import Header from "./share/component/Nav";
 import Footer from "./share/component/Footer";
+import GuardRoute from "./authentication/guardRoute";
 
 function App() {
   return (
@@ -12,7 +13,11 @@ function App() {
         <div className="App-header">
           <Routes>
             <Route path="/*" element={<MainLayout />} />
-            <Route path="/admin/*" element={<AdminLayout />} />
+            {/* <Route path="/admin/*" element={<AdminLayout />} /> */}
+            <Route
+              path="/admin/*"
+              element={<GuardRoute element={AdminLayout} />}
+            />
           </Routes>
         </div>
       </div>

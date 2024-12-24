@@ -36,7 +36,13 @@ const Login = () => {
             // Lưu token vào cookie
             Cookies.set("accessToken", accessToken, { expires: 1 }); // Token tồn tại trong 1 ngày
             loginIs(); // Cập nhật trạng thái đăng nhập
-            navigate("/admin"); // Điều hướng đến trang dashboard
+
+            // Kiểm tra role và điều hướng
+            if (user.role === 1) {
+                navigate("/admin"); // Điều hướng đến trang quản trị
+            } else {
+                navigate("/"); // Điều hướng đến trang chủ
+            }
         } catch (error) {
             setErrorMessage(error.response?.data?.EM || "Đăng nhập thất bại");
         }
