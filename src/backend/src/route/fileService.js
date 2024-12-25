@@ -11,15 +11,15 @@ const upload = multer({ storage: storage });
 
 // Kiểm tra các thuộc tính đầu vào
 const validateRequest = (req, res, next) => {
-    const { folderPath, id } = req.body;
+    const { folderPath, makhachhang } = req.body;
     const file = req.file || req.files;
 
     if (!folderPath) {
         return res.status(400).json({ error: "folderPath is missing or empty" });
     }
 
-    // if (!id) {
-    //   return res.status(400).json({ error: 'id is missing or empty' });
+    // if (!makhachhang) {
+    //   return res.status(400).json({ error: 'makhachhang is missing or empty' });
     // }
 
     if (!file || file.length === 0) {
@@ -63,12 +63,12 @@ router.post(
     validateRequest,
     async (req, res) => {
         try {
-            const { folderPath, id } = req.body;
+            const { folderPath, makhachhang } = req.body;
             const fullFolderPath = path.join(
                 __dirname,
                 "../../public",
                 folderPath,
-                id
+                makhachhang
             );
 
             // Gọi service để upload các file
@@ -85,7 +85,7 @@ router.post(
                 status: true,
                 listfileName: `[${fileNames.join(",")}]`,
                 folderPath,
-                id,
+                makhachhang,
             });
         } catch (err) {
             res.status(500).json({ error: err.message });

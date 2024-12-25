@@ -3375,7 +3375,7 @@ EntityPrimaryAttribute 0 Arial,8,U</a:FontList>
                     </o:DataItem>
                     <o:DataItem Id="o123">
                         <a:ObjectID>429AB2E1-C961-4799-80C2-D22FF824D8BB</a:ObjectID>
-                        <a:Name>id</a:Name>
+                        <a:Name>makhachhang</a:Name>
                         <a:Code>ID</a:Code>
                         <a:CreationDate>1730787072</a:CreationDate>
                         <a:Creator>HP</a:Creator>
@@ -3422,7 +3422,7 @@ EntityPrimaryAttribute 0 Arial,8,U</a:FontList>
                     </o:DataItem>
                     <o:DataItem Id="o133">
                         <a:ObjectID>CCDB7784-1AC5-4669-A8EF-9EE213398D0A</a:ObjectID>
-                        <a:Name>sdt</a:Name>
+                        <a:Name>sodienthoai</a:Name>
                         <a:Code>SODIENTHOAI</a:Code>
                         <a:CreationDate>1730787072</a:CreationDate>
                         <a:Creator>HP</a:Creator>

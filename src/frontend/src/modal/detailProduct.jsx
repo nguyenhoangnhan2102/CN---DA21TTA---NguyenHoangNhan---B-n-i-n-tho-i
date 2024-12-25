@@ -93,7 +93,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     maxHeight: '95vh',
                     height: '95vh',
                 }}>
-                <Typography id="modal-title" variant="h6" component="h2">
+                <Typography makhachhang="modal-title" variant="h6" component="h2">
                     Chi tiết
                 </Typography>
                 <div className="d-flex align-items-center justify-content-between text-center mb-3">
@@ -132,7 +132,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 </div>
                 <FormControl fullWidth margin="normal">
                     <TextField
-                        id="product-text-field"
+                        makhachhang="product-text-field"
                         value={form.tensanpham}
                         label="Tên"
                         //disabled
@@ -146,7 +146,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 <div className="d-flex gap-2">
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.tenthuonghieu}
                             label="Thương hiệu"
                             //disabled
@@ -159,7 +159,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.hedieuhanh}
                             label="Hệ điều hành"
                             //disabled
@@ -174,7 +174,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 <div className="d-flex gap-2">
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.giasanpham}
                             label="Giá"
                             //disabled
@@ -188,7 +188,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.soluongsanpham}
                             label="Số lượng"
                             //disabled
@@ -203,7 +203,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 <div className="d-flex gap-2">
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.cpu}
                             label="CPU"
                             //disabled
@@ -217,7 +217,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.gpu}
                             label="GPU"
                             //disabled
@@ -230,7 +230,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.pin}
                             label="Pin"
                             //disabled
@@ -245,7 +245,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 <div className="d-flex gap-2">
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.cameratruoc}
                             label="Camera trước"
                             //disabled
@@ -259,7 +259,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.camerasau}
                             label="Camera sau"
                             //disabled
@@ -274,7 +274,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 <div className="d-flex gap-2">
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.congnghemanhinh}
                             label="Công nghệ màn hình"
                             //disabled
@@ -288,7 +288,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <TextField
-                            id="product-text-field"
+                            makhachhang="product-text-field"
                             value={form.dophangiaimanhinh}
                             label="Độ phân giải màn hình"
                             //disabled
@@ -302,7 +302,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 </div>
                 <FormControl fullWidth margin="normal">
                     <TextField
-                        id="product-text-field"
+                        makhachhang="product-text-field"
                         value={form.motasanpham}
                         label="Mô tả"
                         multiline

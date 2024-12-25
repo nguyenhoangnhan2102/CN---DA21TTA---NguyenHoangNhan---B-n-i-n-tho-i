@@ -113,11 +113,11 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
             aria-describedby="modal-description"
         >
             <Box sx={modalStyle}>
-                <Typography id="modal-title" variant="h6" component="h2">
+                <Typography makhachhang="modal-title" variant="h6" component="h2">
                     {colorproduct ? "Cập nhật" : "Thêm mới"}
                 </Typography>
                 <FormControl fullWidth margin="normal">
-                    <InputLabel id="select-mathuonghieu-label">Sản phẩm</InputLabel>
+                    <InputLabel makhachhang="select-mathuonghieu-label">Sản phẩm</InputLabel>
                     <Select
                         labelId="select-mathuonghieu-label"
                         name="masanpham"
@@ -160,7 +160,7 @@ const ModalColorProduct = ({ colorproduct, onSave, open, onClose }) => {
                 <Box sx={{ marginTop: 1, marginBottom: 1 }}>
                     <input
                         type="file"
-                        id="mausachinhanh"
+                        makhachhang="mausachinhanh"
                         name="mausachinhanh"
                         accept="image/*"
                         onChange={handleFileChange}

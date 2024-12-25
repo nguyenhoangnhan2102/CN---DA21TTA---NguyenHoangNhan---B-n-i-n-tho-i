@@ -28,11 +28,11 @@ function Cart() {
                 setInfoUser(decodedToken || {});
                 console.log("Decoded Token:", decodedToken);
 
-                const id = decodedToken.id; // Lấy giá trị id từ token
-                console.log("Customer ID:", id);
+                const makhachhang = decodedToken.makhachhang; // Lấy giá trị makhachhang từ token
+                console.log("Customer ID:", makhachhang);
 
-                if (id) {
-                    await fetchCartItems(id); // Gọi API với id
+                if (makhachhang) {
+                    await fetchCartItems(makhachhang); // Gọi API với makhachhang
                 } else {
                     console.error("ID not found in token.");
                 }
@@ -45,15 +45,15 @@ function Cart() {
     };
 
 
-    const fetchCartItems = async (id) => {
-        if (!id) {
+    const fetchCartItems = async (makhachhang) => {
+        if (!makhachhang) {
             console.error("User ID is undefined, cannot fetch cart items.");
             toast.error("Lỗi khi lấy dữ liệu giỏ hàng: User ID không xác định.");
             return;
         }
 
         try {
-            const response = await axiosInstance.get(`${apiUrl}/cart/${id}`);
+            const response = await axiosInstance.get(`${apiUrl}/cart/${makhachhang}`);
             console.log("Cart items:", response.data);
             if (response.data.EC === 1) {
                 const updatedItems = response.data.DT.map((item) => ({
@@ -180,7 +180,7 @@ function Cart() {
                                     margin="normal"
                                     label="Họ tên"
                                     type="text"
-                                    value={infoUser.sdt}
+                                    value={infoUser.sodienthoai}
                                 />
                             </div>
                             <div className="mb-3">

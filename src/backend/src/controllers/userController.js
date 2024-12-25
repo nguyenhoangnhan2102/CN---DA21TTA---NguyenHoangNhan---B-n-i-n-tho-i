@@ -26,7 +26,7 @@ const getAllUser = async (req, res) => {
 
 
 const registerUser = async (req, res) => {
-    const { email, hoten, password, sdt, diachi } = req.body;
+    const { email, hoten, password, sodienthoai, diachi } = req.body;
 
     const [existingUser] = await connection.query(
         "SELECT * FROM `KHACHHANG` WHERE email = ?",
@@ -44,8 +44,8 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         let role = 0;
         connection.query(
-            "INSERT INTO `KHACHHANG` (email, password, role, hoten, sdt, diachi) VALUES (?, ?, ?, ?, ?, ?)",
-            [email, hashedPassword, role, hoten, sdt, diachi]
+            "INSERT INTO `KHACHHANG` (email, password, role, hoten, sodienthoai, diachi) VALUES (?, ?, ?, ?, ?, ?)",
+            [email, hashedPassword, role, hoten, sodienthoai, diachi]
         );
         return res.status(200).json({
             EM: "Đăng ký thành công",
@@ -103,11 +103,11 @@ const loginUser = async (req, res) => {
         }
         const token = jwt.sign(
             {
-                id: user.id,
+                makhachhang: user.makhachhang,
                 email: user.email,
                 role: user.role,
                 hoten: user.hoten,
-                sdt: user.sdt,
+                sodienthoai: user.sodienthoai,
                 diachi: user.diachi,
             },
             JWT_SECRET,
@@ -120,7 +120,7 @@ const loginUser = async (req, res) => {
             DT: {
                 accessToken: token,
                 user: {
-                    id: user.id,
+                    makhachhang: user.makhachhang,
                     email: user.email,
                     role: user.role,
                 },
@@ -138,11 +138,11 @@ const loginUser = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
     try {
-        const userId = req.body.id; // Lấy ID từ req.body
+        const userId = req.body.makhachhang; // Lấy ID từ req.body
         console.log("User ID:", userId);
 
         const results = await connection.query(
-            "SELECT id, email, password, role, hoten, sdt, diachi FROM `KHACHHANG` WHERE id = ?",
+            "SELECT makhachhang, email, password, role, hoten, sodienthoai, diachi FROM `KHACHHANG` WHERE makhachhang = ?",
             [userId]
         );
 
@@ -176,13 +176,13 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-    const { id } = req.params;
-    const { hoten, sdt, diachi } = req.body;
+    const { makhachhang } = req.params;
+    const { hoten, sodienthoai, diachi } = req.body;
 
     try {
         const [existingUser] = await connection.query(
-            "SELECT * FROM `KHACHHANG` WHERE id = ?",
-            [id]
+            "SELECT * FROM `KHACHHANG` WHERE makhachhang = ?",
+            [makhachhang]
         );
         if (existingUser.length === 0) {
             return res.status(404).json({
@@ -192,11 +192,11 @@ const updateUser = async (req, res) => {
             });
         }
 
-        await connection.query("UPDATE `KHACHHANG` SET hoten = ?, sdt = ?, diachi = ? WHERE id = ?", [
+        await connection.query("UPDATE `KHACHHANG` SET hoten = ?, sodienthoai = ?, diachi = ? WHERE makhachhang = ?", [
             hoten,
-            sdt,
+            sodienthoai,
             diachi,
-            id,
+            makhachhang,
         ]);
 
         return res.status(200).json({
@@ -229,10 +229,10 @@ const verifyAdmin = async (req, res) => {
         // Giải mã token
         const decoded = jwt.verify(token, JWT_SECRET);
 
-        const id = decoded.id;
-        console.log("id", decoded);
+        const makhachhang = decoded.makhachhang;
+        console.log("makhachhang", decoded);
         // Truy vấn để lấy thông tin user từ database
-        const [rows] = await connection.query("SELECT role FROM KHACHHANG WHERE id = ?", [id]);
+        const [rows] = await connection.query("SELECT role FROM KHACHHANG WHERE makhachhang = ?", [makhachhang]);
 
         if (rows.length > 0) {
             const user = rows[0];

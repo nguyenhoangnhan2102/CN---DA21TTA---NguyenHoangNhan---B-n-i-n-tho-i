@@ -16,7 +16,7 @@ const getAllOrders = async (req, res) => {
       FROM DONHANG d
       JOIN CHITIETDONHANG c ON d.madonhang = c.madonhang
       JOIN SANPHAM s ON c.masanpham = s.masanpham
-      JOIN KHACHHANG k ON d.id = k.id
+      JOIN KHACHHANG k ON d.makhachhang = k.makhachhang
       JOIN MAUSACSANPHAM m ON c.masanpham = m.masanpham
       ORDER BY d.ngaylap DESC;
     `);

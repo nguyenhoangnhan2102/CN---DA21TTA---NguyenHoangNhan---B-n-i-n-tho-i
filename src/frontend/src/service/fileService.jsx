@@ -8,7 +8,7 @@ export const uploadSingleFile = async (imageUrl, folderPath, file) => {
         const formData = new FormData();
 
         // Thêm các trường vào formData
-        formData.append("imgName", imageUrl); // Thêm id
+        formData.append("imgName", imageUrl); // Thêm makhachhang
         formData.append("folderPath", folderPath); // Thêm folderPath
         formData.append("file", file); // Thêm file (file ở đây là đối tượng file từ input)
 

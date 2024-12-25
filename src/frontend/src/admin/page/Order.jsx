@@ -82,7 +82,7 @@
 //                 <tbody>
 //                     {currentOrders.length > 0 ? (
 //                         currentOrders.map((order, index) => (
-//                             <tr key={order.id}>
+//                             <tr key={order.makhachhang}>
 //                                 <td>{order.machitietdonhang}</td>
 //                                 <td>{order.tensanpham || "Không có tên"}</td>
 //                                 <td>{order.hotenkhachhang || "Không có email"}</td>

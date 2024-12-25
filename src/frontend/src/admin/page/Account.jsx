@@ -90,11 +90,11 @@ const Accounts = () => {
                 <tbody>
                     {currentUsers.length > 0 ? (
                         currentUsers.map((user, index) => (
-                            <tr key={user.id}>
+                            <tr key={user.makhachhang}>
                                 <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
                                 <td>{user.hoten || "Không có tên"}</td>
                                 <td>{user.email || "Không có email"}</td>
-                                <td>{user.sdt}</td>
+                                <td>{user.sodienthoai}</td>
                                 <td>{user.diachi}</td>
                                 <td>
                                     {user.role === 1

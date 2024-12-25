@@ -40,7 +40,7 @@ const Header = () => {
 
             if (token) {
                 const decodedToken = jwtDecode(token);
-                const response = await axiosInstance.post(`${userURL}/profile`, { id: decodedToken.id });
+                const response = await axiosInstance.post(`${userURL}/profile`, { makhachhang: decodedToken.makhachhang });
                 if (response.data.EC === 200) {
                     setUserData(response.data.DT[0]);
                 } else {
@@ -81,7 +81,7 @@ const Header = () => {
                         </Link>
                     </Navbar>
                     <Navbar.Toggle aria-controls="navbarScroll" />
-                    <Navbar.Collapse id="navbarScroll">
+                    <Navbar.Collapse makhachhang="navbarScroll">
                         <Nav
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}

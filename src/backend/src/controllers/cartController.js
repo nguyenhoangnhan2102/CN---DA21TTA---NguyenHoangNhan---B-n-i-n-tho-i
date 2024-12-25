@@ -2,11 +2,11 @@ const connection = require("../config/dataBase");
 
 const getAllCartByCustomer = async (req, res) => {
     try {
-        // Lấy id khách hàng từ tham số query hoặc params
-        const { id } = req.params; // Giả sử bạn truyền id khách hàng từ params
+        // Lấy makhachhang khách hàng từ tham số query hoặc params
+        const { makhachhang } = req.params; // Giả sử bạn truyền makhachhang khách hàng từ params
 
         // Kiểm tra nếu không có mã khách hàng được cung cấp
-        if (!id) {
+        if (!makhachhang) {
             return res.status(400).json({
                 EM: "Mã khách hàng không được để trống",
                 EC: -1,
@@ -14,10 +14,10 @@ const getAllCartByCustomer = async (req, res) => {
             });
         }
 
-        // Query SQL lọc theo id
+        // Query SQL lọc theo makhachhang
         const query = `
             SELECT 
-                gh.id, 
+                gh.makhachhang, 
                 sp.masanpham, 
                 sp.tensanpham, 
                 sp.hinhanhchinh,
@@ -31,11 +31,11 @@ const getAllCartByCustomer = async (req, res) => {
             ON 
                 gh.masanpham = sp.masanpham
             WHERE 
-                gh.id = ?
+                gh.makhachhang = ?
         `;
 
-        // Thực thi query với tham số id
-        const [results] = await connection.query(query, [id]);
+        // Thực thi query với tham số makhachhang
+        const [results] = await connection.query(query, [makhachhang]);
 
         // Kiểm tra nếu giỏ hàng rỗng
         if (results.length === 0) {
@@ -63,17 +63,17 @@ const getAllCartByCustomer = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-    const { id, masanpham } = req.body;
+    const { makhachhang, masanpham } = req.body;
 
-    if (!id || !masanpham) {
-        return res.status(400).json({ message: "id và masanpham là bắt buộc" });
+    if (!makhachhang || !masanpham) {
+        return res.status(400).json({ message: "makhachhang và masanpham là bắt buộc" });
     }
 
     try {
         // Kiểm tra khách hàng tồn tại
         const customerCheck = await connection.query(
-            "SELECT * FROM KHACHHANG WHERE id = ?",
-            [id]
+            "SELECT * FROM KHACHHANG WHERE makhachhang = ?",
+            [makhachhang]
         );
         if (customerCheck[0].length === 0) {
             return res.status(404).json({ message: "Khách hàng không tồn tại" });
@@ -90,8 +90,8 @@ const addToCart = async (req, res) => {
 
         // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng
         const cartCheck = await connection.query(
-            "SELECT * FROM GIOHANG WHERE masanpham = ? AND id = ?",
-            [masanpham, id]
+            "SELECT * FROM GIOHANG WHERE masanpham = ? AND makhachhang = ?",
+            [masanpham, makhachhang]
         );
         if (cartCheck[0].length > 0) {
             return res.status(400).json({
@@ -101,13 +101,13 @@ const addToCart = async (req, res) => {
 
         // Thêm sản phẩm vào giỏ hàng
         await connection.query(
-            "INSERT INTO GIOHANG (masanpham, id) VALUES (?, ?)",
-            [masanpham, id]
+            "INSERT INTO GIOHANG (masanpham, makhachhang) VALUES (?, ?)",
+            [masanpham, makhachhang]
         );
 
         res.status(201).json({
             message: "Sản phẩm đã được thêm vào giỏ hàng",
-            data: { masanpham, id },
+            data: { masanpham, makhachhang },
         });
     } catch (err) {
         console.error("Error adding product to cart:", err.message);

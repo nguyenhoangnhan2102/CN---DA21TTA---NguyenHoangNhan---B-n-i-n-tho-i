@@ -43,7 +43,7 @@ export const deleteProduct = async (masanpham) => {
         const response = await axiosInstance.delete(`${apiProduct}/${masanpham}`);
         return response.data;
     } catch (error) {
-        console.error(`Lỗi xóa sản phẩm có id = ${masanpham}:`, error);
+        console.error(`Lỗi xóa sản phẩm có makhachhang = ${masanpham}:`, error);
         throw error;
     }
 };

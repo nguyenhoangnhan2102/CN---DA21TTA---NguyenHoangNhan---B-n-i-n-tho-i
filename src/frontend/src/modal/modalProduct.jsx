@@ -167,7 +167,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
             // hideBackdrop
             >
                 <Box sx={modalStyle}>
-                    <Typography id="modal-title" variant="h6" component="h2">
+                    <Typography makhachhang="modal-title" variant="h6" component="h2">
                         {product ? "Cập nhật" : "Tạo mới"}
                     </Typography>
 
@@ -181,7 +181,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                     />
                     <div className="d-flex gap-2 align-items-center">
                         <FormControl fullWidth margin="normal">
-                            <InputLabel id="select-mathuonghieu-label">Thương hiệu</InputLabel>
+                            <InputLabel makhachhang="select-mathuonghieu-label">Thương hiệu</InputLabel>
                             <Select
                                 labelId="select-mathuonghieu-label"
                                 name="mathuonghieu"
@@ -331,7 +331,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                     />
                     {product && (
                         <FormControl fullWidth margin="normal">
-                            <InputLabel id="trangthai-label">Trạng thái</InputLabel>
+                            <InputLabel makhachhang="trangthai-label">Trạng thái</InputLabel>
                             <Select
                                 labelId="trangthai-label"
                                 name="trangthai"
@@ -354,7 +354,7 @@ const ModalProduct = ({ product, onSave, open, onClose }) => {
                     <Box sx={{ marginTop: 1, marginBottom: 1 }}>
                         <input
                             type="file"
-                            id="hinhanhchinh"
+                            makhachhang="hinhanhchinh"
                             name="hinhanhchinh"
                             accept="hinhanhchinh/*"
                             onChange={handleFileChange}

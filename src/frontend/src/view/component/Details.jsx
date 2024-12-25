@@ -49,17 +49,17 @@ const ProductDetails = () => {
     };
 
     const handleAddToCart = async () => {
-        const { id } = inforUser;
+        const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
 
-        if (!id || !masanpham) {
+        if (!makhachhang || !masanpham) {
             console.error("Missing required information: makhachhang or masanpham");
             return;
         }
 
         try {
             const response = await axiosInstance.post(`${apiUrl}/cart`, {
-                id,
+                makhachhang,
                 masanpham,
             });
 
@@ -99,7 +99,7 @@ const ProductDetails = () => {
                     </label>
                 </div>
                 <div className="col-md-8">
-                    <div className="carousel slide carousel-content" id="productCarousel" data-bs-ride="carousel">
+                    <div className="carousel slide carousel-content" makhachhang="productCarousel" data-bs-ride="carousel">
                         {productdetails.danhsachhinhanh && productdetails.danhsachhinhanh.trim() !== "" ? (
                             <>
                                 <div className="carousel-indicators">

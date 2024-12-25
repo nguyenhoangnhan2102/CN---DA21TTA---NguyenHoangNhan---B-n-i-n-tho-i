@@ -35,7 +35,7 @@ export const deleteManufacturer = async (mathuonghieu) => {
         const response = await axiosInstance.delete(`${apiManufacturer}/${mathuonghieu}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting manufacturer with id ${mathuonghieu}:`, error);
+        console.error(`Error deleting manufacturer with makhachhang ${mathuonghieu}:`, error);
         throw error;
     }
 };

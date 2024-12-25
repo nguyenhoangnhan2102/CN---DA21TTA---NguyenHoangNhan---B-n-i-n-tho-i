@@ -21,7 +21,7 @@ export default function Profile() {
     const fetchUserProfile = async () => {
         try {
             const decodedToken = jwtDecode(token);
-            const response = await axiosInstance.post(`${apiUrl}/profile`, { id: decodedToken.id });
+            const response = await axiosInstance.post(`${apiUrl}/profile`, { makhachhang: decodedToken.makhachhang });
             if (response.data.EC === 200) {
                 setUserInfo(response.data.DT[0]);
             } else {
@@ -78,7 +78,7 @@ export default function Profile() {
                             </div>
                             <div className="profile-info-box__item">
                                 <span className="profile-info-box__label"><strong>Số điện thoại</strong></span>
-                                <span className="profile-info-box__value">{userInfo.sdt || "Chưa cập nhật"}</span>
+                                <span className="profile-info-box__value">{userInfo.sodienthoai || "Chưa cập nhật"}</span>
                             </div>
                             <div className="profile-info-box__item">
                                 <span className="profile-info-box__label"><strong>Địa chỉ</strong></span>

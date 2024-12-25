@@ -67,7 +67,7 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
             aria-describedby="modal-description"
         >
             <Box sx={modalStyle}>
-                <Typography id="modal-title" variant="h6" component="h2">
+                <Typography makhachhang="modal-title" variant="h6" component="h2">
                     {manufacturer ? "Cập nhật" : "Thêm mới"}
                 </Typography>
 
@@ -80,7 +80,7 @@ const ModalManufacturer = ({ manufacturer, onSave, open, onClose }) => {
                     onChange={handleChange}
                 />
                 <FormControl fullWidth margin="normal">
-                    <InputLabel id="trangthaithuonghieu-label">Trạng thái</InputLabel>
+                    <InputLabel makhachhang="trangthaithuonghieu-label">Trạng thái</InputLabel>
                     <Select
                         labelId="trangthaithuonghieu-label"
                         name="trangthaithuonghieu"

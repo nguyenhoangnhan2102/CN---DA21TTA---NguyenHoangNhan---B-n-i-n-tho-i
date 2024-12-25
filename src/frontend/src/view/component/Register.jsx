@@ -15,7 +15,7 @@ const Register = () => {
         email: "",
         password: "",
         hoten: "",
-        sdt: "",
+        sodienthoai: "",
         diachi: "",
     });
     const [rePassword, setRePassword] = useState("");
@@ -46,7 +46,7 @@ const Register = () => {
                         email: "",
                         password: "",
                         hoten: "",
-                        sdt: "",
+                        sodienthoai: "",
                         diachi: "",
                     });
                     setRePassword("");

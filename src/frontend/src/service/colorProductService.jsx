@@ -35,7 +35,7 @@ export const updateColorProduct = async (mamau, colorproduct) => {
 //         const response = await axiosInstance.delete(`${apiColorProduct}/${mamau}`);
 //         return response.data;
 //     } catch (error) {
-//         console.error(`Error deleting colorproduct with id ${mamau}:`, error);
+//         console.error(`Error deleting colorproduct with makhachhang ${mamau}:`, error);
 //         throw error;
 //     }
 // };
