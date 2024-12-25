@@ -3,22 +3,26 @@ const connection = require("../config/dataBase");
 const getAllOrders = async (req, res) => {
     try {
         const [rows, fields] = await connection.query(`
-      SELECT 
-        s.tensanpham,
-        k.hoten AS hotenkhachhang,
-        k.diachi AS diachikhachhang,
-        c.soluong,
-        d.tongtien,
-        m.tenmausanpham,
-        m.mausachinhanh,
-        d.ngaylap,
-        d.trangthaidonhang
-      FROM DONHANG d
-      JOIN CHITIETDONHANG c ON d.madonhang = c.madonhang
-      JOIN SANPHAM s ON c.masanpham = s.masanpham
-      JOIN KHACHHANG k ON d.makhachhang = k.makhachhang
-      JOIN MAUSACSANPHAM m ON c.masanpham = m.masanpham
-      ORDER BY d.ngaylap DESC;
+        SELECT 
+            d.madonhang,
+            s.tensanpham,
+            d.hotenkhachhang AS hotenkhachhang,
+            d.diachigiaohang AS diachigiaohang,
+            d.sdtkhachhang AS sodienthoaikhachhang,
+            s.giasanpham,
+            s.soluongsanpham AS tongsoluongsanpham,
+            d.tongtien,
+            m.tenmausanpham,
+            m.mausachinhanh,
+            d.ngaylap,
+            d.trangthaidonhang
+        FROM DONHANG d
+        JOIN CHITIETDONHANG c ON d.madonhang = c.madonhang
+        JOIN SANPHAM s ON c.masanpham = s.masanpham
+        JOIN KHACHHANG k ON d.makhachhang = k.makhachhang
+        JOIN MAUSACSANPHAM m ON c.masanpham = m.masanpham
+        ORDER BY d.ngaylap DESC;
+
     `);
         res.json(rows);
     } catch (err) {
@@ -33,6 +37,8 @@ const comfirmOrder = async (req, res) => {
         hotenkhachhang,
         sdtkhachhang,
         diachigiaohang,
+        trangthaidonhang,
+        ngaylap,
         tongtien,
         chiTietSanPham
     } = req.body;
@@ -60,17 +66,7 @@ const comfirmOrder = async (req, res) => {
         for (const item of chiTietSanPham) {
             const { masanpham, soluong, giatien } = item;
 
-            // Kiểm tra số lượng sản phẩm
-            const [product] = await connection.query(
-                "SELECT soluong FROM SANPHAM WHERE masanpham = ?",
-                [masanpham]
-            );
-
-            if (product.length === 0 || product[0].soluong < soluongSP) {
-                throw new Error(`Sản phẩm ${masanpham} không đủ số lượng.`);
-            }
-
-            // Thêm chi tiết hóa đơn
+            // Thêm chi tiết hóa đơn    
             await connection.query(
                 "INSERT INTO CHITIETDONHANG (madonhang, masanpham, giatien, soluong) VALUES (?, ?, ?, ?)",
                 [madonhang, masanpham, soluong, giatien]

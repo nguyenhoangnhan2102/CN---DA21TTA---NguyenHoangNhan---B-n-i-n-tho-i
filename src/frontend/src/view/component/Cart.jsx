@@ -52,6 +52,57 @@ function Cart() {
         }
     };
 
+    const handleCheckout = async () => {
+        if (!infoUser.hoten || !infoUser.sodienthoai || !infoUser.diachi) {
+            alert("Vui lòng điền đầy đủ thông tin người mua!");
+            return;
+        }
+
+        if (cartItems.length === 0) {
+            alert("Giỏ hàng đang trống!");
+            return;
+        }
+
+        try {
+            const chiTietSanPham = cartItems.map((item) => ({
+                masanpham: item.masanpham,
+                soluong: totalQuantity,
+                giatien: item.giasanpham,
+            }));
+
+            const data = {
+                makhachhang: infoUser.makhachhang, // hoặc ID người dùng từ token
+                hotenkhachhang: infoUser.hoten,
+                sdtkhachhang: infoUser.sodienthoai,
+                diachigiaohang: infoUser.diachi,
+                trangthaidonhang: 0, // 0: Đang chờ xử lý, 1: Đã xác nhận, 2: Đang giao hàng, 3: Đã giao hàng
+                tongtien: subTotal,
+                soluong: totalQuantity,
+                chiTietSanPham,
+                ngaylap: new Date().toISOString().slice(0, 19).replace("T", " "),
+            };
+
+            console.log("Checkout data:", data);
+            console.log("Số lượng sản phẩm trong giỏ hàng:", totalQuantity);
+
+            const response = await axiosInstance.post(`${apiUrl}/orders`, data);
+
+            if (response.data.success) {
+                alert("Đặt hàng thành công!");
+                console.log("sdt", infoUser.sodienthoai);
+                // Xóa giỏ hàng hoặc chuyển hướng
+                setCartItems([]);
+                setTotalQuantity(0);
+                setSubTotal(0);
+            } else {
+                alert(`Đặt hàng thất bại: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error("Error during checkout:", error);
+            alert("Có lỗi xảy ra khi đặt hàng!");
+        }
+    };
+
     const handleQuantityChange = (masanpham, type) => {
         setCartItems(prevItems => {
             const updatedCartItems = prevItems.map(item => {
@@ -88,7 +139,6 @@ function Cart() {
     };
 
 
-    console.log(cartItems);
 
     return (
         <div className="container py-5">
@@ -157,7 +207,7 @@ function Cart() {
                                 fullWidth
                                 margin="normal"
                                 label="Số điện thoại"
-                                type="text"
+                                type="number"
                                 name="sodienthoai"
                                 value={infoUser.sodienthoai || ""}
                                 onChange={handleChange}
@@ -184,7 +234,9 @@ function Cart() {
                             <strong>Tổng cộng:</strong>{" "}
                             <span className="text-danger">{subTotal.toLocaleString()} VND</span>
                         </p>
-                        <button className="btn btn-success w-100 mt-3">Thanh Toán</button>
+                        <button className="btn btn-success w-100 mt-3" onClick={handleCheckout}>
+                            Thanh Toán
+                        </button>
                     </div>
                 </div>
             </div>
