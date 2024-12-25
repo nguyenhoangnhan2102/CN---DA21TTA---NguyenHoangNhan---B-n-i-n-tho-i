@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 import { TextField } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
@@ -9,6 +10,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const imgURL = process.env.REACT_APP_IMG_URL;
 
 function Cart() {
+    const { masanpham } = useParams();
     const [infoUser, setInfoUser] = useState({});
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [subTotal, setSubTotal] = useState(0);
@@ -64,39 +66,43 @@ function Cart() {
         }
 
         try {
+            // Kiểm tra cartItems để xác nhận nó có chứa các sản phẩm khác nhau không
+            console.log("Cart items:", cartItems);
+
+            // Chuẩn bị dữ liệu chi tiết đơn hàng từ giỏ hàng
             const chiTietSanPham = cartItems.map((item) => ({
                 masanpham: item.masanpham,
-                soluong: totalQuantity,
+                soluong: item.soluongsanpham,
                 giatien: item.giasanpham,
             }));
 
+            console.log("Chi tiết sản phẩm:", chiTietSanPham); // Kiểm tra lại chi tiết sản phẩm
+
+            // Tạo dữ liệu gửi đi
             const data = {
-                makhachhang: infoUser.makhachhang, // hoặc ID người dùng từ token
+                makhachhang: infoUser.makhachhang,
                 hotenkhachhang: infoUser.hoten,
                 sdtkhachhang: infoUser.sodienthoai,
                 diachigiaohang: infoUser.diachi,
-                trangthaidonhang: 0, // 0: Đang chờ xử lý, 1: Đã xác nhận, 2: Đang giao hàng, 3: Đã giao hàng
+                trangthaidonhang: 0, // Đang chờ xử lý
                 tongtien: subTotal,
                 soluong: totalQuantity,
-                chiTietSanPham,
+                chiTietSanPham, // Đảm bảo rằng mỗi sản phẩm có một mã sản phẩm duy nhất
                 ngaylap: new Date().toLocaleString("sv-SE", {
                     timeZone: "Asia/Ho_Chi_Minh",
                 }).replace(" ", "T"),
             };
 
             console.log("Checkout data:", data);
-            console.log("Số lượng sản phẩm trong giỏ hàng:", totalQuantity);
-            console.log("Ngày:", data.ngaylap);
 
+            // Gửi yêu cầu đặt hàng đến API
             const response = await axiosInstance.post(`${apiUrl}/orders`, data);
 
             if (response.data.success) {
                 alert("Đặt hàng thành công!");
-                console.log("sdt", infoUser.sodienthoai);
-                // Xóa giỏ hàng hoặc chuyển hướng
-                setCartItems([]);
-                setTotalQuantity(0);
-                setSubTotal(0);
+                setCartItems([]); // Xóa giỏ hàng sau khi thanh toán
+                setTotalQuantity(0); // Reset tổng số lượng
+                setSubTotal(0); // Reset tổng giá trị
             } else {
                 alert(`Đặt hàng thất bại: ${response.data.message}`);
             }
@@ -105,6 +111,7 @@ function Cart() {
             alert("Có lỗi xảy ra khi đặt hàng!");
         }
     };
+
 
     const handleQuantityChange = (masanpham, type) => {
         setCartItems(prevItems => {

@@ -6,6 +6,7 @@ const getAllOrders = async (req, res) => {
         SELECT 
             d.madonhang,
             s.tensanpham,
+            s.masanpham,
             d.hotenkhachhang AS hotenkhachhang,
             d.diachigiaohang AS diachigiaohang,
             d.sdtkhachhang AS sodienthoaikhachhang,
@@ -40,15 +41,17 @@ const comfirmOrder = async (req, res) => {
         trangthaidonhang,
         ngaylap,
         tongtien,
-        chiTietSanPham
+        chiTietSanPham,
+        soluong,
     } = req.body;
 
+    // Kiểm tra tính hợp lệ của thông tin
     if (!makhachhang || !chiTietSanPham || chiTietSanPham.length === 0) {
         return res.status(400).json({ success: false, message: "Thiếu thông tin đơn hàng." });
     }
 
     try {
-
+        // Thêm đơn hàng mới vào bảng DONHANG
         const [result] = await connection.query(
             "INSERT INTO DONHANG (ngaylap, trangthaidonhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, makhachhang) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [ngaylap, trangthaidonhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, makhachhang]
@@ -62,15 +65,30 @@ const comfirmOrder = async (req, res) => {
             [madonhang]
         );
 
-        // Thêm chi tiết hóa đơn và kiểm tra số lượng sản phẩm
+        // Duyệt qua các sản phẩm trong giỏ hàng
         for (const item of chiTietSanPham) {
             const { masanpham, soluong, giatien } = item;
 
-            // Thêm chi tiết hóa đơn    
+            // // Kiểm tra số lượng sản phẩm trong kho (nếu cần)
+            // const [sanpham] = await connection.query(
+            //     "SELECT soluong FROM SANPHAM WHERE masanpham = ?",
+            //     [masanpham]
+            // );
+            // if (sanpham[0].soluong < soluong) {
+            //     return res.status(400).json({ success: false, message: `Số lượng sản phẩm ${masanpham} không đủ.` });
+            // }
+
+            // Thêm chi tiết đơn hàng vào bảng CHITIETDONHANG
             await connection.query(
                 "INSERT INTO CHITIETDONHANG (madonhang, masanpham, giatien, soluong) VALUES (?, ?, ?, ?)",
-                [madonhang, masanpham, soluong, giatien]
+                [madonhang, masanpham, giatien, soluong]
             );
+
+            // // Giảm số lượng sản phẩm trong kho sau khi đặt hàng (nếu cần)
+            // await connection.query(
+            //     "UPDATE SANPHAM SET soluong = soluong - ? WHERE masanpham = ?",
+            //     [soluong, masanpham]
+            // );
         }
 
         // Trả thông tin hóa đơn, bao gồm thời gian lập
@@ -85,6 +103,7 @@ const comfirmOrder = async (req, res) => {
         return res.status(500).json({ success: false, message: "Lỗi khi đặt hàng.", error: error.message });
     }
 };
+
 
 module.exports = {
     getAllOrders,
