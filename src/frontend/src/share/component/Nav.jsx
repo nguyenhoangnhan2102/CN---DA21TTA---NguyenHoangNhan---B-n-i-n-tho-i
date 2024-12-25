@@ -132,7 +132,7 @@ const Header = () => {
                             style={{ marginLeft: '0', marginTop: '10px' }}
                         >
                             <MenuItem onClick={() => handleOptionClick("Profile")}>
-                                Thông tin cá nhân
+                                Thông tin
                             </MenuItem>
                             <MenuItem onClick={() => handleOptionClick("Logout")}>
                                 Đăng xuất

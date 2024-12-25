@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import { jwtDecode } from "jwt-decode"; // Đã sửa lại import không destructure
+import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import axiosInstance from "../../authentication/axiosInstance";
 import "../style/Cart.scss";
@@ -10,9 +10,9 @@ const imgURL = process.env.REACT_APP_IMG_URL;
 
 function Cart() {
     const [infoUser, setInfoUser] = useState({});
-    const [cartItems, setCartItems] = useState([]);
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [subTotal, setSubTotal] = useState(0);
+    const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
         const accessToken = Cookies.get("accessToken");
@@ -21,7 +21,7 @@ function Cart() {
                 const decodedToken = jwtDecode(accessToken);
                 if (decodedToken) {
                     setInfoUser(decodedToken);
-                    fetchCartItems(decodedToken.makhachhang);
+                    fetchCartItems(decodedToken.makhachhang);  // Fetch cart items when user info is available
                 }
             } catch (error) {
                 console.error("Error decoding JWT:", error);
@@ -31,62 +31,39 @@ function Cart() {
         }
     }, []);
 
+    // Hàm gọi API để lấy tất cả sản phẩm trong giỏ hàng
     const fetchCartItems = async (makhachhang) => {
         try {
             const response = await axiosInstance.get(`${apiUrl}/cart/${makhachhang}`);
-            const { EC, DT } = response.data;
-            if (EC === 1) {
-                const updatedItems = DT.map((item) => ({
-                    ...item,
-                    soluongsanpham: item.soluongsanpham || 1, // Đảm bảo số lượng mặc định là 1
-                }));
-                setCartItems(updatedItems);
-                calculateTotals(updatedItems);
+            if (response.data.EC === 1) {
+                setCartItems(response.data.DT);
+
+                // Tính tổng số lượng và tổng giá trị sản phẩm
+                const totalQty = response.data.DT.reduce((acc, item) => acc + item.soluongsanpham, 0);
+                const subTotalAmount = response.data.DT.reduce((acc, item) => acc + item.soluongsanpham * item.giasanpham, 0);
+
+                setTotalQuantity(totalQty);
+                setSubTotal(subTotalAmount);
             } else {
-                console.warn(response.data.EM);
+                console.error("No products found in the cart");
             }
         } catch (error) {
             console.error("Error fetching cart items:", error);
         }
     };
 
-
-    const calculateTotals = (items) => {
-        let totalQty = 0;
-        let totalPrice = 0;
-        items.forEach((item) => {
-            totalQty += item.soluongsanpham || 1;
-            totalPrice += (item.soluongsanpham || 1) * item.giasanpham;
-        });
-        setTotalQuantity(totalQty);
-        setSubTotal(totalPrice);
-    };
-
-    const handleQuantityChange = (index, change) => {
-        const updatedCart = [...cartItems];
-        const item = updatedCart[index];
-
-        // Kiểm tra giới hạn số lượng tối đa
-        const maxQuantity = item.soluongton || Infinity; // Giả sử có trường `soluongton` lưu số lượng tồn
-        const newQuantity = (item.soluongsanpham || 1) + change;
-
-        if (newQuantity > 0 && newQuantity <= maxQuantity) {
-            item.soluongsanpham = newQuantity;
-            setCartItems(updatedCart);
-            calculateTotals(updatedCart);
-        } else if (newQuantity > maxQuantity) {
-            alert(`Sản phẩm "${item.tensanpham}" đã đạt số lượng tối đa (${maxQuantity})!`);
-        }
-    };
-
+    console.log(cartItems);
 
     return (
-        <div className="container py-5 ">
+        <div className="container py-5">
             <h2 className="text-center mb-4">Giỏ Hàng</h2>
             <div className="row">
+                {/* Phần thông tin sản phẩm */}
                 <div className="col-md-8">
-                    {cartItems.length > 0 ? (
-                        cartItems.map((item, index) => (
+                    {cartItems.length === 0 ? (
+                        <p>Giỏ hàng của bạn đang trống</p>
+                    ) : (
+                        cartItems.map((item) => (
                             <div key={item.masanpham} className="card mb-3 shadow-sm">
                                 <div className="row g-0">
                                     <div className="col-md-3">
@@ -99,36 +76,17 @@ function Cart() {
                                     <div className="col-md-9">
                                         <div className="card-body">
                                             <h5 className="card-title">{item.tensanpham}</h5>
-                                            <p className="card-text text-muted">
-                                                Giá: {item.giasanpham.toLocaleString()} VND
-                                            </p>
-                                            <div className="d-flex align-items-center">
-                                                <button
-                                                    className="btn btn-outline-secondary btn-sm"
-                                                    onClick={() => handleQuantityChange(index, -1)}
-                                                >
-                                                    -
-                                                </button>
-                                                <span className="mx-3">
-                                                    {item.soluongsanpham || 1}
-                                                </span>
-                                                <button
-                                                    className="btn btn-outline-secondary btn-sm"
-                                                    onClick={() => handleQuantityChange(index, 1)}
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
+                                            <p className="card-text text-muted">Giá: {item.giasanpham.toLocaleString()} VND</p>
+                                            <p className="card-text">Số lượng: {item.soluongsanpham}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ))
-                    ) : (
-                        <div className="col-12">Không có sản phẩm trong giỏ hàng</div>
                     )}
                 </div>
 
+                {/* Phần thông tin người mua và tóm tắt */}
                 <div className="col-md-4">
                     <div className="card p-3 shadow-sm mb-3">
                         <h4 className="text-center mb-3">Thông Tin Người Mua</h4>
@@ -139,7 +97,7 @@ function Cart() {
                                 label="Họ tên"
                                 type="text"
                                 value={infoUser.hoten || ""}
-
+                                InputProps={{ readOnly: true }}
                             />
                             <TextField
                                 fullWidth
@@ -147,6 +105,7 @@ function Cart() {
                                 label="Số điện thoại"
                                 type="text"
                                 value={infoUser.sodienthoai || ""}
+                                InputProps={{ readOnly: true }}
                             />
                             <TextField
                                 fullWidth
@@ -156,6 +115,7 @@ function Cart() {
                                 value={infoUser.diachi || ""}
                                 multiline
                                 rows={2}
+                                InputProps={{ readOnly: true }}
                             />
                         </form>
                     </div>
