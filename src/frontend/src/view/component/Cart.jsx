@@ -79,11 +79,14 @@ function Cart() {
                 tongtien: subTotal,
                 soluong: totalQuantity,
                 chiTietSanPham,
-                ngaylap: new Date().toISOString().slice(0, 19).replace("T", " "),
+                ngaylap: new Date().toLocaleString("sv-SE", {
+                    timeZone: "Asia/Ho_Chi_Minh",
+                }).replace(" ", "T"),
             };
 
             console.log("Checkout data:", data);
             console.log("Số lượng sản phẩm trong giỏ hàng:", totalQuantity);
+            console.log("Ngày:", data.ngaylap);
 
             const response = await axiosInstance.post(`${apiUrl}/orders`, data);
 
