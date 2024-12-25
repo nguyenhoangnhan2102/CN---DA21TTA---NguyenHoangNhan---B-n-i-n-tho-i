@@ -26,7 +26,7 @@ const getAllUser = async (req, res) => {
 
 
 const registerUser = async (req, res) => {
-    const { email, hoten, password, sodienthoai, diachi } = req.body;
+    const { email, hoten, password, sdt, diachi } = req.body;
 
     const [existingUser] = await connection.query(
         "SELECT * FROM `KHACHHANG` WHERE email = ?",
@@ -44,8 +44,8 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         let role = 0;
         connection.query(
-            "INSERT INTO `KHACHHANG` (email, password, role, hoten, sodienthoai, diachi) VALUES (?, ?, ?, ?, ?, ?)",
-            [email, hashedPassword, role, hoten, sodienthoai, diachi]
+            "INSERT INTO `KHACHHANG` (email, password, role, hoten, sdt, diachi) VALUES (?, ?, ?, ?, ?, ?)",
+            [email, hashedPassword, role, hoten, sdt, diachi]
         );
         return res.status(200).json({
             EM: "Đăng ký thành công",
@@ -107,7 +107,7 @@ const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 hoten: user.hoten,
-                sodienthoai: user.sodienthoai,
+                sdt: user.sdt,
                 diachi: user.diachi,
             },
             JWT_SECRET,
@@ -142,7 +142,7 @@ const getUserProfile = async (req, res) => {
         console.log("User ID:", userId);
 
         const results = await connection.query(
-            "SELECT id, email, password, role, hoten, sodienthoai, diachi FROM `KHACHHANG` WHERE id = ?",
+            "SELECT id, email, password, role, hoten, sdt, diachi FROM `KHACHHANG` WHERE id = ?",
             [userId]
         );
 
@@ -177,7 +177,7 @@ const getUserProfile = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { hoten, sodienthoai, diachi } = req.body;
+    const { hoten, sdt, diachi } = req.body;
 
     try {
         const [existingUser] = await connection.query(
@@ -192,9 +192,9 @@ const updateUser = async (req, res) => {
             });
         }
 
-        await connection.query("UPDATE `KHACHHANG` SET hoten = ?, sodienthoai = ?, diachi = ? WHERE id = ?", [
+        await connection.query("UPDATE `KHACHHANG` SET hoten = ?, sdt = ?, diachi = ? WHERE id = ?", [
             hoten,
-            sodienthoai,
+            sdt,
             diachi,
             id,
         ]);

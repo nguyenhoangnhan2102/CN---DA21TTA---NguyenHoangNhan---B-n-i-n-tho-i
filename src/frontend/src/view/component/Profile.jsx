@@ -78,7 +78,7 @@ export default function Profile() {
                             </div>
                             <div className="profile-info-box__item">
                                 <span className="profile-info-box__label"><strong>Số điện thoại</strong></span>
-                                <span className="profile-info-box__value">{userInfo.sodienthoai || "Chưa cập nhật"}</span>
+                                <span className="profile-info-box__value">{userInfo.sdt || "Chưa cập nhật"}</span>
                             </div>
                             <div className="profile-info-box__item">
                                 <span className="profile-info-box__label"><strong>Địa chỉ</strong></span>

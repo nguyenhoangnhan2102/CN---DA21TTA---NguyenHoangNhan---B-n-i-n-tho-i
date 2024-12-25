@@ -6,20 +6,36 @@ import Cookies from "js-cookie";
 import axiosInstance from "../../authentication/axiosInstance";
 import "../style/Cart.scss";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+const imgURL = process.env.REACT_APP_IMG_URL;
+
 function Cart() {
     const [infoUser, setInfoUser] = useState({});
     const [cartItems, setCartItems] = useState([]);
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const [subTotal, setSubTotal] = useState(0);
 
     useEffect(() => {
         getUserInfoUser();
+        fetchCartItems();
     }, []);
 
-    const getUserInfoUser = () => {
+    const getUserInfoUser = async () => {
         const accessToken = Cookies.get("accessToken");
         if (accessToken) {
             try {
                 const decodedToken = jwtDecode(accessToken);
                 setInfoUser(decodedToken || {});
+                console.log("Decoded Token:", decodedToken);
+
+                const id = decodedToken.id; // Lấy giá trị id từ token
+                console.log("Customer ID:", id);
+
+                if (id) {
+                    await fetchCartItems(id); // Gọi API với id
+                } else {
+                    console.error("ID not found in token.");
+                }
             } catch (error) {
                 console.error("Error decoding JWT:", error);
             }
@@ -28,25 +44,69 @@ function Cart() {
         }
     };
 
-    // Tăng số lượng sản phẩm
-    const increaseQuantity = (id) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-            )
-        );
+
+    const fetchCartItems = async (id) => {
+        if (!id) {
+            console.error("User ID is undefined, cannot fetch cart items.");
+            toast.error("Lỗi khi lấy dữ liệu giỏ hàng: User ID không xác định.");
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.get(`${apiUrl}/cart/${id}`);
+            console.log("Cart items:", response.data);
+            if (response.data.EC === 1) {
+                const updatedItems = response.data.DT.map((item) => ({
+                    ...item,
+                    soluongsanpham: item.soluongsanpham || 1,
+                }));
+                setCartItems(updatedItems);
+                calculateSubTotal(updatedItems);
+                calculateTotalQuantity(updatedItems);
+            } else {
+                console.error(response.data.EM);
+            }
+        } catch (error) {
+            console.error("Error fetching cart items:", error);
+            toast.error("Lỗi khi lấy dữ liệu giỏ hàng.");
+        }
     };
 
-    // Giảm số lượng sản phẩm
-    const decreaseQuantity = (id) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
-        );
+
+    const calculateSubTotal = (items) => {
+        const total = items.reduce((sum, item) => sum + item.gia * item.soluong, 0);
+        setSubTotal(total);
     };
+
+    const calculateTotalQuantity = (items) => {
+        const totalQty = items.reduce((sum, item) => sum + item.soluong, 0);
+        setTotalQuantity(totalQty);
+    };
+
+    const handleIncrease = (masanpham) => {
+        const updatedItems = cartItems.map((item) =>
+            item.masanpham === masanpham
+                ? { ...item, soluong: item.soluong + 1 }
+                : item
+        );
+        setCartItems(updatedItems);
+        calculateSubTotal(updatedItems);
+        calculateTotalQuantity(updatedItems);
+    };
+
+    const handleDecrease = (masanpham) => {
+        const updatedItems = cartItems.map((item) =>
+            item.masanpham === masanpham && item.soluong > 1
+                ? { ...item, soluong: item.soluong - 1 }
+                : item
+        );
+        setCartItems(updatedItems);
+        calculateSubTotal(updatedItems);
+        calculateTotalQuantity(updatedItems);
+    };
+
+
+    console.log("API URL:", apiUrl); // Kiểm tra biến apiUrl
 
     return (
         <div className="container py-5">
@@ -54,47 +114,50 @@ function Cart() {
             <div className="row">
                 {/* Phần thông tin sản phẩm */}
                 <div className="col-md-8">
-                    {cartItems.map((item) => (
-                        <div key={item.id} className="card mb-3 shadow-sm">
-                            <div className="row g-0">
-                                <div className="col-md-3">
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        className="img-fluid rounded-start"
-                                    />
-                                </div>
-                                <div className="col-md-9">
-                                    <div className="card-body">
-                                        <h5 className="card-title">{item.name}</h5>
-                                        <p className="card-text text-muted">
-                                            Giá: {item.price.toLocaleString()} VND
-                                        </p>
-                                        <div className="d-flex align-items-center">
-                                            <button
-                                                className="btn btn-outline-primary btn-sm"
-                                                onClick={() => decreaseQuantity(item.id)}
-                                            >
-                                                -
-                                            </button>
-                                            <span className="mx-2">{item.quantity}</span>
-                                            <button
-                                                className="btn btn-outline-primary btn-sm"
-                                                onClick={() => increaseQuantity(item.id)}
-                                            >
-                                                +
-                                            </button>
-                                            <button
-                                                className="btn btn-danger btn-sm ms-3"
-                                            >
-                                                Xóa
-                                            </button>
+                    {cartItems && cartItems.length > 0 ?
+                        cartItems.map((item) => (
+                            <div key={item.masanpham} className="card mb-3 shadow-sm">
+                                <div className="row g-0">
+                                    <div className="col-md-3">
+                                        <img
+                                            src={`${imgURL}/${item.hinhanhchinh}`}
+                                            alt={item.tensanpham}
+                                            width="65px"
+                                            className="img-fluid rounded-3"
+                                        />
+                                    </div>
+                                    <div className="col-md-9">
+                                        <div className="card-body">
+                                            <h5 className="card-title">{item.tensanpham}</h5>
+                                            <p className="card-text text-muted">
+                                                Giá: {item.giasanpham.toLocaleString()} VND
+                                            </p>
+                                            <div className="d-flex align-items-center">
+                                                <button
+                                                    className="btn btn-outline-primary btn-sm"
+                                                >
+                                                    -
+                                                </button>
+                                                <span className="mx-2">{item.soluongsanpham || 1}</span>
+                                                <button
+                                                    className="btn btn-outline-primary btn-sm"
+                                                >
+                                                    +
+                                                </button>
+                                                <button
+                                                    className="btn btn-danger btn-sm ms-3"
+                                                >
+                                                    Xóa
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        )) :
+                        (
+                            <div className="col-12"> Không có sản phẩm trong giỏ hàng</div>
+                        )}
                 </div>
 
                 {/* Phần thông tin người mua và tóm tắt */}
@@ -117,7 +180,7 @@ function Cart() {
                                     margin="normal"
                                     label="Họ tên"
                                     type="text"
-                                    value={infoUser.sodienthoai}
+                                    value={infoUser.sdt}
                                 />
                             </div>
                             <div className="mb-3">

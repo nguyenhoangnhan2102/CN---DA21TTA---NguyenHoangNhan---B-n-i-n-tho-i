@@ -1,5 +1,67 @@
 const connection = require("../config/dataBase");
 
+const getAllCartByCustomer = async (req, res) => {
+    try {
+        // Lấy id khách hàng từ tham số query hoặc params
+        const { id } = req.params; // Giả sử bạn truyền id khách hàng từ params
+
+        // Kiểm tra nếu không có mã khách hàng được cung cấp
+        if (!id) {
+            return res.status(400).json({
+                EM: "Mã khách hàng không được để trống",
+                EC: -1,
+                DT: [],
+            });
+        }
+
+        // Query SQL lọc theo id
+        const query = `
+            SELECT 
+                gh.id, 
+                sp.masanpham, 
+                sp.tensanpham, 
+                sp.hinhanhchinh,
+                sp.giasanpham, 
+                gh.created_at,
+                gh.update_at
+            FROM 
+                GIOHANG gh
+            JOIN 
+                SANPHAM sp
+            ON 
+                gh.masanpham = sp.masanpham
+            WHERE 
+                gh.id = ?
+        `;
+
+        // Thực thi query với tham số id
+        const [results] = await connection.query(query, [id]);
+
+        // Kiểm tra nếu giỏ hàng rỗng
+        if (results.length === 0) {
+            return res.status(404).json({
+                EM: "Không tìm thấy sản phẩm nào trong giỏ hàng",
+                EC: 0,
+                DT: [],
+            });
+        }
+
+        // Trả kết quả về client
+        return res.status(200).json({
+            EM: "Lấy danh sách sản phẩm giỏ hàng thành công",
+            EC: 1,
+            DT: results,
+        });
+    } catch (err) {
+        console.error("Error fetching cart:", err);
+        return res.status(500).json({
+            EM: `Lỗi controller: ${err.message}`,
+            EC: -1,
+            DT: [],
+        });
+    }
+};
+
 const addToCart = async (req, res) => {
     const { id, masanpham } = req.body;
 
@@ -55,4 +117,5 @@ const addToCart = async (req, res) => {
 
 module.exports = {
     addToCart,
+    getAllCartByCustomer,
 };

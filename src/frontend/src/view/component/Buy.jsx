@@ -83,7 +83,7 @@ const Buy = () => {
                                     margin="normal"
                                     label="Số điện thoại"
                                     type="text"
-                                    value={infoUser.sodienthoai}
+                                    value={infoUser.sdt}
                                 />
                             </div>
                             <div className="mb-3">

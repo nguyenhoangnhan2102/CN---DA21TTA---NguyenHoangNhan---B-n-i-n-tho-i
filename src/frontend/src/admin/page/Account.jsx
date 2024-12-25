@@ -94,7 +94,7 @@ const Accounts = () => {
                                 <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
                                 <td>{user.hoten || "Không có tên"}</td>
                                 <td>{user.email || "Không có email"}</td>
-                                <td>{user.sodienthoai}</td>
+                                <td>{user.sdt}</td>
                                 <td>{user.diachi}</td>
                                 <td>
                                     {user.role === 1
