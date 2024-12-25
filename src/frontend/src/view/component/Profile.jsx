@@ -55,7 +55,7 @@ export default function Profile() {
                         <p className="profile-section__description">
                             Bạn có thể cập nhật Hồ sơ Công khai của mình tại đây và thông tin sẽ tự động đồng bộ ở tất cả các hệ thống.
                         </p>
-                        <div className="d-flex justify-content-end gap-2">
+                        <div className="d-flex justify-content-end gap-2 my-3">
                             <button className="profile-info-box__btn">Cập nhật</button>
                         </div>
                         <div className="profile-info-box">

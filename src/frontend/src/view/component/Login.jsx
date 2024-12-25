@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { TextField } from "@mui/material";
 import { useAuth } from "../../authentication/AuthContext";
+import { toast } from "react-toastify";
 import axiosInstance from "../../authentication/axiosInstance";
 import Cookies from "js-cookie";
 import "../style/Form.scss";
@@ -39,8 +40,10 @@ const Login = () => {
 
             // Kiểm tra role và điều hướng
             if (user.role === 1) {
+                toast.success("Đăng nhập thành công");
                 navigate("/admin"); // Điều hướng đến trang quản trị
             } else {
+                toast.success("Đăng nhập thành công");
                 navigate("/"); // Điều hướng đến trang chủ
             }
         } catch (error) {

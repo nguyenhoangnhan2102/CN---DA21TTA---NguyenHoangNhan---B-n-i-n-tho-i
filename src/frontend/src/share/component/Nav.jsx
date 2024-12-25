@@ -70,7 +70,7 @@ const Header = () => {
     return (
         <>
             <Navbar expand="lg" className="navbar-container">
-                <Container fluid>
+                <Container fluid className='navbar-content'>
                     <Navbar className='navbar-logo'>
                         <Link
                             to={`/`}
@@ -88,7 +88,7 @@ const Header = () => {
                             navbarScroll
                         >
                         </Nav>
-                        <Form className="d-flex align-items-center" style={{ marginRight: '30px' }}>
+                        <Form className="d-flex align-items-center">
                             <Link
                                 to={`/cart`}
                                 className="text-decoration-none text-dark">
@@ -102,7 +102,7 @@ const Header = () => {
                                     {UserData ? (
                                         <>
                                             <li className="header-avata d-flex align-items-center">
-                                                <p onClick={handleClick} title="User Dropdown" className="d-flex justify-content-end">
+                                                <p onClick={handleClick} title="User Dropdown" className="d-flex justify-content-center">
                                                     <Avatar
                                                         sx={{ mr: 2 }}
                                                         alt="User Avatar"
@@ -132,10 +132,10 @@ const Header = () => {
                             style={{ marginLeft: '0', marginTop: '10px' }}
                         >
                             <MenuItem onClick={() => handleOptionClick("Profile")}>
-                                Profile
+                                Thông tin cá nhân
                             </MenuItem>
                             <MenuItem onClick={() => handleOptionClick("Logout")}>
-                                Logout
+                                Đăng xuất
                             </MenuItem>
                         </Menu>
                     </div>

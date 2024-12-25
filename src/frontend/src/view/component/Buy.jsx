@@ -1,17 +1,6 @@
 import React, { useState } from "react";
-import "../style/Buy.scss"; // File CSS nếu cần
-import {
-    Box,
-    Button,
-    TextField,
-    Modal,
-    Typography,
-    Input,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-} from "@mui/material";
+import { TextField } from "@mui/material";
+import "../style/Buy.scss";
 
 const Buy = () => {
     const [customerInfo, setCustomerInfo] = useState({
