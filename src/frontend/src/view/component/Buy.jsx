@@ -1,19 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+
 import "../style/Buy.scss";
 
 const Buy = () => {
-    const [customerInfo, setCustomerInfo] = useState({
-        name: "",
-        phone: "",
-        address: "",
-    });
+    const [infoProduct, setInfoProduct] = useState({});
+    const [infoUser, setInfoUser] = useState({});
     const [quantity, setQuantity] = useState(1);
 
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setCustomerInfo((prevInfo) => ({ ...prevInfo, [id]: value }));
+    useEffect(() => {
+        getUserInfoUser();
+    }, []);
+
+    const getUserInfoUser = () => {
+        const accessToken = Cookies.get("accessToken");
+        if (accessToken) {
+            try {
+                const decodedToken = jwtDecode(accessToken);
+                setInfoUser(decodedToken || {});
+            } catch (error) {
+                console.error("Error decoding JWT:", error);
+            }
+        } else {
+            console.log("No Access Token found in Cookie");
+        }
     };
+
+
 
     const increaseQuantity = () => {
         setQuantity(quantity + 1);
@@ -26,6 +41,8 @@ const Buy = () => {
     const handlePurchase = () => {
         alert(`Mua sản phẩm thành công! Số lượng: ${quantity}`);
     };
+
+    console.log(infoUser);
 
     return (
         <div className="container py-5">
@@ -40,8 +57,7 @@ const Buy = () => {
                                     margin="normal"
                                     label="Họ tên"
                                     type="text"
-                                    value={customerInfo.name}
-                                    onChange={handleInputChange}
+                                    value={infoUser.hoten}
                                 />
                             </div>
                             <div className="mb-3">
@@ -50,8 +66,7 @@ const Buy = () => {
                                     margin="normal"
                                     label="Số điện thoại"
                                     type="text"
-                                    value={customerInfo.phone}
-                                    onChange={handleInputChange}
+                                    value={infoUser.sodienthoai}
                                 />
                             </div>
                             <div className="mb-3">
@@ -60,9 +75,9 @@ const Buy = () => {
                                     margin="normal"
                                     label="Địa chỉ"
                                     type="text"
-                                    value={customerInfo.address}
-                                    onChange={handleInputChange}
+                                    value={infoUser.diachi}
                                     multiline
+                                    rows={4}
                                 />
                             </div>
                         </form>
