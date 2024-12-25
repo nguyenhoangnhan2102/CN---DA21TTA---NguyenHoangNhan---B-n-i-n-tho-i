@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import axiosInstance from "../../authentication/axiosInstance";
@@ -86,6 +86,9 @@ const ProductDetails = () => {
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
     }
+
+    console.log("productdetails", productdetails);
+    console.log("inforUser", inforUser);
 
     return (
         <div className="container mt-3 product-details">
@@ -277,9 +280,9 @@ const ProductDetails = () => {
                             <i className="fa-solid fa-cart-shopping"></i>
                             <p>Thêm vào giỏ</p>
                         </button>
-                        <button to={`/buy/${productdetails.masanpham}`} className="btn btn-primary button-buy col-6">
+                        <Link to={`/buy/${productdetails.masanpham}`} className="btn btn-primary button-buy col-6">
                             Mua ngay
-                        </button>
+                        </Link>
                     </div>
                     <div className="contact">
                         Gọi đặt mua <strong>1900 232 460</strong> (8:00 - 21:00)

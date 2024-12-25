@@ -2,10 +2,8 @@ const connection = require("../config/dataBase");
 
 const getAllCartByCustomer = async (req, res) => {
     try {
-        // Lấy makhachhang khách hàng từ tham số query hoặc params
-        const { makhachhang } = req.params; // Giả sử bạn truyền makhachhang khách hàng từ params
+        const { makhachhang } = req.params;
 
-        // Kiểm tra nếu không có mã khách hàng được cung cấp
         if (!makhachhang) {
             return res.status(400).json({
                 EM: "Mã khách hàng không được để trống",
@@ -14,27 +12,18 @@ const getAllCartByCustomer = async (req, res) => {
             });
         }
 
-        // Query SQL lọc theo makhachhang
         const query = `
-            SELECT 
-                gh.makhachhang, 
-                sp.masanpham, 
-                sp.tensanpham, 
-                sp.hinhanhchinh,
-                sp.giasanpham, 
-                gh.created_at,
-                gh.update_at
-            FROM 
-                GIOHANG gh
-            JOIN 
-                SANPHAM sp
-            ON 
-                gh.masanpham = sp.masanpham
-            WHERE 
-                gh.makhachhang = ?
-        `;
+    SELECT 
+      SP.masanpham, SP.tensanpham, SP.giasanpham, SP.hinhanhchinh, SP.soluongsanpham,
+      GH.created_at, GH.update_at
+    FROM 
+      GIOHANG GH
+    JOIN 
+      SANPHAM SP ON GH.masanpham = SP.masanpham
+    WHERE 
+      GH.makhachhang = ?
+  `;
 
-        // Thực thi query với tham số makhachhang
         const [results] = await connection.query(query, [makhachhang]);
 
         // Kiểm tra nếu giỏ hàng rỗng
@@ -90,8 +79,8 @@ const addToCart = async (req, res) => {
 
         // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng
         const cartCheck = await connection.query(
-            "SELECT * FROM GIOHANG WHERE masanpham = ? AND makhachhang = ?",
-            [masanpham, makhachhang]
+            "SELECT * FROM GIOHANG WHERE makhachhang = ? AND masanpham = ?",
+            [makhachhang, masanpham]
         );
         if (cartCheck[0].length > 0) {
             return res.status(400).json({
@@ -101,13 +90,13 @@ const addToCart = async (req, res) => {
 
         // Thêm sản phẩm vào giỏ hàng
         await connection.query(
-            "INSERT INTO GIOHANG (masanpham, makhachhang) VALUES (?, ?)",
-            [masanpham, makhachhang]
+            "INSERT INTO GIOHANG (makhachhang, masanpham) VALUES (?, ?)",
+            [makhachhang, masanpham]
         );
 
         res.status(201).json({
             message: "Sản phẩm đã được thêm vào giỏ hàng",
-            data: { masanpham, makhachhang },
+            data: { makhachhang, masanpham },
         });
     } catch (err) {
         console.error("Error adding product to cart:", err.message);

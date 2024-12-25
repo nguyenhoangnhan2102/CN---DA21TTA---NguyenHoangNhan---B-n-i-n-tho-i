@@ -59,7 +59,7 @@ const Buy = () => {
         alert(`Mua sản phẩm thành công! Số lượng: ${quantity}`);
     };
 
-    console.log(infoProduct);
+    console.log(infoUser);
 
     return (
         <div className="container py-5">

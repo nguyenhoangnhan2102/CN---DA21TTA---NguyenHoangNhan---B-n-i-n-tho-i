@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import { jwtDecode } from "jwt-decode";
-import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode"; // Đã sửa lại import không destructure
 import Cookies from "js-cookie";
 import axiosInstance from "../../authentication/axiosInstance";
 import "../style/Cart.scss";
@@ -16,113 +15,84 @@ function Cart() {
     const [subTotal, setSubTotal] = useState(0);
 
     useEffect(() => {
-        getUserInfoUser();
-        fetchCartItems();
-    }, []);
-
-    const getUserInfoUser = async () => {
         const accessToken = Cookies.get("accessToken");
         if (accessToken) {
             try {
                 const decodedToken = jwtDecode(accessToken);
-                setInfoUser(decodedToken || {});
-                console.log("Decoded Token:", decodedToken);
-
-                const makhachhang = decodedToken.makhachhang; // Lấy giá trị makhachhang từ token
-                console.log("Customer ID:", makhachhang);
-
-                if (makhachhang) {
-                    await fetchCartItems(makhachhang); // Gọi API với makhachhang
-                } else {
-                    console.error("ID not found in token.");
+                if (decodedToken) {
+                    setInfoUser(decodedToken);
+                    fetchCartItems(decodedToken.makhachhang);
                 }
             } catch (error) {
                 console.error("Error decoding JWT:", error);
             }
         } else {
-            console.log("No Access Token found in Cookie");
+            console.error("Access token not found in cookies");
         }
-    };
-
+    }, []);
 
     const fetchCartItems = async (makhachhang) => {
-        if (!makhachhang) {
-            console.error("User ID is undefined, cannot fetch cart items.");
-            toast.error("Lỗi khi lấy dữ liệu giỏ hàng: User ID không xác định.");
-            return;
-        }
-
         try {
             const response = await axiosInstance.get(`${apiUrl}/cart/${makhachhang}`);
-            console.log("Cart items:", response.data);
-            if (response.data.EC === 1) {
-                const updatedItems = response.data.DT.map((item) => ({
+            const { EC, DT } = response.data;
+            if (EC === 1) {
+                const updatedItems = DT.map((item) => ({
                     ...item,
-                    soluongsanpham: item.soluongsanpham || 1,
+                    soluongsanpham: item.soluongsanpham || 1, // Đảm bảo số lượng mặc định là 1
                 }));
                 setCartItems(updatedItems);
-                calculateSubTotal(updatedItems);
-                calculateTotalQuantity(updatedItems);
+                calculateTotals(updatedItems);
             } else {
-                console.error(response.data.EM);
+                console.warn(response.data.EM);
             }
         } catch (error) {
             console.error("Error fetching cart items:", error);
-            toast.error("Lỗi khi lấy dữ liệu giỏ hàng.");
         }
     };
 
 
-    const calculateSubTotal = (items) => {
-        const total = items.reduce((sum, item) => sum + item.gia * item.soluong, 0);
-        setSubTotal(total);
-    };
-
-    const calculateTotalQuantity = (items) => {
-        const totalQty = items.reduce((sum, item) => sum + item.soluong, 0);
+    const calculateTotals = (items) => {
+        let totalQty = 0;
+        let totalPrice = 0;
+        items.forEach((item) => {
+            totalQty += item.soluongsanpham || 1;
+            totalPrice += (item.soluongsanpham || 1) * item.giasanpham;
+        });
         setTotalQuantity(totalQty);
+        setSubTotal(totalPrice);
     };
 
-    const handleIncrease = (masanpham) => {
-        const updatedItems = cartItems.map((item) =>
-            item.masanpham === masanpham
-                ? { ...item, soluong: item.soluong + 1 }
-                : item
-        );
-        setCartItems(updatedItems);
-        calculateSubTotal(updatedItems);
-        calculateTotalQuantity(updatedItems);
+    const handleQuantityChange = (index, change) => {
+        const updatedCart = [...cartItems];
+        const item = updatedCart[index];
+
+        // Kiểm tra giới hạn số lượng tối đa
+        const maxQuantity = item.soluongton || Infinity; // Giả sử có trường `soluongton` lưu số lượng tồn
+        const newQuantity = (item.soluongsanpham || 1) + change;
+
+        if (newQuantity > 0 && newQuantity <= maxQuantity) {
+            item.soluongsanpham = newQuantity;
+            setCartItems(updatedCart);
+            calculateTotals(updatedCart);
+        } else if (newQuantity > maxQuantity) {
+            alert(`Sản phẩm "${item.tensanpham}" đã đạt số lượng tối đa (${maxQuantity})!`);
+        }
     };
 
-    const handleDecrease = (masanpham) => {
-        const updatedItems = cartItems.map((item) =>
-            item.masanpham === masanpham && item.soluong > 1
-                ? { ...item, soluong: item.soluong - 1 }
-                : item
-        );
-        setCartItems(updatedItems);
-        calculateSubTotal(updatedItems);
-        calculateTotalQuantity(updatedItems);
-    };
-
-
-    console.log("API URL:", apiUrl); // Kiểm tra biến apiUrl
 
     return (
-        <div className="container py-5">
+        <div className="container py-5 ">
             <h2 className="text-center mb-4">Giỏ Hàng</h2>
             <div className="row">
-                {/* Phần thông tin sản phẩm */}
                 <div className="col-md-8">
-                    {cartItems && cartItems.length > 0 ?
-                        cartItems.map((item) => (
+                    {cartItems.length > 0 ? (
+                        cartItems.map((item, index) => (
                             <div key={item.masanpham} className="card mb-3 shadow-sm">
                                 <div className="row g-0">
                                     <div className="col-md-3">
                                         <img
                                             src={`${imgURL}/${item.hinhanhchinh}`}
                                             alt={item.tensanpham}
-                                            width="65px"
                                             className="img-fluid rounded-3"
                                         />
                                     </div>
@@ -134,84 +104,71 @@ function Cart() {
                                             </p>
                                             <div className="d-flex align-items-center">
                                                 <button
-                                                    className="btn btn-outline-primary btn-sm"
+                                                    className="btn btn-outline-secondary btn-sm"
+                                                    onClick={() => handleQuantityChange(index, -1)}
                                                 >
                                                     -
                                                 </button>
-                                                <span className="mx-2">{item.soluongsanpham || 1}</span>
+                                                <span className="mx-3">
+                                                    {item.soluongsanpham || 1}
+                                                </span>
                                                 <button
-                                                    className="btn btn-outline-primary btn-sm"
+                                                    className="btn btn-outline-secondary btn-sm"
+                                                    onClick={() => handleQuantityChange(index, 1)}
                                                 >
                                                     +
-                                                </button>
-                                                <button
-                                                    className="btn btn-danger btn-sm ms-3"
-                                                >
-                                                    Xóa
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        )) :
-                        (
-                            <div className="col-12"> Không có sản phẩm trong giỏ hàng</div>
-                        )}
+                        ))
+                    ) : (
+                        <div className="col-12">Không có sản phẩm trong giỏ hàng</div>
+                    )}
                 </div>
 
-                {/* Phần thông tin người mua và tóm tắt */}
                 <div className="col-md-4">
                     <div className="card p-3 shadow-sm mb-3">
                         <h4 className="text-center mb-3">Thông Tin Người Mua</h4>
                         <form>
-                            <div className="mb-3">
-                                <TextField
-                                    fullWidth
-                                    margin="normal"
-                                    label="Họ tên"
-                                    type="text"
-                                    value={infoUser.hoten}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <TextField
-                                    fullWidth
-                                    margin="normal"
-                                    label="Họ tên"
-                                    type="text"
-                                    value={infoUser.sodienthoai}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <TextField
-                                    fullWidth
-                                    margin="normal"
-                                    label="Họ tên"
-                                    type="text"
-                                    value={infoUser.diachi}
-                                    multiline
-                                    rows={4}
-                                />
-                            </div>
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Họ tên"
+                                type="text"
+                                value={infoUser.hoten || ""}
+
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Số điện thoại"
+                                type="text"
+                                value={infoUser.sodienthoai || ""}
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Địa chỉ giao hàng"
+                                type="text"
+                                value={infoUser.diachi || ""}
+                                multiline
+                                rows={2}
+                            />
                         </form>
                     </div>
                     <div className="card p-3 shadow-sm">
                         <h4 className="text-center mb-3">Tóm Tắt Đơn Hàng</h4>
                         <p>
-                            <strong>Số lượng sản phẩm:</strong>{" "}
-                            {cartItems.reduce((total, item) => total + item.quantity, 0)}
+                            <strong>Số lượng sản phẩm:</strong> {totalQuantity}
                         </p>
                         <p>
                             <strong>Tổng cộng:</strong>{" "}
-                            <span className="text-danger">
-                            </span>
+                            <span className="text-danger">{subTotal.toLocaleString()} VND</span>
                         </p>
-                        <button
-                            className="btn btn-success w-100 mt-3"
-                        >
-                            Thanh Toán
-                        </button>
+                        <button className="btn btn-success w-100 mt-3">Thanh Toán</button>
                     </div>
                 </div>
             </div>
