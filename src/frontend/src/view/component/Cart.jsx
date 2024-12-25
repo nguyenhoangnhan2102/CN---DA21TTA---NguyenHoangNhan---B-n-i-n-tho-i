@@ -52,6 +52,42 @@ function Cart() {
         }
     };
 
+    const handleQuantityChange = (masanpham, type) => {
+        setCartItems(prevItems => {
+            const updatedCartItems = prevItems.map(item => {
+                if (item.masanpham === masanpham) {
+                    const updatedQuantity = type === "increase"
+                        ? item.soluongsanpham + 1
+                        : item.soluongsanpham > 1
+                            ? item.soluongsanpham - 1
+                            : item.soluongsanpham; // Không giảm xuống dưới 1
+
+                    return { ...item, soluongsanpham: updatedQuantity };
+                }
+                return item;
+            });
+
+            // Cập nhật lại tổng số lượng và tổng giá trị
+            const totalQty = updatedCartItems.reduce((acc, item) => acc + item.soluongsanpham, 0);
+            const subTotalAmount = updatedCartItems.reduce((acc, item) => acc + item.soluongsanpham * item.giasanpham, 0);
+
+            setTotalQuantity(totalQty);
+            setSubTotal(subTotalAmount);
+
+            return updatedCartItems;
+        });
+    };
+
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setInfoUser(prevState => ({
+            ...prevState,
+            [name]: value,  // Cập nhật giá trị của trường tương ứng
+        }));
+    };
+
+
     console.log(cartItems);
 
     return (
@@ -77,7 +113,24 @@ function Cart() {
                                         <div className="card-body">
                                             <h5 className="card-title">{item.tensanpham}</h5>
                                             <p className="card-text text-muted">Giá: {item.giasanpham.toLocaleString()} VND</p>
-                                            <p className="card-text">Số lượng: {item.soluongsanpham}</p>
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <div className="d-flex align-items-center">
+                                                    <button
+                                                        className="btn btn-outline-secondary me-2"
+                                                        onClick={() => handleQuantityChange(item.masanpham, "decrease")}
+                                                    >
+                                                        -
+                                                    </button>
+                                                    <span>{item.soluongsanpham}</span>
+                                                    <button
+                                                        className="btn btn-outline-secondary ms-2"
+                                                        onClick={() => handleQuantityChange(item.masanpham, "increase")}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                                <p className="card-text">Số lượng: {item.soluongsanpham}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -96,26 +149,29 @@ function Cart() {
                                 margin="normal"
                                 label="Họ tên"
                                 type="text"
+                                name="hoten"
                                 value={infoUser.hoten || ""}
-                                InputProps={{ readOnly: true }}
+                                onChange={handleChange}
                             />
                             <TextField
                                 fullWidth
                                 margin="normal"
                                 label="Số điện thoại"
                                 type="text"
+                                name="sodienthoai"
                                 value={infoUser.sodienthoai || ""}
-                                InputProps={{ readOnly: true }}
+                                onChange={handleChange}
                             />
                             <TextField
                                 fullWidth
                                 margin="normal"
                                 label="Địa chỉ giao hàng"
                                 type="text"
+                                name="diachi"
                                 value={infoUser.diachi || ""}
+                                onChange={handleChange}
                                 multiline
-                                rows={2}
-                                InputProps={{ readOnly: true }}
+                                rows={3}
                             />
                         </form>
                     </div>
