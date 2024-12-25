@@ -18,7 +18,7 @@ const RouterView = () => {
             element: <ProductDetails />,
         },
         {
-            path: "/buy",
+            path: "/buy/:masanpham",
             element: <Buy />,
         },
         {

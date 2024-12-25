@@ -39,15 +39,21 @@
   padding: 12px;
 
   .button-cart {
-    display       : flex;
-    flex-direction: column;
-    background    : #ffffff;
-    color         : #2270e6;
-    border-color  : #2270e6;
-    font-size     : 14px;
+    display        : flex;
+    justify-content: center;
+    flex-direction : column;
+    background     : #ffffff;
+    color          : #2270e6;
+    border-color   : #2270e6;
+    font-size      : 14px;
 
     i {
+      width  : 100%;
       padding: 2px;
+    }
+
+    p {
+      width: 100%;
     }
   }
 

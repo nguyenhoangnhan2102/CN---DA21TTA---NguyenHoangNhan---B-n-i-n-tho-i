@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 import axiosInstance from "../../authentication/axiosInstance";
+import Cookies from "js-cookie";
 import "../style/Details.scss";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -10,12 +13,28 @@ const imgURL = process.env.REACT_APP_IMG_URL;
 const ProductDetails = () => {
     const [productdetails, setProductDetails] = useState([]);
     const { masanpham } = useParams();
+    const [inforUser, setInforUser] = useState({});
     const [showDetails, setShowDetails] = useState(true);
     const [showDetailsCamera, setShowDetailsCamera] = useState(true);
 
     useEffect(() => {
         fecthProductDetails();
+        getUserInfoUser();
     }, [masanpham]);
+
+    const getUserInfoUser = () => {
+        const accessToken = Cookies.get("accessToken");
+        if (accessToken) {
+            try {
+                const decodedToken = jwtDecode(accessToken);
+                setInforUser(decodedToken || {});
+            } catch (error) {
+                console.error("Error decoding JWT:", error);
+            }
+        } else {
+            console.log("No Access Token found in Cookie");
+        }
+    };
 
     const fecthProductDetails = async () => {
         if (masanpham) {
@@ -25,6 +44,41 @@ const ProductDetails = () => {
                 console.log("setProductDetails", response.data.DT)
             } catch (err) {
                 console.error("Error occurred", err);
+            }
+        }
+    };
+
+    const handleAddToCart = async () => {
+        const { id } = inforUser;
+        const { masanpham } = productdetails;
+
+        if (!id || !masanpham) {
+            console.error("Missing required information: makhachhang or masanpham");
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.post(`${apiUrl}/cart`, {
+                id,
+                masanpham,
+            });
+
+            if (response.status === 201) {
+                toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+            } else {
+                toast.error("Không thể thêm sản phẩm vào giỏ hàng");
+            }
+        } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.message ===
+                "Sản phẩm đã tồn tại trong giỏ hàng"
+            ) {
+                toast.warning("Sản phẩm đã tồn tại trong giỏ hàng");
+            } else {
+                console.error("Error adding product to cart:", error.message);
+                toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng");
             }
         }
     };
@@ -219,13 +273,13 @@ const ProductDetails = () => {
                         </div>
                     )}
                     <div className="btn-buy d-flex gap-2">
-                        <Link className="btn btn-secondary button-cart col-6">
+                        <button className="btn btn-secondary button-cart col-6" onClick={handleAddToCart}>
                             <i className="fa-solid fa-cart-shopping"></i>
-                            Thêm vào giỏ
-                        </Link>
-                        <Link to={`/buy`} className="btn btn-primary button-buy col-6">
+                            <p>Thêm vào giỏ</p>
+                        </button>
+                        <button to={`/buy/${productdetails.masanpham}`} className="btn btn-primary button-buy col-6">
                             Mua ngay
-                        </Link>
+                        </button>
                     </div>
                     <div className="contact">
                         Gọi đặt mua <strong>1900 232 460</strong> (8:00 - 21:00)

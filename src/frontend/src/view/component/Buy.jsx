@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-
+import axiosInstance from "../../authentication/axiosInstance";
 import "../style/Buy.scss";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+const apiProductUrl = apiUrl + '/products';
+const apiOrders = apiUrl + '/orders';
+
 const Buy = () => {
+    const { masanpham } = useParams();
     const [infoProduct, setInfoProduct] = useState({});
     const [infoUser, setInfoUser] = useState({});
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         getUserInfoUser();
+        fetchListDetailProduct();
     }, []);
 
     const getUserInfoUser = () => {
@@ -28,7 +36,16 @@ const Buy = () => {
         }
     };
 
-
+    const fetchListDetailProduct = async () => {
+        if (masanpham) {
+            try {
+                const response = await axiosInstance.get(`${apiProductUrl}/${masanpham}`);
+                setInfoProduct(response.data.DT || {});
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+    };
 
     const increaseQuantity = () => {
         setQuantity(quantity + 1);
@@ -42,7 +59,7 @@ const Buy = () => {
         alert(`Mua sản phẩm thành công! Số lượng: ${quantity}`);
     };
 
-    console.log(infoUser);
+    console.log(infoProduct);
 
     return (
         <div className="container py-5">
@@ -91,7 +108,7 @@ const Buy = () => {
                             <img src="/iphone-16-pro-max-titan-den-.jpg" alt="iphone-16-pro-max-titan-den-.jpg" width="200px" height="200px" />
                         </div>
                         <p>
-                            <strong>Tên Sản Phẩm:</strong> Điện Thoại iPhone 14
+                            <strong>Tên Sản Phẩm:</strong> {infoProduct.tensanpham}
                         </p>
                         <p>
                             <strong>Giá Tiền:</strong> 25,000,000 VND

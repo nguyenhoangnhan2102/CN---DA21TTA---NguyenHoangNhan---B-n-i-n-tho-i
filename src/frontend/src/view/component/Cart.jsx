@@ -1,29 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { TextField } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import axiosInstance from "../../authentication/axiosInstance";
 import "../style/Cart.scss";
 
 function Cart() {
-    const [cartItems, setCartItems] = useState([
-        {
-            id: 1,
-            name: "Điện Thoại iPhone 14",
-            price: 25000000,
-            quantity: 1,
-            image: "/iphone-16-pro-max-titan-den-.jpg",
-        },
-        {
-            id: 2,
-            name: "Samsung Galaxy S22 Ultra 5G",
-            price: 7000000,
-            quantity: 2,
-            image: "/samsung.webp",
-        },
-    ]);
+    const [infoUser, setInfoUser] = useState({});
+    const [cartItems, setCartItems] = useState([]);
 
-    const [customerInfo, setCustomerInfo] = useState({
-        name: "",
-        phone: "",
-        address: "",
-    });
+    useEffect(() => {
+        getUserInfoUser();
+    }, []);
+
+    const getUserInfoUser = () => {
+        const accessToken = Cookies.get("accessToken");
+        if (accessToken) {
+            try {
+                const decodedToken = jwtDecode(accessToken);
+                setInfoUser(decodedToken || {});
+            } catch (error) {
+                console.error("Error decoding JWT:", error);
+            }
+        } else {
+            console.log("No Access Token found in Cookie");
+        }
+    };
 
     // Tăng số lượng sản phẩm
     const increaseQuantity = (id) => {
@@ -43,35 +46,6 @@ function Cart() {
                     : item
             )
         );
-    };
-
-    // Xóa sản phẩm
-    const removeItem = (id) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    };
-
-    // Tính tổng tiền
-    const calculateTotal = () =>
-        cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-    // Xử lý khi người dùng nhập thông tin
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setCustomerInfo({ ...customerInfo, [name]: value });
-    };
-
-    // Xử lý khi nhấn nút "Thanh Toán"
-    const handleCheckout = () => {
-        if (!customerInfo.name || !customerInfo.phone || !customerInfo.address) {
-            alert("Vui lòng điền đầy đủ thông tin người mua!");
-            return;
-        }
-        alert(
-            `Cảm ơn bạn ${customerInfo.name}, đơn hàng đã được đặt thành công!`
-        );
-        // Reset thông tin
-        setCustomerInfo({ name: "", phone: "", address: "" });
-        setCartItems([]);
     };
 
     return (
@@ -112,7 +86,6 @@ function Cart() {
                                             </button>
                                             <button
                                                 className="btn btn-danger btn-sm ms-3"
-                                                onClick={() => removeItem(item.id)}
                                             >
                                                 Xóa
                                             </button>
@@ -130,37 +103,33 @@ function Cart() {
                         <h4 className="text-center mb-3">Thông Tin Người Mua</h4>
                         <form>
                             <div className="mb-3">
-                                <label className="form-label">Họ Tên</label>
-                                <input
+                                <TextField
+                                    fullWidth
+                                    margin="normal"
+                                    label="Họ tên"
                                     type="text"
-                                    className="form-control"
-                                    name="name"
-                                    value={customerInfo.name}
-                                    onChange={handleInputChange}
-                                    placeholder="Nhập họ tên"
+                                    value={infoUser.hoten}
                                 />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Số Điện Thoại</label>
-                                <input
+                                <TextField
+                                    fullWidth
+                                    margin="normal"
+                                    label="Họ tên"
                                     type="text"
-                                    className="form-control"
-                                    name="phone"
-                                    value={customerInfo.phone}
-                                    onChange={handleInputChange}
-                                    placeholder="Nhập số điện thoại"
+                                    value={infoUser.sodienthoai}
                                 />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Địa Chỉ</label>
-                                <textarea
-                                    className="form-control"
-                                    name="address"
-                                    rows="3"
-                                    value={customerInfo.address}
-                                    onChange={handleInputChange}
-                                    placeholder="Nhập địa chỉ giao hàng"
-                                ></textarea>
+                                <TextField
+                                    fullWidth
+                                    margin="normal"
+                                    label="Họ tên"
+                                    type="text"
+                                    value={infoUser.diachi}
+                                    multiline
+                                    rows={4}
+                                />
                             </div>
                         </form>
                     </div>
@@ -173,12 +142,10 @@ function Cart() {
                         <p>
                             <strong>Tổng cộng:</strong>{" "}
                             <span className="text-danger">
-                                {calculateTotal().toLocaleString()} VND
                             </span>
                         </p>
                         <button
                             className="btn btn-success w-100 mt-3"
-                            onClick={handleCheckout}
                         >
                             Thanh Toán
                         </button>
