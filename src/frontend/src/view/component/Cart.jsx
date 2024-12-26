@@ -54,6 +54,15 @@ function Cart() {
         }
     };
 
+    const getCartItemsDetails = () => {
+        return cartItems.map(item => ({
+            masanpham: item.masanpham,
+            soluong: item.soluongsanpham,
+            giatien: item.giasanpham,
+        }));
+    };
+
+
     const handleCheckout = async () => {
         if (!infoUser.hoten || !infoUser.sodienthoai || !infoUser.diachi) {
             alert("Vui lòng điền đầy đủ thông tin người mua!");
@@ -66,17 +75,8 @@ function Cart() {
         }
 
         try {
-            // Kiểm tra cartItems để xác nhận nó có chứa các sản phẩm khác nhau không
-            console.log("Cart items:", cartItems);
 
-            // Chuẩn bị dữ liệu chi tiết đơn hàng từ giỏ hàng
-            const chiTietSanPham = cartItems.map((item) => ({
-                masanpham: item.masanpham,
-                soluong: item.soluongsanpham,
-                giatien: item.giasanpham,
-            }));
-
-            console.log("Chi tiết sản phẩm:", chiTietSanPham); // Kiểm tra lại chi tiết sản phẩm
+            const cartDetails = getCartItemsDetails();
 
             // Tạo dữ liệu gửi đi
             const data = {
@@ -87,13 +87,13 @@ function Cart() {
                 trangthaidonhang: 0, // Đang chờ xử lý
                 tongtien: subTotal,
                 soluong: totalQuantity,
-                chiTietSanPham, // Đảm bảo rằng mỗi sản phẩm có một mã sản phẩm duy nhất
+                chiTietSanPham: cartDetails, // Đảm bảo rằng mỗi sản phẩm có một mã sản phẩm duy nhất
                 ngaylap: new Date().toLocaleString("sv-SE", {
                     timeZone: "Asia/Ho_Chi_Minh",
                 }).replace(" ", "T"),
             };
 
-            console.log("Checkout data:", data);
+            console.log("cartDetails", cartDetails);
 
             // Gửi yêu cầu đặt hàng đến API
             const response = await axiosInstance.post(`${apiUrl}/orders`, data);

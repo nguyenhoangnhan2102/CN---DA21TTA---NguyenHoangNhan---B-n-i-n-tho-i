@@ -45,7 +45,6 @@ const comfirmOrder = async (req, res) => {
         soluong,
     } = req.body;
 
-    // Kiểm tra tính hợp lệ của thông tin
     if (!makhachhang || !chiTietSanPham || chiTietSanPham.length === 0) {
         return res.status(400).json({ success: false, message: "Thiếu thông tin đơn hàng." });
     }
@@ -59,50 +58,51 @@ const comfirmOrder = async (req, res) => {
 
         const madonhang = result.insertId;
 
-        // Lấy thời gian lập hóa đơn vừa thêm
-        const [donhang] = await connection.query(
-            "SELECT ngaylap FROM DONHANG WHERE madonhang = ?",
-            [madonhang]
-        );
-
-        // Duyệt qua các sản phẩm trong giỏ hàng
+        // Kiểm tra số lượng sản phẩm trong kho và xử lý chi tiết đơn hàng
         for (const item of chiTietSanPham) {
             const { masanpham, soluong, giatien } = item;
 
-            // // Kiểm tra số lượng sản phẩm trong kho (nếu cần)
-            // const [sanpham] = await connection.query(
-            //     "SELECT soluong FROM SANPHAM WHERE masanpham = ?",
-            //     [masanpham]
-            // );
-            // if (sanpham[0].soluong < soluong) {
-            //     return res.status(400).json({ success: false, message: `Số lượng sản phẩm ${masanpham} không đủ.` });
-            // }
+            // Kiểm tra số lượng sản phẩm hiện tại trong kho
+            const [product] = await connection.query(
+                "SELECT soluongsanpham FROM SANPHAM WHERE masanpham = ?",
+                [masanpham]
+            );
+
+            if (!product || product.soluongsanpham < soluong) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Sản phẩm mã ${masanpham} không đủ số lượng trong kho.`,
+                });
+            }
+
+            // Trừ số lượng sản phẩm trong kho
+            await connection.query(
+                "UPDATE SANPHAM SET soluongsanpham = soluongsanpham - ? WHERE masanpham = ?",
+                [soluong, masanpham]
+            );
 
             // Thêm chi tiết đơn hàng vào bảng CHITIETDONHANG
             await connection.query(
                 "INSERT INTO CHITIETDONHANG (madonhang, masanpham, giatien, soluong) VALUES (?, ?, ?, ?)",
                 [madonhang, masanpham, giatien, soluong]
             );
-
-            // // Giảm số lượng sản phẩm trong kho sau khi đặt hàng (nếu cần)
-            // await connection.query(
-            //     "UPDATE SANPHAM SET soluong = soluong - ? WHERE masanpham = ?",
-            //     [soluong, masanpham]
-            // );
         }
 
-        // Trả thông tin hóa đơn, bao gồm thời gian lập
-        return res.status(201).json({
+        // Trả về phản hồi thành công
+        return res.status(200).json({
             success: true,
             message: "Đặt hàng thành công.",
             madonhang,
-            ngaylap: donhang[0]?.ngaylap // Trả thời gian lập hóa đơn từ database
         });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: "Lỗi khi đặt hàng.", error: error.message });
+        console.error("Error during order confirmation:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Đã xảy ra lỗi khi xác nhận đơn hàng.",
+        });
     }
 };
+
 
 
 module.exports = {
