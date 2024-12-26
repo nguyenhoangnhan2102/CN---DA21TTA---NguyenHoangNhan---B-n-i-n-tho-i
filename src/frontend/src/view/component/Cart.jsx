@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
 import { TextField } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
@@ -10,7 +9,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const imgURL = process.env.REACT_APP_IMG_URL;
 
 function Cart() {
-    const { masanpham } = useParams();
     const [infoUser, setInfoUser] = useState({});
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [subTotal, setSubTotal] = useState(0);
