@@ -52,10 +52,10 @@ const getAllCartByCustomer = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-    const { makhachhang, masanpham } = req.body;
+    const { makhachhang, masanpham, mausacsanpham } = req.body;  // Thêm mausacsanpham
 
-    if (!makhachhang || !masanpham) {
-        return res.status(400).json({ message: "makhachhang và masanpham là bắt buộc" });
+    if (!makhachhang || !masanpham || !mausacsanpham) {
+        return res.status(400).json({ message: "makhachhang, masanpham và mausacsanpham là bắt buộc" });
     }
 
     try {
@@ -77,32 +77,42 @@ const addToCart = async (req, res) => {
             return res.status(404).json({ message: "Sản phẩm không tồn tại" });
         }
 
-        // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng
+        // Kiểm tra màu sắc sản phẩm tồn tại
+        const colorCheck = await connection.query(
+            "SELECT * FROM MAUSACSANPHAM WHERE mausacsanpham = ? AND masanpham = ?",
+            [mausacsanpham, masanpham]  // Kiểm tra màu sắc thuộc về sản phẩm
+        );
+        if (colorCheck[0].length === 0) {
+            return res.status(404).json({ message: "Màu sắc không tồn tại cho sản phẩm này" });
+        }
+
+        // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
         const cartCheck = await connection.query(
-            "SELECT * FROM GIOHANG WHERE makhachhang = ? AND masanpham = ?",
-            [makhachhang, masanpham]
+            "SELECT * FROM GIOHANG WHERE makhachhang = ? AND masanpham = ? AND mausacsanpham = ?",
+            [makhachhang, masanpham, mausacsanpham]
         );
         if (cartCheck[0].length > 0) {
             return res.status(400).json({
-                message: "Sản phẩm đã tồn tại trong giỏ hàng",
+                message: "Sản phẩm và màu sắc đã tồn tại trong giỏ hàng",
             });
         }
 
-        // Thêm sản phẩm vào giỏ hàng
+        // Thêm sản phẩm và màu sắc vào giỏ hàng
         await connection.query(
-            "INSERT INTO GIOHANG (makhachhang, masanpham) VALUES (?, ?)",
-            [makhachhang, masanpham]
+            "INSERT INTO GIOHANG (makhachhang, masanpham, mausacsanpham) VALUES (?, ?, ?)",
+            [makhachhang, masanpham, mausacsanpham]
         );
 
         res.status(201).json({
             message: "Sản phẩm đã được thêm vào giỏ hàng",
-            data: { makhachhang, masanpham },
+            data: { makhachhang, masanpham, mausacsanpham },
         });
     } catch (err) {
         console.error("Error adding product to cart:", err.message);
         res.status(500).json({ message: err.message });
     }
 };
+
 
 module.exports = {
     addToCart,

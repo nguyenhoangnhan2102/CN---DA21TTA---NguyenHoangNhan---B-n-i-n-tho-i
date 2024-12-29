@@ -96,40 +96,7 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 <Typography makhachhang="modal-title" variant="h6" component="h2">
                     Chi tiết
                 </Typography>
-                <div className="d-flex align-items-center justify-content-between text-center mb-3">
-                    <label>Ảnh chính</label>
-                    {form.hinhanhchinh && product?.hinhanhchinh && (
-                        <img
-                            src={`${imgURL}/${product.hinhanhchinh}`}
-                            alt={product.tensanpham}
-                            style={{ width: "80px", height: "80px" }}
-                        />
-                    )}
-                </div>
-                <div className="d-flex align-items-center justify-content-between text-center mb-3">
-                    <label>Màu</label>
-                    {Array.isArray(form.danhsachmausacsanpham) &&
-                        form.danhsachmausacsanpham.map((img, index) => (
-                            <img
-                                key={index}
-                                src={`${imgURL}/${img}`}
-                                alt={`Màu sản phẩm ${index + 1}`}
-                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                            />
-                        ))}
-                </div>
-                <div className="d-flex align-items-center justify-content-between text-center mb-3">
-                    <label>Hình ảnh khác</label>
-                    {Array.isArray(form.danhsachhinhanh) &&
-                        form.danhsachhinhanh.map((img, index) => (
-                            <img
-                                key={index}
-                                src={`${imgURL}/${img}`}
-                                alt={`Màu sản phẩm ${index + 1}`}
-                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                            />
-                        ))}
-                </div>
+
                 <FormControl fullWidth margin="normal">
                     <TextField
                         makhachhang="product-text-field"
@@ -315,6 +282,42 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                         }}
                     />
                 </FormControl>
+                <div className="d-flex align-items-center mb-3">
+                    <p className="col-2">Ảnh chính</p>
+                    <div className="d-flex align-items-center justify-content-center col-10">
+                        {form.hinhanhchinh && product?.hinhanhchinh && (
+                            <img
+                                src={`${imgURL}/${product.hinhanhchinh}`}
+                                alt={product.tensanpham}
+                                style={{ width: "80px", height: "80px" }}
+                            />
+                        )}
+                    </div>
+                </div>
+                <div className="d-flex align-items-center justify-content-between text-center mb-3">
+                    <label>Màu</label>
+                    {Array.isArray(form.danhsachmausacsanpham) &&
+                        form.danhsachmausacsanpham.map((img, index) => (
+                            <img
+                                key={index}
+                                src={`${imgURL}/${img}`}
+                                alt={`Màu sản phẩm ${index + 1}`}
+                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                            />
+                        ))}
+                </div>
+                <div className="d-flex align-items-center justify-content-between text-center mb-3">
+                    <label>Hình ảnh khác</label>
+                    {Array.isArray(form.danhsachhinhanh) &&
+                        form.danhsachhinhanh.map((img, index) => (
+                            <img
+                                key={index}
+                                src={`${imgURL}/${img}`}
+                                alt={`Màu sản phẩm ${index + 1}`}
+                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                            />
+                        ))}
+                </div>
             </Box>
         </Modal >
     );
