@@ -103,8 +103,6 @@ const comfirmOrder = async (req, res) => {
     }
 };
 
-
-
 module.exports = {
     getAllOrders,
     comfirmOrder,

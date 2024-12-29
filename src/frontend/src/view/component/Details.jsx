@@ -51,38 +51,37 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
-        const selectedColor = document.querySelector('input[name="selectedColor"]:checked');  // Lấy màu sắc đã chọn
 
-        if (!makhachhang || !masanpham || !selectedColor) {
-            console.error("Missing required information: makhachhang, masanpham, or selectedColor");
+        if (!makhachhang || !masanpham) {
+            console.error("Missing required information: makhachhang or masanpham");
             return;
         }
 
-        const mausacsanpham = selectedColor.value; // Lấy giá trị mausacsanpham (ID màu sắc)
-
         try {
-            // Thêm vào GIOHANG
-            await axiosInstance.post(`${apiUrl}/cart`, {
+            const response = await axiosInstance.post(`${apiUrl}/cart`, {
                 makhachhang,
                 masanpham,
             });
 
-            // Thêm vào GIOHANG_MAU
-            await axiosInstance.post(`${apiUrl}/cart/color`, {
-                makhachhang,
-                masanpham,
-                mamau: mausacsanpham,  // Thêm mamau vào bảng GIOHANG_MAU
-            });
-
-            toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+            if (response.status === 201) {
+                toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+            } else {
+                toast.error("Không thể thêm sản phẩm vào giỏ hàng");
+            }
         } catch (error) {
-            console.error("Error adding product to cart:", error.message);
-            toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng");
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.message ===
+                "Sản phẩm đã tồn tại trong giỏ hàng"
+            ) {
+                toast.warning("Sản phẩm đã tồn tại trong giỏ hàng");
+            } else {
+                console.error("Error adding product to cart:", error.message);
+                toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng");
+            }
         }
     };
-
-
-
 
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
@@ -160,29 +159,31 @@ const ProductDetails = () => {
                         {productdetails.danhsachmausacsanpham &&
                             productdetails.danhsachmausacsanpham.split(',').map((image, index) => (
                                 <div className="row" key={index}>
-                                    <div className="my-2 d-flex align-items-center">
-                                        {/* Radio button để chọn màu */}
+                                    <div className="my-2 d-flex me-2">
                                         <input
                                             type="radio"
                                             id={`color-${index}`}
-                                            name="selectedColor"
-                                            value={image}  // Giá trị là mausacsanpham
-                                            defaultChecked={index === 0}  // Mặc định chọn màu đầu tiên
-                                            style={{ marginRight: '10px' }}
+                                            name="product-color"
+                                            value={image}
+                                            checked={index === 0} // Mặc định chọn màu đầu tiên
+                                            style={{
+                                                marginLeft: '0',
+                                                width: '20px',
+                                                height: '20px',
+                                            }}
+                                            onChange={() => console.log(`Chọn màu sản phẩm ${index + 1}`)} // Xử lý sự kiện khi nhấn radio
                                         />
-                                        {/* Label chứa ảnh màu */}
-                                        <label htmlFor={`color-${index}`} style={{ cursor: 'pointer' }}>
-                                            <img
-                                                src={`${imgURL}${image}`}  // Đường dẫn tới ảnh
-                                                alt={`Màu sản phẩm ${index + 1}`}
-                                                style={{
-                                                    width: '100px',
-                                                    height: '100px',
-                                                    borderRadius: '5px',
-                                                    border: '1px solid #ccc',
-                                                }}
-                                            />
-                                        </label>
+                                        <img
+                                            src={`${imgURL}${image}`} // Đường dẫn tới ảnh
+                                            alt={`Màu sản phẩm ${index + 1}`}
+                                            style={{
+                                                width: '100px',
+                                                height: '100px',
+                                                marginLeft: '5px',
+                                                borderRadius: '5px',
+                                                border: '1px solid #ccc',
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             ))}
