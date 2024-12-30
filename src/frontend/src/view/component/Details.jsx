@@ -52,10 +52,9 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
-        const mamau = selectedColor;
 
-        if (!makhachhang || !masanpham || !mamau) {
-            console.error("Missing required information: makhachhang or masanpham or mamau");
+        if (!makhachhang || !masanpham || !selectedColor) {
+            console.error("Missing required information: makhachhang, masanpham, or selectedColor");
             return;
         }
 
@@ -63,6 +62,7 @@ const ProductDetails = () => {
             const response = await axiosInstance.post(`${apiUrl}/cart`, {
                 makhachhang,
                 masanpham,
+                mamau: selectedColor, // Send the selected color (mamau) along with other data
             });
 
             if (response.status === 201) {
@@ -74,12 +74,10 @@ const ProductDetails = () => {
             if (
                 error.response &&
                 error.response.status === 400 &&
-                error.response.data.message ===
-                "Sản phẩm đã tồn tại trong giỏ hàng"
+                error.response.data.message === "Sản phẩm đã tồn tại trong giỏ hàng"
             ) {
                 toast.warning("Sản phẩm đã tồn tại trong giỏ hàng");
             } else {
-                console.error("Error adding product to cart:", error.message);
                 toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng");
             }
         }
@@ -93,9 +91,6 @@ const ProductDetails = () => {
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
     }
-
-    console.log("productdetails", productdetails.danhsachmamau);
-    console.log("inforUser", inforUser);
 
     return (
         <div className="container mt-3 product-details">
@@ -163,8 +158,8 @@ const ProductDetails = () => {
                         )}
                     </div>
                     <div className="d-flex my-4 product-color">
-                        {productdetails.danhsachmausacsanpham &&
-                            productdetails.danhsachmausacsanpham.split(',').map((item, index) => (
+                        {productdetails.danhsachmamau &&
+                            productdetails.danhsachmamau.split(',').map((item, index) => (
                                 <div className="row" key={item.mamau}>
                                     <div className="my-2 d-flex me-2">
                                         <input
@@ -172,11 +167,11 @@ const ProductDetails = () => {
                                             id={`color-${index}`}
                                             name="product-color"
                                             value={item.mamau}
-                                            onChange={() => handleColorChange(item.mamau)}
+                                            onChange={() => handleColorChange(item)} // Set selected color on change
                                         />
                                         <img
-                                            src={`${imgURL}${item}`} // Đường dẫn tới ảnh
-                                            alt={`Màu sản phẩm ${index + 1}`}
+                                            src={`${imgURL}${item}`} // Assuming item is the image filename
+                                            alt={`Color ${index + 1}`}
                                             style={{
                                                 width: '100px',
                                                 height: '100px',
