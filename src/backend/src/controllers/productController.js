@@ -6,19 +6,11 @@ const getAllProduct = async (req, res) => {
         const queryActive = `
         SELECT
             sp.*,
-            th.tenthuonghieu,
-            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
-            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+            th.tenthuonghieu
         FROM
             SANPHAM sp
         LEFT JOIN
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
-        LEFT JOIN
-            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
-        LEFT JOIN
-            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE
             sp.trangthai = 0
         GROUP BY
@@ -30,19 +22,11 @@ const getAllProduct = async (req, res) => {
         const queryInactive = `
         SELECT
             sp.*,
-            th.tenthuonghieu,
-            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
-            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+            th.tenthuonghieu
         FROM
             SANPHAM sp
         LEFT JOIN
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
-        LEFT JOIN
-            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
-        LEFT JOIN
-            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE
             sp.trangthai = 1
         GROUP BY
@@ -77,19 +61,12 @@ const getDetailProduct = async (req, res) => {
     let masanpham = req.params.masanpham;
     try {
         const query = `
-        SELECT 
-            sp.*, 
-            th.tenthuonghieu,
-            ms.mamau,
-        FROM 
-            SANPHAM sp
-        LEFT JOIN
-            THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
-        LEFT JOIN
-            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
-        LEFT JOIN
-            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
-        WHERE sp.masanpham = ?
+        SELECT SANPHAM.*, MAUSAC.tenmausanpham, MAUSAC.mausachinhanh, HINHANHSANPHAM.hinhanh
+    FROM SANPHAM
+    LEFT JOIN CHITIETSANPHAM ON SANPHAM.masanpham = CHITIETSANPHAM.masanpham
+    LEFT JOIN MAUSAC ON CHITIETSANPHAM.mamau = MAUSAC.mamau
+    LEFT JOIN HINHANHSANPHAM ON CHITIETSANPHAM.mahinhanh = HINHANHSANPHAM.mahinhanh
+    WHERE SANPHAM.masanpham = ?
         `;
 
         const [results] = await connection.query(query, [req.params.masanpham]);
