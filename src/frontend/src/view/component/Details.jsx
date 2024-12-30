@@ -53,6 +53,10 @@ const ProductDetails = () => {
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
 
+        console.log("makhachhang", makhachhang);
+        console.log("masanpham", masanpham);
+        console.log("selectedColor", selectedColor);
+
         if (!makhachhang || !masanpham || !selectedColor) {
             console.error("Missing required information: makhachhang, masanpham, or selectedColor");
             return;
@@ -105,10 +109,10 @@ const ProductDetails = () => {
                 </div>
                 <div className="col-md-8">
                     <div className="carousel slide carousel-content" makhachhang="productCarousel" data-bs-ride="carousel">
-                        {productdetails.danhsachhinhanh && productdetails.danhsachhinhanh.trim() !== "" ? (
+                        {productdetails.hinhanhkhac && productdetails.hinhanhkhac.trim() !== "" ? (
                             <>
                                 <div className="carousel-indicators">
-                                    {productdetails.danhsachhinhanh.split(",").map((_, index) => (
+                                    {productdetails.hinhanhkhac.split(",").map((_, index) => (
                                         <button
                                             type="button"
                                             data-bs-target="#productCarousel"
@@ -121,7 +125,7 @@ const ProductDetails = () => {
                                     ))}
                                 </div>
                                 <div className="carousel-inner product-details-image">
-                                    {productdetails.danhsachhinhanh.split(",").map((image, index) => (
+                                    {productdetails.hinhanhkhac.split(",").map((image, index) => (
                                         <div
                                             className={`carousel-item ${index === 0 ? "active" : ""}`}
                                             key={index}
@@ -159,27 +163,31 @@ const ProductDetails = () => {
                     </div>
                     <div className="d-flex my-4 product-color">
                         {productdetails.danhsachmamau &&
-                            productdetails.danhsachmamau.split(',').map((item, index) => (
-                                <div className="row" key={item.mamau}>
+                            productdetails.danhsachmamau.map((mamau, index) => (
+                                <div className="row" key={mamau}>
                                     <div className="my-2 d-flex me-2">
+                                        {/* Input radio cho từng màu sắc */}
                                         <input
                                             type="radio"
-                                            id={`color-${index}`}
+                                            id={`color-${mamau}`}
                                             name="product-color"
-                                            value={item.mamau}
-                                            onChange={() => handleColorChange(item)} // Set selected color on change
+                                            value={mamau}
+                                            onChange={() => handleColorChange(mamau)} // Truyền mã màu khi thay đổi
                                         />
-                                        <img
-                                            src={`${imgURL}${item}`} // Assuming item is the image filename
-                                            alt={`Color ${index + 1}`}
-                                            style={{
-                                                width: '100px',
-                                                height: '100px',
-                                                marginLeft: '5px',
-                                                borderRadius: '5px',
-                                                border: '1px solid #ccc',
-                                            }}
-                                        />
+                                        {/* Hiển thị hình ảnh tương ứng */}
+                                        {productdetails.danhsachmausacsanpham && (
+                                            <img
+                                                src={`${imgURL}${productdetails.danhsachmausacsanpham[index]}`} // Đối chiếu index với mã màu
+                                                alt={`Color ${mamau}`}
+                                                style={{
+                                                    width: '100px',
+                                                    height: '100px',
+                                                    marginLeft: '5px',
+                                                    borderRadius: '5px',
+                                                    border: '1px solid #ccc',
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             ))}

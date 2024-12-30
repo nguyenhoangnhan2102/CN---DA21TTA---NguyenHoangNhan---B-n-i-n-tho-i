@@ -80,10 +80,7 @@ const getDetailProduct = async (req, res) => {
         SELECT 
             sp.*, 
             th.tenthuonghieu,
-            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
-            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+            ms.mamau,
         FROM 
             SANPHAM sp
         LEFT JOIN
