@@ -16,6 +16,7 @@ const ProductDetails = () => {
     const [inforUser, setInforUser] = useState({});
     const [showDetails, setShowDetails] = useState(true);
     const [showDetailsCamera, setShowDetailsCamera] = useState(true);
+    const [selectedColor, setSelectedColor] = useState("");
 
     useEffect(() => {
         fecthProductDetails();
@@ -51,9 +52,10 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
+        const mamau = selectedColor;
 
-        if (!makhachhang || !masanpham) {
-            console.error("Missing required information: makhachhang or masanpham");
+        if (!makhachhang || !masanpham || !mamau) {
+            console.error("Missing required information: makhachhang or masanpham or mamau");
             return;
         }
 
@@ -83,11 +85,16 @@ const ProductDetails = () => {
         }
     };
 
+    const handleColorChange = (mamau) => {
+        setSelectedColor(mamau);
+        console.log("Selected color:", mamau);
+    };
+
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
     }
 
-    console.log("productdetails", productdetails);
+    console.log("productdetails", productdetails.danhsachmamau);
     console.log("inforUser", inforUser);
 
     return (
@@ -157,24 +164,18 @@ const ProductDetails = () => {
                     </div>
                     <div className="d-flex my-4 product-color">
                         {productdetails.danhsachmausacsanpham &&
-                            productdetails.danhsachmausacsanpham.split(',').map((image, index) => (
-                                <div className="row" key={index}>
+                            productdetails.danhsachmausacsanpham.split(',').map((item, index) => (
+                                <div className="row" key={item.mamau}>
                                     <div className="my-2 d-flex me-2">
                                         <input
                                             type="radio"
                                             id={`color-${index}`}
                                             name="product-color"
-                                            value={image}
-                                            checked={index === 0} // Mặc định chọn màu đầu tiên
-                                            style={{
-                                                marginLeft: '0',
-                                                width: '20px',
-                                                height: '20px',
-                                            }}
-                                            onChange={() => console.log(`Chọn màu sản phẩm ${index + 1}`)} // Xử lý sự kiện khi nhấn radio
+                                            value={item.mamau}
+                                            onChange={() => handleColorChange(item.mamau)}
                                         />
                                         <img
-                                            src={`${imgURL}${image}`} // Đường dẫn tới ảnh
+                                            src={`${imgURL}${item}`} // Đường dẫn tới ảnh
                                             alt={`Màu sản phẩm ${index + 1}`}
                                             style={{
                                                 width: '100px',
@@ -301,7 +302,6 @@ const ProductDetails = () => {
                         Gọi đặt mua <strong>1900 232 460</strong> (8:00 - 21:00)
                     </div>
                 </div>
-
             </div>
         </div>
     );
