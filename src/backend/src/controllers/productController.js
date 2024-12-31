@@ -108,10 +108,14 @@ const getDetailProduct = async (req, res) => {
             });
         }
 
+        // Chuyển đổi danhsachmamau thành mảng số nguyên
+        const product = results[0];
+        product.danhsachmamau = product.danhsachmamau ? product.danhsachmamau.split(',').map(Number) : [];
+
         return res.status(200).json({
             EM: "Lấy thông tin sản phẩm thành công",
             EC: 1,
-            DT: results[0],
+            DT: product,
         });
     } catch (err) {
         console.error("Error fetching:", err);
@@ -122,6 +126,7 @@ const getDetailProduct = async (req, res) => {
         });
     }
 };
+
 
 const createProduct = async (req, res) => {
     const {

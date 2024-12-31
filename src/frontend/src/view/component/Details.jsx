@@ -54,8 +54,6 @@ const ProductDetails = () => {
         const { masanpham } = productdetails;
         const mamau = selectedColor; // Use the selected color
 
-
-
         if (!makhachhang || !masanpham || !mamau) {
             console.error("Missing required information: makhachhang, masanpham, mamau");
             toast.error("Vui lòng chọn màu sắc và đảm bảo thông tin đầy đủ.");
@@ -63,10 +61,9 @@ const ProductDetails = () => {
         }
 
         const soluong = 1; // Assuming the quantity is 1, you can adjust this if needed
-        const gia = productdetails.gia; // Assuming the price is in the product details
+        const gia = productdetails.giasanpham; // Assuming the price is in the product details
 
         try {
-
             console.log("makhachhang", makhachhang);
             console.log("masanpham", masanpham);
             console.log("mamau", mamau);
@@ -81,12 +78,16 @@ const ProductDetails = () => {
                 gia,
             });
 
+            console.log(response.data); // In ra phản hồi từ server
+
             if (response.status === 201) {
                 toast.success("Sản phẩm đã được thêm vào giỏ hàng");
             } else {
                 toast.error("Không thể thêm sản phẩm vào giỏ hàng");
             }
         } catch (error) {
+            console.error(error); // In ra lỗi chi tiết
+
             if (
                 error.response &&
                 error.response.status === 400 &&
@@ -98,6 +99,7 @@ const ProductDetails = () => {
             }
         }
     };
+
 
 
     if (!productdetails || Object.keys(productdetails).length === 0) {
@@ -168,7 +170,7 @@ const ProductDetails = () => {
 
                     <div className="d-flex my-4 product-color">
                         {productdetails.danhsachmamau && // Lấy danh sách màu từ `danhsachmamau`
-                            productdetails.danhsachmamau.split(',').map((colorId, index) => (
+                            productdetails.danhsachmamau.map((colorId, index) => (
                                 <div className="row" key={index}>
                                     <div className="my-2 d-flex me-2">
                                         <input
