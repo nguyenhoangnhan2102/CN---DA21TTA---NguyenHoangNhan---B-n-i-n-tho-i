@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import axiosInstance from "../../authentication/axiosInstance";
 import Cookies from "js-cookie";
 import "../style/Details.scss";
+import { useAuth } from "../../authentication/AuthContext";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiProductUrl = apiUrl + '/products';
@@ -17,6 +18,9 @@ const ProductDetails = () => {
     const [showDetails, setShowDetails] = useState(true);
     const [showDetailsCamera, setShowDetailsCamera] = useState(true);
     const [selectedColor, setSelectedColor] = useState('');
+    const { isLoggedIn } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         fecthProductDetails();
@@ -50,13 +54,20 @@ const ProductDetails = () => {
     };
 
     const handleAddToCart = async () => {
+
+        if (!isLoggedIn) {
+            // Lưu lại route hiện tại
+            navigate("/login", { state: { from: location.pathname } }); // Lưu đường dẫn hiện tại
+            return;
+        }
+
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
         const mamau = selectedColor; // Use the selected color
 
         if (!makhachhang || !masanpham || !mamau) {
             console.error("Missing required information: makhachhang, masanpham, mamau");
-            toast.error("Vui lòng chọn màu sắc và đảm bảo thông tin đầy đủ.");
+            toast.warning("Vui lòng chọn màu!!!.");
             return;
         }
 

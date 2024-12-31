@@ -37,6 +37,7 @@ function Cart() {
             const response = await axiosInstance.get(`${apiUrl}/cart/${makhachhang}`);
             if (response.data.EC === 1) {
                 setCartItems(response.data.DT);
+                console.log("Cart items:", response.data.DT);
 
                 // Tính tổng số lượng và tổng giá trị sản phẩm
                 const totalQty = response.data.DT.reduce((acc, item) => acc + item.soluong, 0);
@@ -177,6 +178,9 @@ function Cart() {
                             <strong>Tổng cộng:</strong>{" "}
                             <span className="text-danger">{subTotal.toLocaleString()} VND</span>
                         </p>
+                        <button className="btn btn-success w-100 mt-3">
+                            Thanh Toán
+                        </button>
                     </div>
                 </div>
             </div>
