@@ -1,367 +1,312 @@
-/*==============================================================*/
-/* DBMS name:      SAP SQL Anywhere 17                          */
-/* Created on:     11/26/2024 11:17:33 PM                       */
-/*==============================================================*/
-
-
-if exists(select 1 from sys.sysforeignkey where role='FK_CHITIETD_CO_CHI_TI_DONHANG') then
-    alter table CHITIETDONHANG
-       delete foreign key FK_CHITIETD_CO_CHI_TI_DONHANG
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_CHITIETD_CO_SAN_PH_SANPHAM') then
-    alter table CHITIETDONHANG
-       delete foreign key FK_CHITIETD_CO_SAN_PH_SANPHAM
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_DONHANG_CO__ON_HA_KHACHHAN') then
-    alter table DONHANG
-       delete foreign key FK_DONHANG_CO__ON_HA_KHACHHAN
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_GIOHANG_CO_SANPHAM') then
-    alter table GIOHANG
-       delete foreign key FK_GIOHANG_CO_SANPHAM
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_GIOHANG_CO_GIO_HA_KHACHHAN') then
-    alter table GIOHANG
-       delete foreign key FK_GIOHANG_CO_GIO_HA_KHACHHAN
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_HINHANHS_CO_HINH_A_SANPHAM') then
-    alter table HINHANHSANPHAM
-       delete foreign key FK_HINHANHS_CO_HINH_A_SANPHAM
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_MAUSACSA_CO_MAU_SA_SANPHAM') then
-    alter table MAUSACSANPHAM
-       delete foreign key FK_MAUSACSA_CO_MAU_SA_SANPHAM
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_SANPHAM_ASSOCIATI_THUONGHI') then
-    alter table SANPHAM
-       delete foreign key FK_SANPHAM_ASSOCIATI_THUONGHI
-end if;
-
-drop index if exists CHITIETDONHANG.CO_SAN_PHAM_FK;
-
-drop index if exists CHITIETDONHANG.CO_CHI_TIET_FK;
-
-drop index if exists CHITIETDONHANG.CHITIETDONHANG_PK;
-
-drop table if exists CHITIETDONHANG;
-
-drop index if exists DONHANG.CO__ON_HANG_FK;
-
-drop index if exists DONHANG.DONHANG_PK;
-
-drop table if exists DONHANG;
-
-drop index if exists GIOHANG.CO_FK;
-
-drop index if exists GIOHANG.CO_GIO_HANG_FK;
-
-drop index if exists GIOHANG.GIOHANG_PK;
-
-drop table if exists GIOHANG;
-
-drop index if exists HINHANHSANPHAM.CO_HINH_ANH_FK;
-
-drop index if exists HINHANHSANPHAM.HINHANHSANPHAM_PK;
-
-drop table if exists HINHANHSANPHAM;
-
-drop index if exists KHACHHANG.KHACHHANG_PK;
-
-drop table if exists KHACHHANG;
-
-drop index if exists MAUSACSANPHAM.CO_MAU_SAC_FK;
-
-drop index if exists MAUSACSANPHAM.MAUSACSANPHAM_PK;
-
-drop table if exists MAUSACSANPHAM;
-
-drop index if exists SANPHAM.ASSOCIATION_5_FK;
-
-drop index if exists SANPHAM.SANPHAM_PK;
-
-drop table if exists SANPHAM;
-
-drop index if exists THUONGHIEU.THUONGHIEU_PK;
-
-drop table if exists THUONGHIEU;
-
-/*==============================================================*/
-/* Table: CHITIETDONHANG                                        */
-/*==============================================================*/
-create or replace table CHITIETDONHANG 
-(
-   MACHITIETDONHANG     integer                        not null,
-   MADONHANG            integer                        not null,
-   MASANPHAM            integer                        not null,
-   GIATIEN              integer                        null,
-   SOLUONG              integer                        null,
-   constraint PK_CHITIETDONHANG primary key clustered (MACHITIETDONHANG)
-);
-
-/*==============================================================*/
-/* Index: CHITIETDONHANG_PK                                     */
-/*==============================================================*/
-create unique clustered index CHITIETDONHANG_PK on CHITIETDONHANG (
-MACHITIETDONHANG ASC
-);
-
-/*==============================================================*/
-/* Index: CO_CHI_TIET_FK                                        */
-/*==============================================================*/
-create index CO_CHI_TIET_FK on CHITIETDONHANG (
-MADONHANG ASC
-);
-
-/*==============================================================*/
-/* Index: CO_SAN_PHAM_FK                                        */
-/*==============================================================*/
-create index CO_SAN_PHAM_FK on CHITIETDONHANG (
-MASANPHAM ASC
-);
-
-/*==============================================================*/
-/* Table: DONHANG                                               */
-/*==============================================================*/
-create or replace table DONHANG 
-(
-   MADONHANG            integer                        not null,
-   ID                   integer                        not null,
-   NGAYLAP              timestamp                      null,
-   TRANGTHAIDONHANG     varchar(255)                   null,
-   HOTENKHACHHANG       varchar(255)                   null,
-   SDTKHACHANG          integer                        null,
-   DIACHIGIAOHANG       long varchar                   null,
-   TONGTIEN             integer                        null,
-   constraint PK_DONHANG primary key clustered (MADONHANG)
-);
-
-/*==============================================================*/
-/* Index: DONHANG_PK                                            */
-/*==============================================================*/
-create unique clustered index DONHANG_PK on DONHANG (
-MADONHANG ASC
-);
-
-/*==============================================================*/
-/* Index: CO__ON_HANG_FK                                        */
-/*==============================================================*/
-create index CO__ON_HANG_FK on DONHANG (
-ID ASC
-);
-
-/*==============================================================*/
-/* Table: GIOHANG                                               */
-/*==============================================================*/
-create or replace table GIOHANG 
-(
-   MAGIOHANG            integer                        not null,
-   MASANPHAM            integer                        not null,
-   ID                   integer                        not null,
-   constraint PK_GIOHANG primary key clustered (MAGIOHANG)
-);
-
-/*==============================================================*/
-/* Index: GIOHANG_PK                                            */
-/*==============================================================*/
-create unique clustered index GIOHANG_PK on GIOHANG (
-MAGIOHANG ASC
-);
-
-/*==============================================================*/
-/* Index: CO_GIO_HANG_FK                                        */
-/*==============================================================*/
-create index CO_GIO_HANG_FK on GIOHANG (
-ID ASC
-);
-
-/*==============================================================*/
-/* Index: CO_FK                                                 */
-/*==============================================================*/
-create index CO_FK on GIOHANG (
-MASANPHAM ASC
-);
-
-/*==============================================================*/
-/* Table: HINHANHSANPHAM                                        */
-/*==============================================================*/
-create or replace table HINHANHSANPHAM 
-(
-   MAHINHANH            integer                        not null,
-   MASANPHAM            integer                        not null,
-   HINHANHSANPHAM       long varchar                   null,
-   constraint PK_HINHANHSANPHAM primary key clustered (MAHINHANH)
-);
-
-/*==============================================================*/
-/* Index: HINHANHSANPHAM_PK                                     */
-/*==============================================================*/
-create unique clustered index HINHANHSANPHAM_PK on HINHANHSANPHAM (
-MAHINHANH ASC
-);
-
-/*==============================================================*/
-/* Index: CO_HINH_ANH_FK                                        */
-/*==============================================================*/
-create index CO_HINH_ANH_FK on HINHANHSANPHAM (
-MASANPHAM ASC
-);
-
-/*==============================================================*/
-/* Table: KHACHHANG                                             */
-/*==============================================================*/
-create or replace table KHACHHANG 
-(
-   ID                   integer                        not null,
-   HOTEN                varchar(255)                   null,
-   EMAIL                varchar(255)                   null,
-   PASSWORD             varchar(255)                   null,
-   ROLE                 integer                        null,
-   SODIENTHOAI          integer                        null,
-   DIACHI               long varchar                   null,
-   constraint PK_KHACHHANG primary key clustered (ID)
-);
-
-/*==============================================================*/
-/* Index: KHACHHANG_PK                                          */
-/*==============================================================*/
-create unique clustered index KHACHHANG_PK on KHACHHANG (
-ID ASC
-);
-
-/*==============================================================*/
-/* Table: MAUSACSANPHAM                                         */
-/*==============================================================*/
-create or replace table MAUSACSANPHAM 
-(
-   MAMAU                integer                        not null,
-   MASANPHAM            integer                        not null,
-   TENMAUSANPHAM        varchar(50)                    null,
-   MAUSACSANPHAM        long varchar                   null,
-   constraint PK_MAUSACSANPHAM primary key clustered (MAMAU)
-);
-
-/*==============================================================*/
-/* Index: MAUSACSANPHAM_PK                                      */
-/*==============================================================*/
-create unique clustered index MAUSACSANPHAM_PK on MAUSACSANPHAM (
-MAMAU ASC
-);
-
-/*==============================================================*/
-/* Index: CO_MAU_SAC_FK                                         */
-/*==============================================================*/
-create index CO_MAU_SAC_FK on MAUSACSANPHAM (
-MASANPHAM ASC
-);
-
-/*==============================================================*/
-/* Table: SANPHAM                                               */
-/*==============================================================*/
-create or replace table SANPHAM 
-(
-   MASANPHAM            integer                        not null,
-   MATHUONGHIEU         integer                        not null,
-   TENSANPHAM           varchar(255)                   null,
-   GIASANPHAM           integer                        null,
-   SOLUONGSANPHAM       integer                        null,
-   HEDIEUHANH           varchar(255)                   null,
-   CPU                  varchar(255)                   null,
-   GPU                  varchar(255)                   null,
-   RAM                  varchar(50)                    null,
-   DUNGLUONG            varchar(50)                    null,
-   CAMERATRUOC          varchar(255)                   null,
-   CAMERASAU            varchar(255)                   null,
-   CONGNGHEMANHINH      varchar(255)                   null,
-   DOPHANGIAIMANHINH    varchar(255)                   null,
-   PIN                  varchar(255)                   null,
-   MOTASANPHAM          long varchar                   null,
-   HINHANHCHINH         long varchar                   null,
-   constraint PK_SANPHAM primary key clustered (MASANPHAM)
-);
-
-/*==============================================================*/
-/* Index: SANPHAM_PK                                            */
-/*==============================================================*/
-create unique clustered index SANPHAM_PK on SANPHAM (
-MASANPHAM ASC
-);
-
-/*==============================================================*/
-/* Index: ASSOCIATION_5_FK                                      */
-/*==============================================================*/
-create index ASSOCIATION_5_FK on SANPHAM (
-MATHUONGHIEU ASC
-);
-
-/*==============================================================*/
-/* Table: THUONGHIEU                                            */
-/*==============================================================*/
-create or replace table THUONGHIEU 
-(
-   MATHUONGHIEU         integer                        not null,
-   TENTHUONGHIEU        varchar(255)                   null,
-   constraint PK_THUONGHIEU primary key clustered (MATHUONGHIEU)
-);
-
-/*==============================================================*/
-/* Index: THUONGHIEU_PK                                         */
-/*==============================================================*/
-create unique clustered index THUONGHIEU_PK on THUONGHIEU (
-MATHUONGHIEU ASC
-);
-
-alter table CHITIETDONHANG
-   add constraint FK_CHITIETD_CO_CHI_TI_DONHANG foreign key (MADONHANG)
-      references DONHANG (MADONHANG)
-      on update restrict
-      on delete restrict;
-
-alter table CHITIETDONHANG
-   add constraint FK_CHITIETD_CO_SAN_PH_SANPHAM foreign key (MASANPHAM)
-      references SANPHAM (MASANPHAM)
-      on update restrict
-      on delete restrict;
-
-alter table DONHANG
-   add constraint FK_DONHANG_CO__ON_HA_KHACHHAN foreign key (ID)
-      references KHACHHANG (ID)
-      on update restrict
-      on delete restrict;
-
-alter table GIOHANG
-   add constraint FK_GIOHANG_CO_SANPHAM foreign key (MASANPHAM)
-      references SANPHAM (MASANPHAM)
-      on update restrict
-      on delete restrict;
-
-alter table GIOHANG
-   add constraint FK_GIOHANG_CO_GIO_HA_KHACHHAN foreign key (ID)
-      references KHACHHANG (ID)
-      on update restrict
-      on delete restrict;
-
-alter table HINHANHSANPHAM
-   add constraint FK_HINHANHS_CO_HINH_A_SANPHAM foreign key (MASANPHAM)
-      references SANPHAM (MASANPHAM)
-      on update restrict
-      on delete restrict;
-
-alter table MAUSACSANPHAM
-   add constraint FK_MAUSACSA_CO_MAU_SA_SANPHAM foreign key (MASANPHAM)
-      references SANPHAM (MASANPHAM)
-      on update restrict
-      on delete restrict;
-
-alter table SANPHAM
-   add constraint FK_SANPHAM_ASSOCIATI_THUONGHI foreign key (MATHUONGHIEU)
-      references THUONGHIEU (MATHUONGHIEU)
-      on update restrict
-      on delete restrict;
-
+-- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
+--
+-- Host: localhost    Database: shopphone
+-- ------------------------------------------------------
+-- Server version	5.7.40
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `CHITIETDONHANG`
+--
+
+DROP TABLE IF EXISTS `CHITIETDONHANG`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `CHITIETDONHANG` (
+  `madonhang` int(11) NOT NULL,
+  `masanpham` int(11) NOT NULL,
+  `mamau` int(11) NOT NULL,
+  `giatien` int(11) NOT NULL,
+  `soluong` int(11) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`madonhang`,`masanpham`,`mamau`),
+  KEY `masanpham` (`masanpham`),
+  KEY `mamau` (`mamau`),
+  CONSTRAINT `CHITIETDONHANG_ibfk_1` FOREIGN KEY (`madonhang`) REFERENCES `DONHANG` (`madonhang`),
+  CONSTRAINT `CHITIETDONHANG_ibfk_2` FOREIGN KEY (`masanpham`) REFERENCES `SANPHAM` (`masanpham`),
+  CONSTRAINT `CHITIETDONHANG_ibfk_3` FOREIGN KEY (`mamau`) REFERENCES `MAUSACSANPHAM` (`mamau`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `CHITIETDONHANG`
+--
+
+LOCK TABLES `CHITIETDONHANG` WRITE;
+/*!40000 ALTER TABLE `CHITIETDONHANG` DISABLE KEYS */;
+/*!40000 ALTER TABLE `CHITIETDONHANG` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `CHITIETGIOHANG`
+--
+
+DROP TABLE IF EXISTS `CHITIETGIOHANG`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `CHITIETGIOHANG` (
+  `magiohang` int(11) NOT NULL,
+  `masanpham` int(11) NOT NULL,
+  `mamau` int(11) NOT NULL,
+  `soluong` int(11) DEFAULT NULL,
+  `gia` decimal(18,2) DEFAULT NULL,
+  PRIMARY KEY (`magiohang`,`masanpham`,`mamau`),
+  KEY `masanpham` (`masanpham`),
+  KEY `mamau` (`mamau`),
+  CONSTRAINT `CHITIETGIOHANG_ibfk_1` FOREIGN KEY (`magiohang`) REFERENCES `GIOHANG` (`magiohang`),
+  CONSTRAINT `CHITIETGIOHANG_ibfk_2` FOREIGN KEY (`masanpham`) REFERENCES `SANPHAM` (`masanpham`),
+  CONSTRAINT `CHITIETGIOHANG_ibfk_3` FOREIGN KEY (`mamau`) REFERENCES `MAUSACSANPHAM` (`mamau`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `CHITIETGIOHANG`
+--
+
+LOCK TABLES `CHITIETGIOHANG` WRITE;
+/*!40000 ALTER TABLE `CHITIETGIOHANG` DISABLE KEYS */;
+/*!40000 ALTER TABLE `CHITIETGIOHANG` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `DONHANG`
+--
+
+DROP TABLE IF EXISTS `DONHANG`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `DONHANG` (
+  `madonhang` int(11) NOT NULL AUTO_INCREMENT,
+  `makhachhang` int(11) NOT NULL,
+  `ngaydat` datetime DEFAULT NULL,
+  `trangthaidonhang` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tongtien` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`madonhang`),
+  KEY `makhachhang` (`makhachhang`),
+  CONSTRAINT `DONHANG_ibfk_1` FOREIGN KEY (`makhachhang`) REFERENCES `KHACHHANG` (`makhachhang`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `DONHANG`
+--
+
+LOCK TABLES `DONHANG` WRITE;
+/*!40000 ALTER TABLE `DONHANG` DISABLE KEYS */;
+/*!40000 ALTER TABLE `DONHANG` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `GIOHANG`
+--
+
+DROP TABLE IF EXISTS `GIOHANG`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `GIOHANG` (
+  `magiohang` int(11) NOT NULL AUTO_INCREMENT,
+  `makhachhang` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`magiohang`),
+  KEY `makhachhang` (`makhachhang`),
+  CONSTRAINT `GIOHANG_ibfk_1` FOREIGN KEY (`makhachhang`) REFERENCES `KHACHHANG` (`makhachhang`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `GIOHANG`
+--
+
+LOCK TABLES `GIOHANG` WRITE;
+/*!40000 ALTER TABLE `GIOHANG` DISABLE KEYS */;
+/*!40000 ALTER TABLE `GIOHANG` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `HINHANHSANPHAM`
+--
+
+DROP TABLE IF EXISTS `HINHANHSANPHAM`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `HINHANHSANPHAM` (
+  `mahinhanh` int(11) NOT NULL AUTO_INCREMENT,
+  `masanpham` int(11) NOT NULL,
+  `hinhanhkhac` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`mahinhanh`),
+  KEY `masanpham` (`masanpham`),
+  CONSTRAINT `HINHANHSANPHAM_ibfk_1` FOREIGN KEY (`masanpham`) REFERENCES `SANPHAM` (`masanpham`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `HINHANHSANPHAM`
+--
+
+LOCK TABLES `HINHANHSANPHAM` WRITE;
+/*!40000 ALTER TABLE `HINHANHSANPHAM` DISABLE KEYS */;
+INSERT INTO `HINHANHSANPHAM` VALUES (1,1,'iphone-16-pro-max-titan-trang1.jpg','2024-12-31 14:04:50','2024-12-31 14:04:50'),(2,1,'iphone-16-pro-max-titan.jpg','2024-12-31 14:04:50','2024-12-31 14:04:50'),(3,1,'1.jpg','2024-12-31 14:04:51','2024-12-31 14:04:51'),(4,1,'2.jpg','2024-12-31 14:04:51','2024-12-31 14:04:51'),(5,1,'3.jpg','2024-12-31 14:04:51','2024-12-31 14:04:51'),(6,1,'4.jpg','2024-12-31 14:04:51','2024-12-31 14:04:51'),(7,1,'5.jpg','2024-12-31 14:04:51','2024-12-31 14:04:51');
+/*!40000 ALTER TABLE `HINHANHSANPHAM` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `KHACHHANG`
+--
+
+DROP TABLE IF EXISTS `KHACHHANG`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `KHACHHANG` (
+  `makhachhang` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` int(11) NOT NULL,
+  `hoten` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sodienthoai` varchar(10) DEFAULT NULL,
+  `diachi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`makhachhang`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `KHACHHANG`
+--
+
+LOCK TABLES `KHACHHANG` WRITE;
+/*!40000 ALTER TABLE `KHACHHANG` DISABLE KEYS */;
+/*!40000 ALTER TABLE `KHACHHANG` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `MAUSACSANPHAM`
+--
+
+DROP TABLE IF EXISTS `MAUSACSANPHAM`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `MAUSACSANPHAM` (
+  `mamau` int(11) NOT NULL AUTO_INCREMENT,
+  `masanpham` int(11) NOT NULL,
+  `tenmausanpham` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mausachinhanh` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`mamau`),
+  KEY `masanpham` (`masanpham`),
+  CONSTRAINT `MAUSACSANPHAM_ibfk_1` FOREIGN KEY (`masanpham`) REFERENCES `SANPHAM` (`masanpham`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `MAUSACSANPHAM`
+--
+
+LOCK TABLES `MAUSACSANPHAM` WRITE;
+/*!40000 ALTER TABLE `MAUSACSANPHAM` DISABLE KEYS */;
+INSERT INTO `MAUSACSANPHAM` VALUES (1,1,'Đen','iphone-16-pro-max-titan-den-.jpg','2024-12-31 14:04:38','2024-12-31 14:04:38'),(2,1,'Trắng','iphone-16-pro-max-titan-trang.jpg','2024-12-31 14:04:38','2024-12-31 14:04:38');
+/*!40000 ALTER TABLE `MAUSACSANPHAM` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `SANPHAM`
+--
+
+DROP TABLE IF EXISTS `SANPHAM`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `SANPHAM` (
+  `masanpham` int(11) NOT NULL AUTO_INCREMENT,
+  `mathuonghieu` int(11) NOT NULL,
+  `tensanpham` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `giasanpham` int(11) DEFAULT NULL,
+  `soluongsanpham` int(11) DEFAULT NULL,
+  `hedieuhanh` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cpu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gpu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ram` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dungluong` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cameratruoc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `camerasau` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `congnghemanhinh` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dophangiaimanhinh` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `motasanpham` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `hinhanhchinh` text,
+  `trangthai` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`masanpham`),
+  KEY `mathuonghieu` (`mathuonghieu`),
+  CONSTRAINT `SANPHAM_ibfk_1` FOREIGN KEY (`mathuonghieu`) REFERENCES `THUONGHIEU` (`mathuonghieu`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `SANPHAM`
+--
+
+LOCK TABLES `SANPHAM` WRITE;
+/*!40000 ALTER TABLE `SANPHAM` DISABLE KEYS */;
+INSERT INTO `SANPHAM` VALUES (1,1,'Samsung Galaxy S24 Ultra',33000000,15,'Andromakhachhang','Snapdragon 8 Gen 3','Adreno 740','12GB','512GB','12MP','200MP','Dynamic AMOLED 2X','3088x1440','5000mAh','Smartphone flagship của Samsung','galaxy-s24-ultra-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(2,2,'Google Pixel 8 Pro',25000000,20,'Andromakhachhang','Google Tensor G3','Mali-G710','12GB','256GB','10.5MP','50MP','OLED','3120x1440','5000mAh','Smartphone camera đỉnh cao của Google','pixel-8-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(3,3,'OnePlus 11 Pro',28000000,25,'Andromakhachhang','Snapdragon 8 Gen 2','Adreno 730','16GB','256GB','16MP','50MP','Flumakhachhang AMOLED','3216x1440','5000mAh','Smartphone mạnh mẽ của OnePlus','oneplus-11-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(4,1,'Xiaomi 13 Pro',27000000,30,'Andromakhachhang','Snapdragon 8 Gen 2','Adreno 730','12GB','256GB','32MP','50MP','AMOLED','3200x1440','4820mAh','Smartphone hiệu năng cao từ Xiaomi','xiaomi-13-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(5,2,'Sony Xperia 1 V',35000000,12,'Andromakhachhang','Snapdragon 8 Gen 2','Adreno 740','12GB','512GB','12MP','48MP','OLED','3840x1644','5000mAh','Smartphone cao cấp cho người dùng chuyên nghiệp','sony-xperia-1-v-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(6,3,'Oppo Find X6 Pro',32000000,18,'Andromakhachhang','Snapdragon 8 Gen 2','Adreno 740','12GB','256GB','32MP','50MP','AMOLED','3216x1440','5000mAh','Smartphone cao cấp của Oppo','oppo-find-x6-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(7,1,'Huawei Mate 60 Pro',34000000,22,'HarmonyOS','Kirin 9000S','Mali-G78','12GB','512GB','13MP','50MP','OLED','2848x1200','5000mAh','Smartphone cao cấp từ Huawei','huawei-mate-60-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(8,2,'Realme GT 2 Pro',22000000,28,'Andromakhachhang','Snapdragon 8 Gen 1','Adreno 730','12GB','256GB','50MP','50MP','AMOLED','3216x1440','5000mAh','Smartphone hiệu suất cao từ Realme','realme-gt-2-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49'),(9,3,'Vivo X90 Pro',30000000,17,'Andromakhachhang','Dimensity 9200','Mali-G715','12GB','256GB','50MP','50MP','AMOLED','3200x1440','4700mAh','Smartphone flagship từ Vivo','vivo-x90-pro-thumb-600x600.jpg',0,'2024-12-31 14:02:49','2024-12-31 14:02:49');
+/*!40000 ALTER TABLE `SANPHAM` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `THUONGHIEU`
+--
+
+DROP TABLE IF EXISTS `THUONGHIEU`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `THUONGHIEU` (
+  `mathuonghieu` int(11) NOT NULL AUTO_INCREMENT,
+  `tenthuonghieu` varchar(255) DEFAULT NULL,
+  `trangthaithuonghieu` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`mathuonghieu`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `THUONGHIEU`
+--
+
+LOCK TABLES `THUONGHIEU` WRITE;
+/*!40000 ALTER TABLE `THUONGHIEU` DISABLE KEYS */;
+INSERT INTO `THUONGHIEU` VALUES (1,'Apple',0,'2024-12-31 14:02:21','2024-12-31 14:02:21'),(2,'Samsung',0,'2024-12-31 14:02:21','2024-12-31 14:02:21'),(3,'Xiaomi',0,'2024-12-31 14:02:21','2024-12-31 14:02:21');
+/*!40000 ALTER TABLE `THUONGHIEU` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'shopphone'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-12-31 21:08:30
