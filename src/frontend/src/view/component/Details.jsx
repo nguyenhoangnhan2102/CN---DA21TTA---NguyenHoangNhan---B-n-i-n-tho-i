@@ -16,7 +16,7 @@ const ProductDetails = () => {
     const [inforUser, setInforUser] = useState({});
     const [showDetails, setShowDetails] = useState(true);
     const [showDetailsCamera, setShowDetailsCamera] = useState(true);
-    const [selectedColor, setSelectedColor] = useState("");
+    const [selectedColor, setSelectedColor] = useState('');
 
     useEffect(() => {
         fecthProductDetails();
@@ -53,12 +53,8 @@ const ProductDetails = () => {
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
 
-        console.log("makhachhang", makhachhang);
-        console.log("masanpham", masanpham);
-        console.log("selectedColor", selectedColor);
-
-        if (!makhachhang || !masanpham || !selectedColor) {
-            console.error("Missing required information: makhachhang, masanpham, or selectedColor");
+        if (!makhachhang || !masanpham) {
+            console.error("Missing required information: makhachhang, masanpham");
             return;
         }
 
@@ -66,7 +62,6 @@ const ProductDetails = () => {
             const response = await axiosInstance.post(`${apiUrl}/cart`, {
                 makhachhang,
                 masanpham,
-                mamau: selectedColor, // Send the selected color (mamau) along with other data
             });
 
             if (response.status === 201) {
@@ -87,14 +82,14 @@ const ProductDetails = () => {
         }
     };
 
-    const handleColorChange = (mamau) => {
-        setSelectedColor(mamau);
-        console.log("Selected color:", mamau);
-    };
-
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
     }
+
+    const handleColorChange = (color) => {
+        setSelectedColor(color); // Cập nhật khi chọn màu
+        console.log("selectedColor", color);
+    };
 
     return (
         <div className="container mt-3 product-details">
@@ -108,86 +103,78 @@ const ProductDetails = () => {
                     </label>
                 </div>
                 <div className="col-md-8">
-                    <div className="carousel slide carousel-content" makhachhang="productCarousel" data-bs-ride="carousel">
-                        {productdetails.hinhanhkhac && productdetails.hinhanhkhac.trim() !== "" ? (
-                            <>
-                                <div className="carousel-indicators">
-                                    {productdetails.hinhanhkhac.split(",").map((_, index) => (
-                                        <button
-                                            type="button"
-                                            data-bs-target="#productCarousel"
-                                            data-bs-slide-to={index}
-                                            className={index === 0 ? "active" : ""}
-                                            aria-current={index === 0 ? "true" : "false"}
-                                            aria-label={`Slide ${index + 1}`}
-                                            key={index}
-                                        ></button>
-                                    ))}
-                                </div>
-                                <div className="carousel-inner product-details-image">
-                                    {productdetails.hinhanhkhac.split(",").map((image, index) => (
-                                        <div
-                                            className={`carousel-item ${index === 0 ? "active" : ""}`}
-                                            key={index}
-                                        >
-                                            <img
-                                                src={`${imgURL}${image}`}
-                                                alt={`${productdetails.tensanpham} - ${index + 1}`}
-                                                className="d-block w-100"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
+                    <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
+                        <div className="carousel-indicators">
+                            {productdetails.danhsachhinhanh.split(",").map((_, index) => (
                                 <button
-                                    className="carousel-control-prev"
+                                    key={index}
                                     type="button"
                                     data-bs-target="#productCarousel"
-                                    data-bs-slide="prev"
-                                >
-                                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span className="visually-hidden">Previous</span>
-                                </button>
-                                <button
-                                    className="carousel-control-next"
-                                    type="button"
-                                    data-bs-target="#productCarousel"
-                                    data-bs-slide="next"
-                                >
-                                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span className="visually-hidden">Next</span>
-                                </button>
-                            </>
-                        ) : (
-                            <p>Không có hình ảnh để hiển thị.</p>
-                        )}
+                                    data-bs-slide-to={index}
+                                    className={index === 0 ? "active" : ""}
+                                    aria-current={index === 0 ? "true" : "false"}
+                                    aria-label={`Slide ${index + 1}`}
+                                ></button>
+                            ))}
+                        </div>
+                        <div className="carousel-inner">
+                            {productdetails.danhsachhinhanh.split(",").map((image, index) => (
+                                <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={index}>
+                                    <img
+                                        src={`${imgURL}${image}`}
+                                        alt={`${productdetails.tensanpham} - ${index + 1}`}
+                                        className="d-block w-100"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            className="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#productCarousel"
+                            data-bs-slide="prev"
+                        >
+                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span className="visually-hidden">Previous</span>
+                        </button>
+                        <button
+                            className="carousel-control-next"
+                            type="button"
+                            data-bs-target="#productCarousel"
+                            data-bs-slide="next"
+                        >
+                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span className="visually-hidden">Next</span>
+                        </button>
                     </div>
+
                     <div className="d-flex my-4 product-color">
-                        {productdetails.danhsachmamau &&
-                            productdetails.danhsachmamau.map((mamau, index) => (
-                                <div className="row" key={mamau}>
+                        {productdetails.danhsachmausacsanpham &&
+                            productdetails.danhsachmausacsanpham.split(',').map((color, index) => (
+                                <div className="row" key={index}>
                                     <div className="my-2 d-flex me-2">
-                                        {/* Input radio cho từng màu sắc */}
                                         <input
                                             type="radio"
-                                            id={`color-${mamau}`}
-                                            name="product-color"
-                                            value={mamau}
-                                            onChange={() => handleColorChange(mamau)} // Truyền mã màu khi thay đổi
+                                            id={`color-${index}`}
+                                            name="productColor"
+                                            value={color}
+                                            checked={selectedColor === color}
+                                            onChange={() => handleColorChange(color)} // Cập nhật khi chọn màu
+                                            style={{
+                                                marginRight: '10px',
+                                            }}
                                         />
-                                        {/* Hiển thị hình ảnh tương ứng */}
-                                        {productdetails.danhsachmausacsanpham && (
-                                            <img
-                                                src={`${imgURL}${productdetails.danhsachmausacsanpham[index]}`} // Đối chiếu index với mã màu
-                                                alt={`Color ${mamau}`}
-                                                style={{
-                                                    width: '100px',
-                                                    height: '100px',
-                                                    marginLeft: '5px',
-                                                    borderRadius: '5px',
-                                                    border: '1px solid #ccc',
-                                                }}
-                                            />
-                                        )}
+                                        <img
+                                            src={`${imgURL}${color}`} // Đường dẫn đến ảnh màu sản phẩm
+                                            alt={`Màu sản phẩm ${index + 1}`}
+                                            style={{
+                                                width: '100px',
+                                                height: '100px',
+                                                marginRight: '10px',
+                                                borderRadius: '5px',
+                                                border: '1px solid #ccc',
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             ))}

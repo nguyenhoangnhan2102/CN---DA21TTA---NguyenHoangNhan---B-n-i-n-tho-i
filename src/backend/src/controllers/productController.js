@@ -98,7 +98,7 @@ const getDetailProduct = async (req, res) => {
             sp.masanpham
         `;
 
-        const [results] = await connection.query(query, [req.params.masanpham]);
+        const [results] = await connection.query(query, [masanpham]);
 
         if (results.length === 0) {
             return res.status(404).json({
