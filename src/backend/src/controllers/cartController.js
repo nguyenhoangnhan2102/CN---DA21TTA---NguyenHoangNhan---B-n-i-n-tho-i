@@ -52,41 +52,24 @@ const getAllCartByCustomer = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-    const { masanpham, makhachhang, mamau } = req.body;
+    const { masanpham, makhachhang, mamau, soluong, gia } = req.body;
 
-    // Kiểm tra dữ liệu đầu vào
-    if (!masanpham || !makhachhang || !mamau) {
-        return res.status(400).json({ error: 'Vui lòng cung cấp đầy đủ thông tin.' });
+    // Kiểm tra xem dữ liệu có đầy đủ không
+    if (!masanpham || !makhachhang || !mamau || !soluong || !gia) {
+        return res.status(400).json({ message: 'Thiếu thông tin, vui lòng kiểm tra lại.' });
     }
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const checkQuery = `
-        SELECT * FROM GIOHANG 
-        WHERE masanpham = ? AND makhachhang = ? AND mamau = ?
-    `;
-
-    connection.query(checkQuery, [masanpham, makhachhang, mamau], (err, results) => {
+    SELECT * FROM CHITIETGIOHANG 
+    WHERE magiohang = (SELECT magiohang FROM GIOHANG WHERE makhachhang = ?) 
+    AND masanpham = ? AND mamau = ?
+  `;
+    connection.query(checkQuery, [makhachhang, masanpham, mamau], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Lỗi khi kiểm tra giỏ hàng.', details: err });
+            console.error('Lỗi khi kiểm tra sản phẩm trong giỏ hàng:', err);
+            return res.status(500).json({ message: 'Lỗi server' });
         }
-
-        if (results.length > 0) {
-            return res.status(400).json({ message: 'Sản phẩm đã có trong giỏ hàng.' });
-        }
-
-        // Thêm sản phẩm vào giỏ hàng
-        const insertQuery = `
-            INSERT INTO GIOHANG (masanpham, makhachhang, mamau)
-            VALUES (?, ?, ?)
-        `;
-
-        connection.query(insertQuery, [masanpham, makhachhang, mamau], (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: 'Lỗi khi thêm sản phẩm vào giỏ hàng.', details: err });
-            }
-
-            return res.status(200).json({ message: 'Thêm sản phẩm vào giỏ hàng thành công.' });
-        });
     });
 };
 

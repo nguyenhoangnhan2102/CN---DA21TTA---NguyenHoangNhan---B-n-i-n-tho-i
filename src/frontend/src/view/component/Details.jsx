@@ -52,16 +52,33 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
+        const mamau = selectedColor; // Use the selected color
 
-        if (!makhachhang || !masanpham) {
-            console.error("Missing required information: makhachhang, masanpham");
+
+
+        if (!makhachhang || !masanpham || !mamau) {
+            console.error("Missing required information: makhachhang, masanpham, mamau");
+            toast.error("Vui lòng chọn màu sắc và đảm bảo thông tin đầy đủ.");
             return;
         }
 
+        const soluong = 1; // Assuming the quantity is 1, you can adjust this if needed
+        const gia = productdetails.gia; // Assuming the price is in the product details
+
         try {
+
+            console.log("makhachhang", makhachhang);
+            console.log("masanpham", masanpham);
+            console.log("mamau", mamau);
+            console.log("soluong", soluong);
+            console.log("gia", productdetails.giasanpham);
+
             const response = await axiosInstance.post(`${apiUrl}/cart`, {
                 makhachhang,
                 masanpham,
+                mamau,
+                soluong,
+                gia,
             });
 
             if (response.status === 201) {
@@ -81,6 +98,7 @@ const ProductDetails = () => {
             }
         }
     };
+
 
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
@@ -149,23 +167,23 @@ const ProductDetails = () => {
                     </div>
 
                     <div className="d-flex my-4 product-color">
-                        {productdetails.danhsachmausacsanpham &&
-                            productdetails.danhsachmausacsanpham.split(',').map((color, index) => (
+                        {productdetails.danhsachmamau && // Lấy danh sách màu từ `danhsachmamau`
+                            productdetails.danhsachmamau.split(',').map((colorId, index) => (
                                 <div className="row" key={index}>
                                     <div className="my-2 d-flex me-2">
                                         <input
                                             type="radio"
                                             id={`color-${index}`}
                                             name="productColor"
-                                            value={color}
-                                            checked={selectedColor === color}
-                                            onChange={() => handleColorChange(color)} // Cập nhật khi chọn màu
+                                            value={parseInt(colorId)} // Sử dụng parseInt để đảm bảo giá trị là số nguyên
+                                            checked={selectedColor === parseInt(colorId)} // Kiểm tra nếu màu đã chọn là chính xác
+                                            onChange={() => handleColorChange(parseInt(colorId))} // Cập nhật khi chọn màu
                                             style={{
                                                 marginRight: '10px',
                                             }}
                                         />
                                         <img
-                                            src={`${imgURL}${color}`} // Đường dẫn đến ảnh màu sản phẩm
+                                            src={`${imgURL}${productdetails.danhsachmausacsanpham.split(',')[index]}`} // Lấy hình ảnh màu từ `danhsachmausacsanpham`
                                             alt={`Màu sản phẩm ${index + 1}`}
                                             style={{
                                                 width: '100px',
@@ -177,7 +195,9 @@ const ProductDetails = () => {
                                         />
                                     </div>
                                 </div>
-                            ))}
+                            ))
+                        }
+
                     </div>
                     <div className="my-4 p-3 commit">
                         <h5>Shopphone cam kết</h5>
