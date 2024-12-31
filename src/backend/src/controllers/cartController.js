@@ -1,41 +1,49 @@
 const connection = require("../config/dataBase");
 
 const getAllCartByCustomer = async (req, res) => {
-    const { makhachhang } = req.params;  // Lấy mã khách hàng từ tham số URL
-
     try {
+        const { makhachhang } = req.params;  // Lấy mã khách hàng từ tham số URL
         // Kiểm tra xem khách hàng có tồn tại trong hệ thống không
-        const customerCheck = await connection.query(
-            "SELECT * FROM KHACHHANG WHERE makhachhang = ?",
-            [makhachhang]
-        );
-        if (customerCheck[0].length === 0) {
-            return res.status(404).json({ message: "Khách hàng không tồn tại" });
+        if (!makhachhang) {
+            return res.status(400).json({
+                EM: "Mã khách hàng không được để trống",
+                EC: -1,
+                DT: [],
+            });
         }
 
         // Lấy tất cả sản phẩm trong giỏ hàng của khách hàng
-        const cartItems = await connection.query(
-            `SELECT c.magiohang, s.masanpham, s.tensanpham, m.tenmausanpham, c.soluong, c.gia 
+        const query =
+            `SELECT c.magiohang, s.masanpham, s.tensanpham, m.mamau, m.tenmausanpham, m.mausachinhanh, c.soluong, c.gia
             FROM GIOHANG g
             JOIN CHITIETGIOHANG c ON g.magiohang = c.magiohang
             JOIN SANPHAM s ON c.masanpham = s.masanpham
             JOIN MAUSACSANPHAM m ON c.mamau = m.mamau
-            WHERE g.makhachhang = ?`,
-            [makhachhang]
-        );
+            WHERE g.makhachhang = ?`
+            ;
+        const [results] = await connection.query(query, [makhachhang]);
 
-        if (cartItems[0].length === 0) {
-            return res.status(404).json({ message: "Giỏ hàng trống" });
+        if (results.length === 0) {
+            return res.status(404).json({
+                EM: "Không tìm thấy sản phẩm nào trong giỏ hàng",
+                EC: 0,
+                DT: [],
+            });
         }
 
-        // Trả về các sản phẩm trong giỏ hàng
-        res.status(200).json({
-            message: "Lấy sản phẩm trong giỏ hàng thành công",
-            data: cartItems[0],
+        return res.status(200).json({
+            EM: "Lấy danh sách sản phẩm giỏ hàng thành công",
+            EC: 1,
+            DT: results,
         });
+
     } catch (err) {
-        console.error("Error fetching cart items:", err.message);
-        res.status(500).json({ message: err.message });
+        console.error("Error fetching cart:", err);
+        return res.status(500).json({
+            EM: `Lỗi controller: ${err.message}`,
+            EC: -1,
+            DT: [],
+        });
     }
 };
 
@@ -72,7 +80,19 @@ const addToCart = async (req, res) => {
             "INSERT INTO GIOHANG (makhachhang) VALUES (?)",
             [makhachhang]
         );
-        const magiohang = result[0].insertId;  // Get the generated magiohang ID
+        const magiohang = result[0].insertId;
+
+        // Kiểm tra xem sản phẩm có cùng mã màu đã có trong giỏ hàng chưa
+        const cartCheck = await connection.query(
+            "SELECT * FROM CHITIETGIOHANG WHERE mamau = ? AND masanpham = ? AND magiohang = ?",
+            [mamau, masanpham, magiohang]
+        );
+
+
+        if (cartCheck[0].length > 0) {
+            // Nếu sản phẩm có mã màu đã tồn tại trong giỏ hàng, trả về lỗi
+            return res.status(400).json({ message: "Sản phẩm với mã màu này đã tồn tại trong giỏ hàng" });
+        }
 
         // Thêm sản phẩm vào chi tiết giỏ hàng
         await connection.query(
@@ -90,8 +110,6 @@ const addToCart = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
-
-
 
 module.exports = {
     addToCart,

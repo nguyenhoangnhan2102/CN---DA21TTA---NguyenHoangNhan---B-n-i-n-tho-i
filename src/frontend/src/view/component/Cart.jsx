@@ -39,8 +39,8 @@ function Cart() {
                 setCartItems(response.data.DT);
 
                 // Tính tổng số lượng và tổng giá trị sản phẩm
-                const totalQty = response.data.DT.reduce((acc, item) => acc + item.soluongsanpham, 0);
-                const subTotalAmount = response.data.DT.reduce((acc, item) => acc + item.soluongsanpham * item.giasanpham, 0);
+                const totalQty = response.data.DT.reduce((acc, item) => acc + item.soluong, 0);
+                const subTotalAmount = response.data.DT.reduce((acc, item) => acc + item.soluong * parseFloat(item.gia), 0);
 
                 setTotalQuantity(totalQty);
                 setSubTotal(subTotalAmount);
@@ -52,83 +52,25 @@ function Cart() {
         }
     };
 
-    const getCartItemsDetails = () => {
-        return cartItems.map(item => ({
-            masanpham: item.masanpham,
-            soluong: item.soluongsanpham,
-            giatien: item.giasanpham,
-        }));
-    };
-
-
-    const handleCheckout = async () => {
-        if (!infoUser.hoten || !infoUser.sodienthoai || !infoUser.diachi) {
-            alert("Vui lòng điền đầy đủ thông tin người mua!");
-            return;
-        }
-
-        if (cartItems.length === 0) {
-            alert("Giỏ hàng đang trống!");
-            return;
-        }
-
-        try {
-
-            const cartDetails = getCartItemsDetails();
-
-            // Tạo dữ liệu gửi đi
-            const data = {
-                makhachhang: infoUser.makhachhang,
-                hotenkhachhang: infoUser.hoten,
-                sdtkhachhang: infoUser.sodienthoai,
-                diachigiaohang: infoUser.diachi,
-                trangthaidonhang: 0, // Đang chờ xử lý
-                tongtien: subTotal,
-                soluong: totalQuantity,
-                chiTietSanPham: cartDetails, // Đảm bảo rằng mỗi sản phẩm có một mã sản phẩm duy nhất
-                ngaylap: new Date().toLocaleString("sv-SE", {
-                    timeZone: "Asia/Ho_Chi_Minh",
-                }).replace(" ", "T"),
-            };
-
-            console.log("cartDetails", cartDetails);
-
-            // Gửi yêu cầu đặt hàng đến API
-            const response = await axiosInstance.post(`${apiUrl}/orders`, data);
-
-            if (response.data.success) {
-                alert("Đặt hàng thành công!");
-                setCartItems([]); // Xóa giỏ hàng sau khi thanh toán
-                setTotalQuantity(0); // Reset tổng số lượng
-                setSubTotal(0); // Reset tổng giá trị
-            } else {
-                alert(`Đặt hàng thất bại: ${response.data.message}`);
-            }
-        } catch (error) {
-            console.error("Error during checkout:", error);
-            alert("Có lỗi xảy ra khi đặt hàng!");
-        }
-    };
-
-
+    // Cập nhật số lượng sản phẩm
     const handleQuantityChange = (masanpham, type) => {
         setCartItems(prevItems => {
             const updatedCartItems = prevItems.map(item => {
                 if (item.masanpham === masanpham) {
                     const updatedQuantity = type === "increase"
-                        ? item.soluongsanpham + 1
-                        : item.soluongsanpham > 1
-                            ? item.soluongsanpham - 1
-                            : item.soluongsanpham; // Không giảm xuống dưới 1
+                        ? item.soluong + 1
+                        : item.soluong > 1
+                            ? item.soluong - 1
+                            : item.soluong; // Không giảm xuống dưới 1
 
-                    return { ...item, soluongsanpham: updatedQuantity };
+                    return { ...item, soluong: updatedQuantity };
                 }
                 return item;
             });
 
             // Cập nhật lại tổng số lượng và tổng giá trị
-            const totalQty = updatedCartItems.reduce((acc, item) => acc + item.soluongsanpham, 0);
-            const subTotalAmount = updatedCartItems.reduce((acc, item) => acc + item.soluongsanpham * item.giasanpham, 0);
+            const totalQty = updatedCartItems.reduce((acc, item) => acc + item.soluong, 0);
+            const subTotalAmount = updatedCartItems.reduce((acc, item) => acc + item.soluong * parseFloat(item.gia), 0);
 
             setTotalQuantity(totalQty);
             setSubTotal(subTotalAmount);
@@ -136,17 +78,6 @@ function Cart() {
             return updatedCartItems;
         });
     };
-
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setInfoUser(prevState => ({
-            ...prevState,
-            [name]: value,  // Cập nhật giá trị của trường tương ứng
-        }));
-    };
-
-
 
     return (
         <div className="container py-5">
@@ -158,11 +89,11 @@ function Cart() {
                         <p>Giỏ hàng của bạn đang trống</p>
                     ) : (
                         cartItems.map((item) => (
-                            <div key={item.masanpham} className="card mb-3 shadow-sm">
+                            <div key={item.magiohang} className="card mb-3 shadow-sm">
                                 <div className="row g-0">
                                     <div className="col-md-3">
                                         <img
-                                            src={`${imgURL}/${item.hinhanhchinh}`}
+                                            src={`${imgURL}/${item.mausachinhanh}`}
                                             alt={item.tensanpham}
                                             className="img-fluid rounded-3"
                                         />
@@ -170,7 +101,9 @@ function Cart() {
                                     <div className="col-md-9">
                                         <div className="card-body">
                                             <h5 className="card-title">{item.tensanpham}</h5>
-                                            <p className="card-text text-muted">Giá: {item.giasanpham.toLocaleString()} VND</p>
+                                            <p className="card-text text-muted">
+                                                Giá: {parseFloat(item.gia).toLocaleString()} VND
+                                            </p>
                                             <div className="d-flex justify-content-between align-items-center">
                                                 <div className="d-flex align-items-center">
                                                     <button
@@ -179,7 +112,7 @@ function Cart() {
                                                     >
                                                         -
                                                     </button>
-                                                    <span>{item.soluongsanpham}</span>
+                                                    <span>{item.soluong}</span>
                                                     <button
                                                         className="btn btn-outline-secondary ms-2"
                                                         onClick={() => handleQuantityChange(item.masanpham, "increase")}
@@ -187,7 +120,9 @@ function Cart() {
                                                         +
                                                     </button>
                                                 </div>
-                                                <p className="card-text">Số lượng: {item.soluongsanpham}</p>
+                                                <p className="card-text">
+                                                    Số lượng: {item.soluong}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +144,7 @@ function Cart() {
                                 type="text"
                                 name="hoten"
                                 value={infoUser.hoten || ""}
-                                onChange={handleChange}
+                                onChange={(e) => setInfoUser({ ...infoUser, hoten: e.target.value })}
                             />
                             <TextField
                                 fullWidth
@@ -218,7 +153,7 @@ function Cart() {
                                 type="number"
                                 name="sodienthoai"
                                 value={infoUser.sodienthoai || ""}
-                                onChange={handleChange}
+                                onChange={(e) => setInfoUser({ ...infoUser, sodienthoai: e.target.value })}
                             />
                             <TextField
                                 fullWidth
@@ -227,7 +162,7 @@ function Cart() {
                                 type="text"
                                 name="diachi"
                                 value={infoUser.diachi || ""}
-                                onChange={handleChange}
+                                onChange={(e) => setInfoUser({ ...infoUser, diachi: e.target.value })}
                                 multiline
                                 rows={3}
                             />
@@ -242,9 +177,6 @@ function Cart() {
                             <strong>Tổng cộng:</strong>{" "}
                             <span className="text-danger">{subTotal.toLocaleString()} VND</span>
                         </p>
-                        <button className="btn btn-success w-100 mt-3" onClick={handleCheckout}>
-                            Thanh Toán
-                        </button>
                     </div>
                 </div>
             </div>
