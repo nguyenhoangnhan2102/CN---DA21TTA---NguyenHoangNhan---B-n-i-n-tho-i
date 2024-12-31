@@ -7,10 +7,10 @@ const getAllProduct = async (req, res) => {
         SELECT
             sp.*,
             th.tenthuonghieu,
-            GROUP_CONCAT(ms.mamau) AS ds_mamau,
-            GROUP_CONCAT(ms.tenmausanpham) AS ds_tenmausanpham,
-            GROUP_CONCAT(ms.mausachinhanh) AS ds_mausachinhanh,
-            GROUP_CONCAT(ha.hinhanhkhac) AS ds_hinhanhkhac
+            GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
+            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
         FROM
             SANPHAM sp
         LEFT JOIN
@@ -31,10 +31,10 @@ const getAllProduct = async (req, res) => {
         SELECT
             sp.*,
             th.tenthuonghieu,
-            GROUP_CONCAT(ms.mamau) AS ds_mamau,
-            GROUP_CONCAT(ms.tenmausanpham) AS ds_tenmausanpham,
-            GROUP_CONCAT(ms.mausachinhanh) AS ds_mausachinhanh,
-            GROUP_CONCAT(ha.hinhanhkhac) AS ds_hinhanhkhac
+            GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
+            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
         FROM
             SANPHAM sp
         LEFT JOIN
@@ -77,12 +77,25 @@ const getDetailProduct = async (req, res) => {
     let masanpham = req.params.masanpham;
     try {
         const query = `
-        SELECT SANPHAM.*, MAUSAC.tenmausanpham, MAUSAC.mausachinhanh, HINHANHSANPHAM.hinhanh
-    FROM SANPHAM
-    LEFT JOIN CHITIETSANPHAM ON SANPHAM.masanpham = CHITIETSANPHAM.masanpham
-    LEFT JOIN MAUSAC ON CHITIETSANPHAM.mamau = MAUSAC.mamau
-    LEFT JOIN HINHANHSANPHAM ON CHITIETSANPHAM.mahinhanh = HINHANHSANPHAM.mahinhanh
-    WHERE SANPHAM.masanpham = ?
+        SELECT 
+            sp.*,
+            th.tenthuonghieu,
+            GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
+            GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
+            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+        FROM
+            SANPHAM sp
+        JOIN 
+            THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
+        LEFT JOIN
+            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
+        LEFT JOIN
+            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
+        WHERE 
+            sp.masanpham = ?
+        GROUP BY
+            sp.masanpham
         `;
 
         const [results] = await connection.query(query, [req.params.masanpham]);
