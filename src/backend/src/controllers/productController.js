@@ -6,11 +6,19 @@ const getAllProduct = async (req, res) => {
         const queryActive = `
         SELECT
             sp.*,
-            th.tenthuonghieu
+            th.tenthuonghieu,
+            GROUP_CONCAT(ms.mamau) AS ds_mamau,
+            GROUP_CONCAT(ms.tenmausanpham) AS ds_tenmausanpham,
+            GROUP_CONCAT(ms.mausachinhanh) AS ds_mausachinhanh,
+            GROUP_CONCAT(ha.hinhanhkhac) AS ds_hinhanhkhac
         FROM
             SANPHAM sp
         LEFT JOIN
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
+        LEFT JOIN
+            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
+        LEFT JOIN
+            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE
             sp.trangthai = 0
         GROUP BY
@@ -22,11 +30,19 @@ const getAllProduct = async (req, res) => {
         const queryInactive = `
         SELECT
             sp.*,
-            th.tenthuonghieu
+            th.tenthuonghieu,
+            GROUP_CONCAT(ms.mamau) AS ds_mamau,
+            GROUP_CONCAT(ms.tenmausanpham) AS ds_tenmausanpham,
+            GROUP_CONCAT(ms.mausachinhanh) AS ds_mausachinhanh,
+            GROUP_CONCAT(ha.hinhanhkhac) AS ds_hinhanhkhac
         FROM
             SANPHAM sp
         LEFT JOIN
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
+        LEFT JOIN
+            MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
+        LEFT JOIN
+            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE
             sp.trangthai = 1
         GROUP BY
