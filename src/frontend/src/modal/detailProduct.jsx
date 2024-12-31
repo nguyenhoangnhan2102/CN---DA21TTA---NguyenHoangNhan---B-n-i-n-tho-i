@@ -296,8 +296,8 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 </div>
                 <div className="d-flex align-items-center justify-content-between text-center mb-3">
                     <label>Màu</label>
-                    {Array.isArray(form.danhsachmausacsanpham) &&
-                        form.danhsachmausacsanpham.map((img, index) => (
+                    {Array.isArray(form.ds_mausachinhanh) &&
+                        form.ds_mausachinhanh.map((img, index) => (
                             <img
                                 key={index}
                                 src={`${imgURL}/${img}`}
@@ -308,8 +308,8 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                 </div>
                 <div className="d-flex align-items-center justify-content-between text-center mb-3">
                     <label>Hình ảnh khác</label>
-                    {Array.isArray(form.danhsachhinhanh) &&
-                        form.danhsachhinhanh.map((img, index) => (
+                    {Array.isArray(form.ds_hinhanhkhac) &&
+                        form.ds_hinhanhkhac.map((img, index) => (
                             <img
                                 key={index}
                                 src={`${imgURL}/${img}`}

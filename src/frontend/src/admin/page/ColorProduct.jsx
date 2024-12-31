@@ -196,7 +196,7 @@ const ColorProduct = () => {
                     </button>
                 </div>
 
-                <table className="table">
+                <table className="table table-hover">
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>
