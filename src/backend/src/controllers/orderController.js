@@ -1,28 +1,30 @@
 const connection = require("../config/dataBase");
+const moment = require('moment-timezone');
 
 const getAllOrders = async (req, res) => {
     try {
         const [rows, fields] = await connection.query(`
         SELECT 
             d.madonhang,
-            s.tensanpham,
+            m.mamau,
             s.masanpham,
+            s.tensanpham,
+            d.ngaydat,
+            d.trangthaidonhang,
+            d.tongtien,         
+            c.soluong,
+            c.giatien,
             d.hotenkhachhang AS hotenkhachhang,
             d.diachigiaohang AS diachigiaohang,
             d.sdtkhachhang AS sodienthoaikhachhang,
-            s.giasanpham,
-            s.soluongsanpham AS tongsoluongsanpham,
-            d.tongtien,
             m.tenmausanpham,
-            m.mausachinhanh,
-            d.ngaylap,
-            d.trangthaidonhang
+            m.mausachinhanh
         FROM DONHANG d
         JOIN CHITIETDONHANG c ON d.madonhang = c.madonhang
         JOIN SANPHAM s ON c.masanpham = s.masanpham
         JOIN KHACHHANG k ON d.makhachhang = k.makhachhang
         JOIN MAUSACSANPHAM m ON c.masanpham = m.masanpham
-        ORDER BY d.ngaylap DESC;
+        ORDER BY d.ngaydat DESC;
 
     `);
         res.json(rows);
@@ -32,78 +34,60 @@ const getAllOrders = async (req, res) => {
     }
 };
 
-const comfirmOrder = async (req, res) => {
-    const {
-        makhachhang,
-        hotenkhachhang,
-        sdtkhachhang,
-        diachigiaohang,
-        trangthaidonhang,
-        ngaylap,
-        tongtien,
-        chiTietSanPham,
-        soluong,
-    } = req.body;
+const confirmOrder = async (req, res) => {
+    const { makhachhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, chiTietSanPham } = req.body;
 
     if (!makhachhang || !chiTietSanPham || chiTietSanPham.length === 0) {
         return res.status(400).json({ success: false, message: "Thiếu thông tin đơn hàng." });
     }
 
     try {
-        // Thêm đơn hàng mới vào bảng DONHANG
+        // Get current timestamp in Vietnam timezone
+        const ngaydat = moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+        // Insert into DONHANG
         const [result] = await connection.query(
-            "INSERT INTO DONHANG (ngaylap, trangthaidonhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, makhachhang) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [ngaylap, trangthaidonhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, makhachhang]
+            "INSERT INTO DONHANG (ngaydat, tongtien, hotenkhachhang, sdtkhachhang, diachigiaohang, makhachhang) VALUES (?, ?, ?, ?, ?, ?)",
+            [ngaydat, tongtien, hotenkhachhang, sdtkhachhang, diachigiaohang, makhachhang]
         );
 
         const madonhang = result.insertId;
 
-        // Kiểm tra số lượng sản phẩm trong kho và xử lý chi tiết đơn hàng
+        // Add order details
         for (const item of chiTietSanPham) {
-            const { masanpham, soluong, giatien } = item;
+            const { masanpham, mamau, giatien, soluong } = item;
 
-            // Kiểm tra số lượng sản phẩm hiện tại trong kho
+            // Check product quantity
             const [product] = await connection.query(
                 "SELECT soluongsanpham FROM SANPHAM WHERE masanpham = ?",
                 [masanpham]
             );
 
-            if (!product || product.soluongsanpham < soluong) {
-                return res.status(400).json({
-                    success: false,
-                    message: `Sản phẩm mã ${masanpham} không đủ số lượng trong kho.`,
-                });
+            if (product.length === 0 || product[0].soluongsanpham < soluong) {
+                throw new Error(`Sản phẩm ${masanpham} không đủ số lượng.`);
             }
 
-            // Trừ số lượng sản phẩm trong kho
+            // Insert into CHITIETDONHANG
             await connection.query(
-                "UPDATE SANPHAM SET soluongsanpham = soluongsanpham - ? WHERE masanpham = ?",
-                [soluong, masanpham]
-            );
-
-            // Thêm chi tiết đơn hàng vào bảng CHITIETDONHANG
-            await connection.query(
-                "INSERT INTO CHITIETDONHANG (madonhang, masanpham, giatien, soluong) VALUES (?, ?, ?, ?)",
-                [madonhang, masanpham, giatien, soluong]
+                "INSERT INTO CHITIETDONHANG (madonhang, masanpham, mamau, giatien, soluong) VALUES (?, ?, ?, ?, ?)",
+                [madonhang, masanpham, mamau, giatien, soluong]
             );
         }
 
-        // Trả về phản hồi thành công
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
             message: "Đặt hàng thành công.",
             madonhang,
+            ngaydat
         });
     } catch (error) {
-        console.error("Error during order confirmation:", error);
-        return res.status(500).json({
-            success: false,
-            message: "Đã xảy ra lỗi khi xác nhận đơn hàng.",
-        });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Lỗi xử lý đơn hàng.", error: error.message });
     }
 };
 
+
 module.exports = {
     getAllOrders,
-    comfirmOrder,
+    confirmOrder,
 }

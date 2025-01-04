@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
+import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import axiosInstance from "../../authentication/axiosInstance";
@@ -36,49 +37,103 @@ function Cart() {
         try {
             const response = await axiosInstance.get(`${apiUrl}/cart/${makhachhang}`);
             if (response.data.EC === 1) {
-                setCartItems(response.data.DT);
-                console.log("Cart items:", response.data.DT);
-
-                // Tính tổng số lượng và tổng giá trị sản phẩm
-                const totalQty = response.data.DT.reduce((acc, item) => acc + item.soluong, 0);
-                const subTotalAmount = response.data.DT.reduce((acc, item) => acc + item.soluong * parseFloat(item.gia), 0);
-
-                setTotalQuantity(totalQty);
-                setSubTotal(subTotalAmount);
+                const updatedItems = response.data.DT.map((item) => ({
+                    ...item,
+                    soluong: item.soluong || 1,
+                }));
+                setCartItems(updatedItems);
+                calculateSubTotal(updatedItems);
+                calculateTotalQuantity(updatedItems);
             } else {
-                console.error("No products found in the cart");
+                console.error(response.data.EM);
             }
         } catch (error) {
             console.error("Error fetching cart items:", error);
         }
     };
 
-    // Cập nhật số lượng sản phẩm
-    const handleQuantityChange = (masanpham, type) => {
-        setCartItems(prevItems => {
-            const updatedCartItems = prevItems.map(item => {
-                if (item.masanpham === masanpham) {
-                    const updatedQuantity = type === "increase"
-                        ? item.soluong + 1
-                        : item.soluong > 1
-                            ? item.soluong - 1
-                            : item.soluong; // Không giảm xuống dưới 1
+    const handleCheckout = async () => {
+        if (!infoUser.hoten || !infoUser.sodienthoai || !infoUser.diachi) {
+            toast.warning("Vui lòng nhập đầy đủ thông tin!!!");
+            return;
+        }
 
-                    return { ...item, soluong: updatedQuantity };
-                }
-                return item;
-            });
+        if (cartItems.length === 0) {
+            toast.warning("Giỏ hàng của bạn đang trống.");
+            return;
+        }
 
-            // Cập nhật lại tổng số lượng và tổng giá trị
-            const totalQty = updatedCartItems.reduce((acc, item) => acc + item.soluong, 0);
-            const subTotalAmount = updatedCartItems.reduce((acc, item) => acc + item.soluong * parseFloat(item.gia), 0);
+        try {
+            const orderData = {
+                makhachhang: infoUser.makhachhang, // ID khách hàng từ JWT decode
+                hotenkhachhang: infoUser.hoten,
+                sdtkhachhang: infoUser.sodienthoai,
+                diachigiaohang: infoUser.diachi,
+                tongtien: subTotal,
+                chiTietSanPham: cartItems.map(item => ({
+                    masanpham: item.masanpham,
+                    mamau: item.mamau, // Nếu có mã màu
+                    giatien: item.gia,
+                    soluong: item.soluong
+                }))
+            };
 
-            setTotalQuantity(totalQty);
-            setSubTotal(subTotalAmount);
+            const response = await axiosInstance.post(`${apiUrl}/orders`, orderData);
 
-            return updatedCartItems;
-        });
+            if (response.data.success) {
+                alert("Đặt hàng thành công!");
+                setCartItems([]); // Xóa giỏ hàng
+                setTotalQuantity(0);
+                setSubTotal(0);
+            } else {
+                alert(`Đặt hàng thất bại: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error("Lỗi khi đặt hàng:", error);
+            alert("Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.");
+        }
     };
+
+    const calculateSubTotal = (items) => {
+        const total = items.reduce((sum, item) => sum + item.gia * item.soluong, 0);
+        setSubTotal(total);
+    };
+
+    const calculateTotalQuantity = (items) => {
+        const totalQty = items.reduce((sum, item) => sum + item.soluong, 0);
+        setTotalQuantity(totalQty);
+    };
+
+    const handleIncrease = (mamau) => {
+        const updatedItems = cartItems.map((item) =>
+            item.mamau === mamau
+                ? { ...item, soluong: item.soluong + 1 } // Tăng số lượng của sản phẩm cụ thể
+                : item // Giữ nguyên các sản phẩm khác
+        );
+        setCartItems(updatedItems); // Cập nhật lại danh sách giỏ hàng
+        calculateSubTotal(updatedItems); // Cập nhật tổng tiền
+        calculateTotalQuantity(updatedItems); // Cập nhật tổng số lượng
+    };
+
+    const handleDecrease = (mamau) => {
+        const updatedItems = cartItems.map((item) =>
+            item.mamau === mamau && item.soluong > 1
+                ? { ...item, soluong: item.soluong - 1 } // Giảm số lượng nếu lớn hơn 1
+                : item // Giữ nguyên các sản phẩm khác
+        );
+        setCartItems(updatedItems); // Cập nhật lại danh sách giỏ hàng
+        calculateSubTotal(updatedItems); // Cập nhật tổng tiền
+        calculateTotalQuantity(updatedItems); // Cập nhật tổng số lượng
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setInfoUser(prevState => ({
+            ...prevState,
+            [name]: value,  // Cập nhật giá trị của trường tương ứng
+        }));
+    };
+
 
     return (
         <div className="container py-5">
@@ -109,14 +164,14 @@ function Cart() {
                                                 <div className="d-flex align-items-center">
                                                     <button
                                                         className="btn btn-outline-secondary me-2"
-                                                        onClick={() => handleQuantityChange(item.masanpham, "decrease")}
+                                                        onClick={() => handleDecrease(item.mamau)}
                                                     >
                                                         -
                                                     </button>
                                                     <span>{item.soluong}</span>
                                                     <button
                                                         className="btn btn-outline-secondary ms-2"
-                                                        onClick={() => handleQuantityChange(item.masanpham, "increase")}
+                                                        onClick={() => handleIncrease(item.mamau)}
                                                     >
                                                         +
                                                     </button>
@@ -145,7 +200,7 @@ function Cart() {
                                 type="text"
                                 name="hoten"
                                 value={infoUser.hoten || ""}
-                                onChange={(e) => setInfoUser({ ...infoUser, hoten: e.target.value })}
+                                onChange={handleChange}
                             />
                             <TextField
                                 fullWidth
@@ -154,7 +209,7 @@ function Cart() {
                                 type="number"
                                 name="sodienthoai"
                                 value={infoUser.sodienthoai || ""}
-                                onChange={(e) => setInfoUser({ ...infoUser, sodienthoai: e.target.value })}
+                                onChange={handleChange}
                             />
                             <TextField
                                 fullWidth
@@ -163,7 +218,7 @@ function Cart() {
                                 type="text"
                                 name="diachi"
                                 value={infoUser.diachi || ""}
-                                onChange={(e) => setInfoUser({ ...infoUser, diachi: e.target.value })}
+                                onChange={handleChange}
                                 multiline
                                 rows={3}
                             />
@@ -178,9 +233,13 @@ function Cart() {
                             <strong>Tổng cộng:</strong>{" "}
                             <span className="text-danger">{subTotal.toLocaleString()} VND</span>
                         </p>
-                        <button className="btn btn-success w-100 mt-3">
+                        <button
+                            className="btn btn-success w-100 mt-3"
+                            onClick={handleCheckout}
+                        >
                             Thanh Toán
                         </button>
+
                     </div>
                 </div>
             </div>

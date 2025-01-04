@@ -111,7 +111,28 @@ const addToCart = async (req, res) => {
     }
 };
 
+
+const deleteCartItems = async (req, res) => {
+    const { makhachhang } = req.body;
+
+    if (!makhachhang) {
+        return res.status(400).json({ success: false, message: "Thiếu thông tin khách hàng." });
+    }
+
+    try {
+        await connection.query(
+            "DELETE FROM GIOHANG WHERE makhachhang = ?",
+            [makhachhang]
+        );
+        return res.status(200).json({ success: true, message: "Xóa giỏ hàng thành công." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Lỗi khi xóa giỏ hàng.", error: error.message });
+    }
+};
+
 module.exports = {
     addToCart,
     getAllCartByCustomer,
+    deleteCartItems,
 };
