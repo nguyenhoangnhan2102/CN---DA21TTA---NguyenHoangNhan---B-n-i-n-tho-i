@@ -81,16 +81,21 @@ function Cart() {
             const response = await axiosInstance.post(`${apiUrl}/orders`, orderData);
 
             if (response.data.success) {
-                alert("Đặt hàng thành công!");
+
+                await axiosInstance.post(`${apiUrl}/cart/delete`, {
+                    makhachhang: infoUser.makhachhang
+                });
+
+                toast.success("Đặt hàng thành công!");
                 setCartItems([]); // Xóa giỏ hàng
                 setTotalQuantity(0);
                 setSubTotal(0);
             } else {
-                alert(`Đặt hàng thất bại: ${response.data.message}`);
+                toast.error(`Đặt hàng thất bại: ${response.data.message}`);
             }
         } catch (error) {
             console.error("Lỗi khi đặt hàng:", error);
-            alert("Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.");
+            toast.error("Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.");
         }
     };
 

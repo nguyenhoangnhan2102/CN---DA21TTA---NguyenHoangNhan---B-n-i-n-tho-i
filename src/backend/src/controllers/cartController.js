@@ -120,16 +120,25 @@ const deleteCartItems = async (req, res) => {
     }
 
     try {
+        // Xóa các sản phẩm trong giỏ hàng trước
+        await connection.query(
+            "DELETE FROM CHITIETGIOHANG WHERE magiohang IN (SELECT magiohang FROM GIOHANG WHERE makhachhang = ?)",
+            [makhachhang]
+        );
+
+        // Sau đó xóa giỏ hàng
         await connection.query(
             "DELETE FROM GIOHANG WHERE makhachhang = ?",
             [makhachhang]
         );
+
         return res.status(200).json({ success: true, message: "Xóa giỏ hàng thành công." });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: "Lỗi khi xóa giỏ hàng.", error: error.message });
     }
 };
+
 
 module.exports = {
     addToCart,
