@@ -2,7 +2,6 @@ import { useRoutes, Navigate } from "react-router-dom";
 import Home from "./component/Home";
 import ProductDetails from "./component/Details";
 import Profile from "./component/Profile";
-import Buy from "./component/Buy";
 import Cart from "./component/Cart";
 import Login from "./component/Login";
 import Register from "./component/Register";
@@ -16,10 +15,6 @@ const RouterView = () => {
         {
             path: "/product-details/:masanpham",
             element: <ProductDetails />,
-        },
-        {
-            path: "/buy/:masanpham",
-            element: <Buy />,
         },
         {
             path: "/profile",

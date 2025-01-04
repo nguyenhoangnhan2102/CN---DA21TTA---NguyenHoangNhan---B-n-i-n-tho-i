@@ -53,34 +53,25 @@ const ProductDetails = () => {
         }
     };
 
-    const handleAddToCart = async () => {
-
+    const handleAddToCart = async (redirectToCart = false) => {
         if (!isLoggedIn) {
-            // Lưu lại route hiện tại
-            navigate("/login", { state: { from: location.pathname } }); // Lưu đường dẫn hiện tại
+            navigate("/login", { state: { from: location.pathname } });
             return;
         }
 
         const { makhachhang } = inforUser;
         const { masanpham } = productdetails;
-        const mamau = selectedColor; // Use the selected color
+        const mamau = selectedColor;
 
         if (!makhachhang || !masanpham || !mamau) {
-            console.error("Missing required information: makhachhang, masanpham, mamau");
             toast.warning("Vui lòng chọn màu!!!.");
             return;
         }
 
-        const soluong = 1; // Assuming the quantity is 1, you can adjust this if needed
-        const gia = productdetails.giasanpham; // Assuming the price is in the product details
+        const soluong = 1;
+        const gia = productdetails.giasanpham;
 
         try {
-            console.log("makhachhang", makhachhang);
-            console.log("masanpham", masanpham);
-            console.log("mamau", mamau);
-            console.log("soluong", soluong);
-            console.log("gia", productdetails.giasanpham);
-
             const response = await axiosInstance.post(`${apiUrl}/cart`, {
                 makhachhang,
                 masanpham,
@@ -89,16 +80,17 @@ const ProductDetails = () => {
                 gia,
             });
 
-            console.log(response.data); // In ra phản hồi từ server
-
             if (response.status === 201) {
                 toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+
+                // Nếu nút "Mua ngay" được nhấn, chuyển hướng tới giỏ hàng
+                if (redirectToCart) {
+                    navigate("/cart");
+                }
             } else {
                 toast.error("Không thể thêm sản phẩm vào giỏ hàng");
             }
         } catch (error) {
-            console.error(error); // In ra lỗi chi tiết
-
             if (
                 error.response &&
                 error.response.status === 400 &&
@@ -110,8 +102,6 @@ const ProductDetails = () => {
             }
         }
     };
-
-
 
     if (!productdetails || Object.keys(productdetails).length === 0) {
         return <div>Loading...</div>;
@@ -313,13 +303,14 @@ const ProductDetails = () => {
                         </div>
                     )}
                     <div className="btn-buy d-flex gap-2">
-                        <button className="btn btn-secondary button-cart col-6" onClick={handleAddToCart}>
+                        <button className="btn btn-secondary button-cart col-6" onClick={() => handleAddToCart()}>
                             <i className="fa-solid fa-cart-shopping"></i>
                             <p>Thêm vào giỏ</p>
                         </button>
-                        <Link to={`/buy/${productdetails.masanpham}`} className="btn btn-primary button-buy col-6">
+
+                        <button className="btn btn-primary button-buy col-6" onClick={() => handleAddToCart(true)}>
                             Mua ngay
-                        </Link>
+                        </button>
                     </div>
                     <div className="contact">
                         Gọi đặt mua <strong>1900 232 460</strong> (8:00 - 21:00)
