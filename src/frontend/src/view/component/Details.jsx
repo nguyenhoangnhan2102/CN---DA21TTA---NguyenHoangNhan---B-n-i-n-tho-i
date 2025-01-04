@@ -124,7 +124,15 @@ const ProductDetails = () => {
                     </label>
                 </div>
                 <div className="col-md-8">
-                    <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
+                    <div className="d-flex justify-content-center main-image">
+                        <img
+                            src={`${imgURL}${productdetails.hinhanhchinh}`}
+                            alt={productdetails.tensanpham}
+                            width="350px"
+                            height="350px"
+                        />
+                    </div>
+                    {/* <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
                         <div className="carousel-indicators">
                             {productdetails.danhsachhinhanh.split(",").map((_, index) => (
                                 <button
@@ -167,7 +175,7 @@ const ProductDetails = () => {
                             <span className="carousel-control-next-icon" aria-hidden="true"></span>
                             <span className="visually-hidden">Next</span>
                         </button>
-                    </div>
+                    </div> */}
 
                     <div className="d-flex my-4 product-color">
                         {productdetails.danhsachmamau && // Lấy danh sách màu từ `danhsachmamau`
