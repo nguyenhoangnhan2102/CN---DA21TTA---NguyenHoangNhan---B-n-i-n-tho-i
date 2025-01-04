@@ -99,6 +99,23 @@ function Cart() {
         }
     };
 
+    const handleRemoveItem = async (magiohang, masanpham, mamau) => {
+        try {
+            const response = await axiosInstance.delete(`${apiUrl}/cart/${magiohang}/${masanpham}/${mamau}`);
+            if (response.data.EC === 1) {
+                toast.success("Sản phẩm đã được xóa khỏi giỏ hàng");
+                fetchCartItems(infoUser.makhachhang);  // Refresh giỏ hàng sau khi xóa
+            } else {
+                toast.error("Không thể xóa sản phẩm");
+            }
+        } catch (error) {
+            console.error("Error removing item:", error);
+            toast.error("Đã xảy ra lỗi khi xóa sản phẩm");
+        }
+    };
+
+
+
     const calculateSubTotal = (items) => {
         const total = items.reduce((sum, item) => sum + item.gia * item.soluong, 0);
         setSubTotal(total);
@@ -139,7 +156,6 @@ function Cart() {
         }));
     };
 
-
     return (
         <div className="container py-5">
             <h2 className="text-center mb-4">Giỏ Hàng</h2>
@@ -161,22 +177,37 @@ function Cart() {
                                     </div>
                                     <div className="col-md-9">
                                         <div className="card-body">
-                                            <h5 className="card-title">{item.tensanpham}</h5>
-                                            <p className="card-text text-muted">
+                                            <div className="d-flex justify-content-between">
+                                                <h5 className="card-title">{item.tensanpham}</h5>
+                                                <button
+                                                    style={{ border: "none", background: "none" }}
+                                                    onClick={() => handleRemoveItem(item.magiohang, item.masanpham, item.mamau)}
+                                                >
+                                                    <i className="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                            <p className="card-text text-muted ">
                                                 Giá: {parseFloat(item.gia).toLocaleString()} VND
                                             </p>
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div className="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between align-items-center mt-2">
+                                                <div
+                                                    className="d-flex align-items-center border rounded"
+                                                    style={{ border: "1px solid #ccc", height: "40px" }}
+                                                >
                                                     <button
-                                                        className="btn btn-outline-secondary me-2"
+                                                        className="btn me-2"
                                                         onClick={() => handleDecrease(item.mamau)}
+                                                        style={{ border: "none", background: "none" }}
                                                     >
                                                         -
                                                     </button>
-                                                    <span>{item.soluong}</span>
+                                                    <span className="item-soluong">
+                                                        {item.soluong}
+                                                    </span>
                                                     <button
-                                                        className="btn btn-outline-secondary ms-2"
+                                                        className="ms-2"
                                                         onClick={() => handleIncrease(item.mamau)}
+                                                        style={{ border: "none", background: "none" }}
                                                     >
                                                         +
                                                     </button>

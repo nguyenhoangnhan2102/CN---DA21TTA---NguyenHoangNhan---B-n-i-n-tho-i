@@ -15,3 +15,13 @@
 .btn {
     border-radius: 5px;
 }
+
+.item-soluong {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    height         : 40px;
+    width          : 30px;
+    border-right   : 1px solid #e0e0e0;
+    border-left    : 1px solid #e0e0e0;
+}
