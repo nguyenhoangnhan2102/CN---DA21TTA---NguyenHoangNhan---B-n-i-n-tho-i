@@ -216,3 +216,38 @@ tr {
     justify-content: center;
     align-items    : center;
 }
+
+.disabled-row {
+    opacity: 0.6;
+}
+
+.disabled-text {
+    color: #6c757d;
+    /* Màu xám cho văn bản */
+}
+
+.disabled-row {
+    background-color: #f1f1f1;
+    color           : #ccc;
+}
+
+.disabled-row button {
+    pointer-events: none;
+    opacity       : 0.5;
+}
+
+.status-pending {
+    color: rgb(91, 91, 89);
+}
+
+.status-delivered {
+    color: green;
+}
+
+.status-cancelled {
+    color: red;
+}
+
+.btn-status {
+    height: 60px;
+}

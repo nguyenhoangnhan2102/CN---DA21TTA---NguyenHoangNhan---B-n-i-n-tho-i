@@ -12,7 +12,7 @@ import {
     DialogActions,
 } from "@mui/material";
 
-const imgURL = process.env.REACT_APP_API_URL;
+const imgURL = process.env.REACT_APP_IMG_URL;
 
 const Order = () => {
     const [orders, setOrders] = useState([]);
@@ -71,7 +71,7 @@ const Order = () => {
 
     const currentOrders = orders
         .filter(order =>
-            (order.hotenkhachang && order.hotenkhachang.toLowerCase().startsWith(searchTerm.toLowerCase()))
+            (order.hotenkhachhang && order.hotenkhachhang.toLowerCase().startsWith(searchTerm.toLowerCase()))
             ||
             (order.tensanpham && order.tensanpham.toLowerCase().startsWith(searchTerm.toLowerCase())))
         .slice(indexOfFirst, indexOfLast);
@@ -103,9 +103,9 @@ const Order = () => {
                         <th scope="col">Số lượng</th>
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Hình ảnh</th>
-                        <th scope="col">Ngày lặp</th>
+                        <th scope="col">Ngày đặt</th>
                         <th scope="col">Trạng thái</th>
-                        <th scope="col">Cập nhật trạng thái</th>
+                        <th scope="col">Chức năng</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,8 +113,7 @@ const Order = () => {
                         currentOrders.map((order, index) => (
                             <tr
                                 key={order.mahoadon}
-                                // className={order.trangthaihoadon === 1 || order.trangthaihoadon === 2 ? "disabled-row" : ""}
-                                className={order.trangthaihoadon === 2 ? "disabled-row" : ""}
+                                className={order.trangthaidonhang === 2 ? "disabled-row" : ""}
                             >
                                 <td>{(currentPage - 1) * ordersPerPage + index + 1}</td>
                                 <td>{order.madonhang || "Không có"}</td>
@@ -130,28 +129,28 @@ const Order = () => {
                                         alt={order.tensanpham || "Hình ảnh sản phẩm"}
                                     />
                                 </td>
-                                <td>{moment(order.ngaylap).utcOffset(12 * 60).format('HH:mm:ss DD/MM/YYYY')}</td>
+                                <td>{moment(order.ngaydat).utcOffset(12 * 60).format('HH:mm:ss DD/MM/YYYY')}</td>
                                 <td>
                                     <span
                                         className={
-                                            order.trangthaihoadon === 0 ? "status-pending" :
-                                                order.trangthaihoadon === 1 ? "status-delivered" :
-                                                    order.trangthaihoadon === 2 ? "status-cancelled" : ""
+                                            order.trangthaidonhang === 0 ? "status-pending" :
+                                                order.trangthaidonhang === 1 ? "status-delivered" :
+                                                    order.trangthaidonhang === 2 ? "status-cancelled" : ""
                                         }
                                     >
-                                        {order.trangthaihoadon === 0 ? (
+                                        {order.trangthaidonhang === 0 ? (
                                             <>
-                                                <i className="fa-solid fa-hourglass" style={{ textAlign: "center" }}></i>
-                                                Đang giao hàng
+                                                <i className="fa-solid fa-hourglass me-2" style={{ textAlign: "center" }}></i>
+                                                Đang giao
                                             </>
-                                        ) : order.trangthaihoadon === 1 ? (
+                                        ) : order.trangthaidonhang === 1 ? (
                                             <>
-                                                <i className="fa-solid fa-check" style={{ textAlign: "center" }}></i>
+                                                <i className="fa-solid fa-check me-2" style={{ textAlign: "center" }}></i>
                                                 Đã giao
                                             </>
-                                        ) : order.trangthaihoadon === 2 ? (
+                                        ) : order.trangthaidonhang === 2 ? (
                                             <>
-                                                <i className="fa-solid fa-ban" style={{ textAlign: "center" }}></i>
+                                                <i className="fa-solid fa-ban me-2" style={{ textAlign: "center" }}></i>
                                                 Hủy
                                             </>
                                         ) : (
@@ -164,8 +163,7 @@ const Order = () => {
                                         className="btn btn-primary btn-sm"
                                         style={{ width: '50px', height: '35px' }}
                                         onClick={() => handleUpdateStatus(order, 1)}
-                                        disabled={order.trangthaihoadon === 1 || order.trangthaihoadon === 2}
-                                    // disabled={order.trangthaihoadon === 2}
+                                        disabled={order.trangthaidonhang === 1 || order.trangthaidonhang === 2}
                                     >
                                         Giao
                                     </button>
@@ -173,8 +171,7 @@ const Order = () => {
                                         className="btn btn-danger btn-sm"
                                         style={{ width: '50px', height: '35px' }}
                                         onClick={() => handleUpdateStatus(order, 2)}
-                                        disabled={order.trangthaihoadon === 1 || order.trangthaihoadon === 2}
-                                    // disabled={order.trangthaihoadon === 2}
+                                        disabled={order.trangthaidonhang === 1 || order.trangthaidonhang === 2}
                                     >
                                         Hủy
                                     </button>

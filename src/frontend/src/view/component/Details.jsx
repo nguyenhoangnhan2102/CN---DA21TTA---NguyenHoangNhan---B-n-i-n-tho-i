@@ -53,7 +53,7 @@ const ProductDetails = () => {
         }
     };
 
-    const handleAddToCart = async (redirectToCart = false) => {
+    const handleAddToCart = async () => {
         if (!isLoggedIn) {
             navigate("/login", { state: { from: location.pathname } });
             return;
@@ -82,13 +82,53 @@ const ProductDetails = () => {
 
             if (response.status === 201) {
                 toast.success("Sản phẩm đã được thêm vào giỏ hàng");
-
-                // Nếu nút "Mua ngay" được nhấn, chuyển hướng tới giỏ hàng
-                if (redirectToCart) {
-                    navigate("/cart");
-                }
             } else {
                 toast.error("Không thể thêm sản phẩm vào giỏ hàng");
+            }
+        } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.message === "Sản phẩm đã tồn tại trong giỏ hàng"
+            ) {
+                toast.warning("Sản phẩm đã tồn tại trong giỏ hàng");
+            } else {
+                toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng");
+            }
+        }
+    };
+
+    const handleBuyNow = async () => {
+        if (!isLoggedIn) {
+            navigate("/login", { state: { from: location.pathname } });
+            return;
+        }
+
+        const { makhachhang } = inforUser;
+        const { masanpham } = productdetails;
+        const mamau = selectedColor;
+
+        if (!makhachhang || !masanpham || !mamau) {
+            toast.warning("Vui lòng chọn màu!!!.");
+            return;
+        }
+
+        const soluong = 1;
+        const gia = productdetails.giasanpham;
+
+        try {
+            const response = await axiosInstance.post(`${apiUrl}/cart`, {
+                makhachhang,
+                masanpham,
+                mamau,
+                soluong,
+                gia,
+            });
+
+            if (response.status === 201) {
+                navigate("/cart");
+            } else {
+                toast.error("Không thể mua sản phẩm");
             }
         } catch (error) {
             if (
@@ -316,7 +356,7 @@ const ProductDetails = () => {
                             <p>Thêm vào giỏ</p>
                         </button>
 
-                        <button className="btn btn-primary button-buy col-6" onClick={() => handleAddToCart(true)}>
+                        <button className="btn btn-primary button-buy col-6" onClick={() => handleBuyNow()}>
                             Mua ngay
                         </button>
                     </div>
