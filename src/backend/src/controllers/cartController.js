@@ -142,20 +142,26 @@ const deleteCartItems = async (req, res) => {
 const deleteProductInCart = async (req, res) => {
     const { magiohang, masanpham, mamau } = req.params;
 
-    // Xóa sản phẩm khỏi chi tiết giỏ hàng
-    const deleteQuery = `DELETE FROM CHITIETGIOHANG WHERE magiohang = ? AND masanpham = ? AND mamau = ?`;
+    if (!magiohang || !masanpham || !mamau) {
+        return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ magiohang, masanpham và mamau' });
+    }
 
-    connection.query(deleteQuery, [magiohang, masanpham, mamau], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Lỗi khi xóa sản phẩm khỏi giỏ hàng' });
+    try {
+        const result = await connection.query(
+            `DELETE FROM CHITIETGIOHANG
+             WHERE magiohang = ? AND masanpham = ? AND mamau = ?`,
+            [magiohang, masanpham, mamau]
+        );
+
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Xóa sản phẩm khỏi giỏ hàng thành công' });
+        } else {
+            res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
         }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Sản phẩm không tìm thấy trong giỏ hàng' });
-        }
-
-        res.status(200).json({ message: 'Sản phẩm đã được xóa khỏi giỏ hàng thành công' });
-    });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi khi xóa sản phẩm khỏi giỏ hàng', error });
+    }
 }
 
 module.exports = {

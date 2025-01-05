@@ -99,22 +99,24 @@ function Cart() {
         }
     };
 
-    const handleRemoveItem = async (magiohang, masanpham, mamau) => {
+    const handleDelete = async (magiohang, masanpham, mamau) => {
         try {
             const response = await axiosInstance.delete(`${apiUrl}/cart/${magiohang}/${masanpham}/${mamau}`);
-            if (response.data.EC === 1) {
-                toast.success("Sản phẩm đã được xóa khỏi giỏ hàng");
-                fetchCartItems(infoUser.makhachhang);  // Refresh giỏ hàng sau khi xóa
+
+            // Kiểm tra nếu response trả về thành công
+            if (response.status === 200) {
+                // Xử lý sau khi xóa thành công
+                setCartItems(); // Cập nhật giỏ hàng sau khi xóa
             } else {
-                toast.error("Không thể xóa sản phẩm");
+                // Xử lý nếu response trả về thất bại
+                toast.error(response.data.message || "Xóa sản phẩm thất bại.");
             }
         } catch (error) {
-            console.error("Error removing item:", error);
-            toast.error("Đã xảy ra lỗi khi xóa sản phẩm");
+            // Xử lý lỗi khi gửi request
+            console.error("Lỗi khi xóa sản phẩm:", error);
+            toast.error("Đã xảy ra lỗi khi xóa sản phẩm khỏi giỏ hàng.");
         }
     };
-
-
 
     const calculateSubTotal = (items) => {
         const total = items.reduce((sum, item) => sum + item.gia * item.soluong, 0);
@@ -156,6 +158,9 @@ function Cart() {
         }));
     };
 
+
+    console.log(cartItems);
+
     return (
         <div className="container py-5">
             <h2 className="text-center mb-4">Giỏ Hàng</h2>
@@ -165,6 +170,7 @@ function Cart() {
                     {cartItems.length === 0 ? (
                         <p>Giỏ hàng của bạn đang trống</p>
                     ) : (
+
                         cartItems.map((item) => (
                             <div key={item.magiohang} className="card mb-3 shadow-sm">
                                 <div className="row g-0">
@@ -181,7 +187,7 @@ function Cart() {
                                                 <h5 className="card-title">{item.tensanpham}</h5>
                                                 <button
                                                     style={{ border: "none", background: "none" }}
-                                                    onClick={() => handleRemoveItem(item.magiohang, item.masanpham, item.mamau)}
+                                                    onClick={() => handleDelete(item.magiohang, item.masanpham, item.mamau)}
                                                 >
                                                     <i className="fas fa-trash-alt"></i>
                                                 </button>
@@ -201,9 +207,7 @@ function Cart() {
                                                     >
                                                         -
                                                     </button>
-                                                    <span className="item-soluong">
-                                                        {item.soluong}
-                                                    </span>
+                                                    <span className="item-soluong">{item.soluong}</span>
                                                     <button
                                                         className="ms-2"
                                                         onClick={() => handleIncrease(item.mamau)}
@@ -212,9 +216,7 @@ function Cart() {
                                                         +
                                                     </button>
                                                 </div>
-                                                <p className="card-text">
-                                                    Số lượng: {item.soluong}
-                                                </p>
+                                                <p className="card-text">Số lượng: {item.soluong}</p>
                                             </div>
                                         </div>
                                     </div>

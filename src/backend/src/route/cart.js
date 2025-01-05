@@ -6,6 +6,6 @@ const cartController = require("../controllers/cartController");
 router.get("/:makhachhang", cartController.getAllCartByCustomer);
 router.post("/", cartController.addToCart);
 router.post("/delete", cartController.deleteCartItems);
-router.delete("/:madonhang/:masanpham/:mamau", cartController.deleteProductInCart);
+router.delete("/:magiohang/:masanpham/:mamau", cartController.deleteProductInCart);
 
 module.exports = router;
