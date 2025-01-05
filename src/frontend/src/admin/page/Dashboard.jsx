@@ -84,6 +84,14 @@ const Dashboard = () => {
                     <li
                         onClick={(e) => {
                             e.preventDefault();
+                            onNavigateRouter("/admin/orders");
+                        }}
+                    >
+                        <a href="">Đơn hàng</a>
+                    </li>
+                    <li
+                        onClick={(e) => {
+                            e.preventDefault();
                             onLogout();
                         }}
                     >

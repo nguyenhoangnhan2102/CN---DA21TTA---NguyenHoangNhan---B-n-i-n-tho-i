@@ -139,29 +139,38 @@ const deleteCartItems = async (req, res) => {
     }
 };
 
+// const deleteProductInCart = async (req, res) => {
+//     const { magiohang, masanpham, mamau } = req.params;
+
+//     if (!magiohang || !masanpham || !mamau) {
+//         return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ magiohang, masanpham và mamau' });
+//     }
+
+//     try {
+//         const result = await connection.query(
+//             `DELETE FROM CHITIETGIOHANG
+//              WHERE magiohang = ? AND masanpham = ? AND mamau = ?`,
+//             [magiohang, masanpham, mamau]
+//         );
+
+//         if (result.affectedRows > 0) {
+//             res.status(200).json({ message: 'Xóa sản phẩm khỏi giỏ hàng thành công' });
+//         } else {
+//             res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Lỗi khi xóa sản phẩm khỏi giỏ hàng', error });
+//     }
+// }
+
 const deleteProductInCart = async (req, res) => {
     const { magiohang, masanpham, mamau } = req.params;
-
-    if (!magiohang || !masanpham || !mamau) {
-        return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ magiohang, masanpham và mamau' });
-    }
-
-    try {
-        const result = await connection.query(
-            `DELETE FROM CHITIETGIOHANG
+    await connection.query(
+        `DELETE FROM CHITIETGIOHANG
              WHERE magiohang = ? AND masanpham = ? AND mamau = ?`,
-            [magiohang, masanpham, mamau]
-        );
-
-        if (result.affectedRows > 0) {
-            res.status(200).json({ message: 'Xóa sản phẩm khỏi giỏ hàng thành công' });
-        } else {
-            res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Lỗi khi xóa sản phẩm khỏi giỏ hàng', error });
-    }
+        [magiohang, masanpham, mamau]
+    );
 }
 
 module.exports = {

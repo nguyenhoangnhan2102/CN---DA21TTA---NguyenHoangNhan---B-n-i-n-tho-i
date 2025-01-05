@@ -100,22 +100,10 @@ function Cart() {
     };
 
     const handleDelete = async (magiohang, masanpham, mamau) => {
-        try {
-            const response = await axiosInstance.delete(`${apiUrl}/cart/${magiohang}/${masanpham}/${mamau}`);
-
-            // Kiểm tra nếu response trả về thành công
-            if (response.status === 200) {
-                // Xử lý sau khi xóa thành công
-                setCartItems(); // Cập nhật giỏ hàng sau khi xóa
-            } else {
-                // Xử lý nếu response trả về thất bại
-                toast.error(response.data.message || "Xóa sản phẩm thất bại.");
-            }
-        } catch (error) {
-            // Xử lý lỗi khi gửi request
-            console.error("Lỗi khi xóa sản phẩm:", error);
-            toast.error("Đã xảy ra lỗi khi xóa sản phẩm khỏi giỏ hàng.");
-        }
+        await axiosInstance.delete(`${apiUrl}/cart/${magiohang}/${masanpham}/${mamau}`);
+        // Kiểm tra nếu response trả về thành công
+        toast.success("Xóa sản phẩm khỏi giỏ hàng thành công");
+        setCartItems([]); // Xóa giỏ hàng
     };
 
     const calculateSubTotal = (items) => {

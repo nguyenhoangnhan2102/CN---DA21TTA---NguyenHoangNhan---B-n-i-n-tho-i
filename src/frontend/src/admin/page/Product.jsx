@@ -86,7 +86,6 @@ const Product = () => {
             } else {
                 await createProduct(productData); // Gọi API tạo mới
             }
-
             setSelectedProduct(null);
             setOpenModal(false);
             getAllProductData(); // Lấy lại danh sách 
@@ -137,7 +136,6 @@ const Product = () => {
         .slice(indexOfFirstProduct, indexOfLastProduct);
 
     const totalPages = Math.ceil(products.length / productsPerPage);
-
 
     return (
         <>
