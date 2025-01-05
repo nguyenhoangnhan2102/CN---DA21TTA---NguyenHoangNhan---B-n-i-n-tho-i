@@ -192,7 +192,7 @@ const ColorProduct = () => {
 
                 <div className="btn-header-table">
                     <button className="btn btn-sm btn-success mr-2" onClick={handleCreate}>
-                        <i className="fa-solid fa-plus"></i> Thêm mới
+                        <i className="fa-solid fa-plus"></i> Thêm
                     </button>
                 </div>
 
@@ -236,14 +236,14 @@ const ColorProduct = () => {
                                             style={{ padding: "0.5rem", width: '100px' }}
                                         // onClick={() => handleEdit(colorproduct)}
                                         >
-                                            <i className="fa-solid fa-pen-to-square"></i>
+                                            <i className="fa-solid fa-pen-to-square"></i> Sửa
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
                                             style={{ width: '100px' }}
                                         //onClick={() => openModalDelete(colorproduct)}
                                         >
-                                            <i className="fa-solid fa-trash"></i>
+                                            <i className="fa-solid fa-trash"></i> Xóa
                                         </button>
                                     </td>
                                 </tr>

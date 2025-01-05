@@ -5,29 +5,36 @@ const getAllOrders = async (req, res) => {
     try {
         const [rows, fields] = await connection.query(`
         SELECT 
-      d.madonhang, 
-      d.makhachhang, 
-      d.ngaydat, 
-      d.trangthaidonhang, 
-      d.tongtien, 
-      d.hotenkhachhang, 
-      d.sdtkhachhang, 
-      d.diachigiaohang, 
-      d.created_at, 
-      d.update_at,
-      ctdh.masanpham, 
-      ctdh.mamau, 
-      ctdh.giatien, 
-      ctdh.soluong,
-      s.tensanpham, 
-      ms.tenmausanpham,
-      ms.mausachinhanh
-        FROM DONHANG d
-        LEFT JOIN CHITIETDONHANG ctdh ON d.madonhang = ctdh.madonhang
-        LEFT JOIN SANPHAM s ON ctdh.masanpham = s.masanpham
-        LEFT JOIN MAUSACSANPHAM ms ON ctdh.mamau = ms.mamau
-        ORDER BY d.ngaydat DESC;
-
+            d.madonhang, 
+            d.makhachhang, 
+            d.ngaydat, 
+            d.trangthaidonhang, 
+            d.tongtien, 
+            d.hotenkhachhang, 
+            d.sdtkhachhang, 
+            d.diachigiaohang, 
+            d.created_at, 
+            d.update_at,
+            ctdh.masanpham, 
+            ctdh.mamau, 
+            ctdh.giatien, 
+            ctdh.soluong,
+            s.tensanpham, 
+            ms.tenmausanpham,
+            ms.mausachinhanh
+        FROM 
+            DONHANG d
+        LEFT JOIN 
+            CHITIETDONHANG ctdh ON d.madonhang = ctdh.madonhang
+        LEFT JOIN 
+            SANPHAM s ON ctdh.masanpham = s.masanpham
+        LEFT JOIN 
+            MAUSACSANPHAM ms ON ctdh.mamau = ms.mamau
+        ORDER BY 
+            (d.trangthaidonhang = 0) DESC,
+            (d.trangthaidonhang = 1) DESC,
+            (d.trangthaidonhang = 2) DESC,
+            d.created_at DESC
     `);
         res.json(rows);
     } catch (err) {

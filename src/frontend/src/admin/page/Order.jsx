@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
-import { getAllOrders } from "../../service/orderService"; // Import API
+import { getAllOrders, updateStatus } from "../../service/orderService"; // Import API
 import moment from 'moment-timezone';
 import "../css/dashboard.scss";
 import {
@@ -48,23 +48,23 @@ const Order = () => {
         setOpenModal(true);
     };
 
-    // const confirmUpdateStatus = async () => {
-    //     if (selectedOrder && newStatus !== null) {
-    //         try {
-    //             const response = await updateStatus(selectedOrder.mahoadon, newStatus);
-    //             if (response.EC === 1) {
-    //                 toast.success(response.EM); // Hiển thị thông báo thành công
-    //                 getAllOrdersData(); // Lấy lại danh sách đơn hàng sau khi cập nhật
-    //                 setOpenModal(false); // Đóng modal
-    //             } else {
-    //                 toast.error(response.EM); // Hiển thị thông báo lỗi
-    //             }
-    //         } catch (err) {
-    //             toast.error("Lỗi cập nhật trạng thái đơn hàng"); // Hiển thị thông báo lỗi khi gọi API
-    //             console.error("Error occurred", err);
-    //         }
-    //     }
-    // };
+    const confirmUpdateStatus = async () => {
+        if (selectedOrder && newStatus !== null) {
+            try {
+                const response = await updateStatus(selectedOrder.madonhang, newStatus);
+                if (response.EC === 1) {
+                    toast.success(response.EM); // Hiển thị thông báo thành công
+                    getAllOrdersData(); // Lấy lại danh sách đơn hàng sau khi cập nhật
+                    setOpenModal(false); // Đóng modal
+                } else {
+                    toast.error(response.EM); // Hiển thị thông báo lỗi
+                }
+            } catch (err) {
+                toast.error("Lỗi cập nhật trạng thái đơn hàng"); // Hiển thị thông báo lỗi khi gọi API
+                console.error("Error occurred", err);
+            }
+        }
+    };
 
     const indexOfLast = currentPage * ordersPerPage;
     const indexOfFirst = indexOfLast - ordersPerPage;
@@ -233,7 +233,7 @@ const Order = () => {
                         Hủy
                     </button>
                     <button
-                        //onClick={confirmUpdateStatus}
+                        onClick={confirmUpdateStatus}
                         className="btn btn-primary"
                     >
                         Xác nhận

@@ -189,7 +189,7 @@ const Product = () => {
                 </div>
                 <div className="btn-header-table">
                     <button className="btn btn-sm btn-success mr-2" onClick={handleCreate} style={{ width: '70px' }}>
-                        <i className="fa-solid fa-plus"></i>
+                        <i className="fa-solid fa-plus"></i> Thêm
                     </button>
                 </div>
 
@@ -226,27 +226,27 @@ const Product = () => {
                                             alt={product.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    <td className="d-flex align-items-center justify-content-between gap-1" style={{ border: 'none' }}>
+                                    <td className="d-flex align-items-center justify-content-between gap-1 func-button" style={{ border: 'none' }}>
                                         <button
-                                            className="btn btn-sm btn-info"
+                                            className="btn btn-sm btn-secondary"
                                             style={{ padding: "0.5rem", width: '70px', height: '100%' }}
                                             onClick={() => handleViewDetails(product)}
                                         >
-                                            <i className="fa-regular fa-eye"></i>
+                                            <i className="fa-regular fa-eye"></i> Xem
                                         </button>
                                         <button
                                             className="btn btn-sm btn-primary"
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => handleEdit(product)}
                                         >
-                                            <i className="fa-solid fa-pen-to-square"></i>
+                                            <i className="fa-solid fa-pen-to-square"></i> Sửa
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
                                             style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => openModalDelete(product)}
                                         >
-                                            <i className="fa-solid fa-trash"></i>
+                                            <i className="fa-solid fa-trash"></i> Xóa
                                         </button>
                                     </td>
                                 </tr>
