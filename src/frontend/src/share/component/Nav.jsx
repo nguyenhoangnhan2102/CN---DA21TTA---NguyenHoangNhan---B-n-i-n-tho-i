@@ -108,6 +108,9 @@ const Header = () => {
                                                         alt="User Avatar"
                                                         src="/path/to/avatar.jpg"
                                                     />
+                                                    <span className="w-100 username">
+                                                        {UserData.hoten}
+                                                    </span>
                                                 </p>
                                             </li>
                                         </>

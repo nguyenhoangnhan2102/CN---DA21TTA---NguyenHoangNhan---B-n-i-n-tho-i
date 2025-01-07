@@ -59,7 +59,7 @@ const Home = () => {
             <Carouseles />
             <div className="container product-container my-4">
                 <div className="d-flex gap-3 my-4">
-                    <div className="col-1" style={{ width: "15%" }}>
+                    <div className="col-2 mt-2">
                         <input
                             type="text"
                             placeholder="Tìm kiếm"
@@ -68,7 +68,7 @@ const Home = () => {
                             className="form-control col-2"
                         />
                     </div>
-                    <div className="filter-category mb-2">
+                    <div className="col-1 ilter-category mt-2">
                         <select
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
