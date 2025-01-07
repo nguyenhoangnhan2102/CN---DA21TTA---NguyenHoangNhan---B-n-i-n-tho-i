@@ -32,7 +32,6 @@ function Cart() {
         }
     }, []);
 
-    // Hàm gọi API để lấy tất cả sản phẩm trong giỏ hàng
     const fetchCartItems = async (makhachhang) => {
         try {
             const response = await axiosInstance.get(`${apiUrl}/cart/${makhachhang}`);
@@ -57,12 +56,10 @@ function Cart() {
             toast.warning("Vui lòng nhập đầy đủ thông tin!!!");
             return;
         }
-
         if (cartItems.length === 0) {
             toast.warning("Giỏ hàng của bạn đang trống.");
             return;
         }
-
         try {
             const orderData = {
                 makhachhang: infoUser.makhachhang, // ID khách hàng từ JWT decode
@@ -77,17 +74,14 @@ function Cart() {
                     soluong: item.soluong
                 }))
             };
-
             const response = await axiosInstance.post(`${apiUrl}/orders`, orderData);
-
             if (response.data.success) {
 
                 await axiosInstance.post(`${apiUrl}/cart/delete`, {
                     makhachhang: infoUser.makhachhang
                 });
-
                 toast.success("Đặt hàng thành công!");
-                setCartItems([]); // Xóa giỏ hàng
+                setCartItems([]);
                 setTotalQuantity(0);
                 setSubTotal(0);
             } else {
@@ -101,9 +95,8 @@ function Cart() {
 
     const handleDelete = async (magiohang, masanpham, mamau) => {
         await axiosInstance.delete(`${apiUrl}/cart/${magiohang}/${masanpham}/${mamau}`);
-        // Kiểm tra nếu response trả về thành công
         toast.success("Xóa sản phẩm khỏi giỏ hàng thành công");
-        setCartItems([]); // Xóa giỏ hàng
+        setCartItems([]);
     };
 
     const calculateSubTotal = (items) => {
@@ -145,9 +138,6 @@ function Cart() {
             [name]: value,  // Cập nhật giá trị của trường tương ứng
         }));
     };
-
-
-    console.log(cartItems);
 
     return (
         <div className="container py-5">
