@@ -9,16 +9,13 @@ const getAllProduct = async (req, res) => {
             th.tenthuonghieu,
             GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
             GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham
         FROM
             SANPHAM sp
         LEFT JOIN
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
         LEFT JOIN
             MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
-        LEFT JOIN
-            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE
             sp.trangthai = 0
         GROUP BY
@@ -33,16 +30,13 @@ const getAllProduct = async (req, res) => {
             th.tenthuonghieu,
             GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
             GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham
         FROM
             SANPHAM sp
         LEFT JOIN
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
         LEFT JOIN
             MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
-        LEFT JOIN
-            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE
             sp.trangthai = 1
         GROUP BY
@@ -82,16 +76,13 @@ const getDetailProduct = async (req, res) => {
             th.tenthuonghieu,
             GROUP_CONCAT(DISTINCT ms.mamau) AS danhsachmamau,
             GROUP_CONCAT(DISTINCT ms.tenmausanpham) AS danhsachmausac,
-            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham,
-            GROUP_CONCAT(DISTINCT ha.hinhanhkhac) AS danhsachhinhanh
+            GROUP_CONCAT(DISTINCT ms.mausachinhanh) AS danhsachmausacsanpham
         FROM
             SANPHAM sp
         JOIN 
             THUONGHIEU th ON sp.mathuonghieu = th.mathuonghieu
         LEFT JOIN
             MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
-        LEFT JOIN
-            HINHANHSANPHAM ha ON sp.masanpham = ha.masanpham
         WHERE 
             sp.masanpham = ?
         GROUP BY
@@ -368,7 +359,31 @@ const updateStatusProduct = async (req, res) => {
     }
 };
 
+const bestSellingProducts = async (req, res) => {
+    try {
+        const bestSellingProducts = await ChiTietDonHang.findAll({
+            attributes: [
+                'masanpham',
+                [Sequelize.fn('SUM', Sequelize.col('soluong')), 'totalSold']
+            ],
+            include: [{
+                model: SanPham,
+                attributes: ['tensanpham', 'giasanpham', 'hinhanhchinh'],
+            }],
+            group: ['masanpham'],
+            order: [[Sequelize.fn('SUM', Sequelize.col('soluong')), 'DESC']],
+            limit: 10, // Lấy top 10 sản phẩm bán chạy nhất
+        });
 
+        res.json({
+            success: true,
+            data: bestSellingProducts,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
 
 module.exports = {
     getAllProduct,
@@ -377,4 +392,5 @@ module.exports = {
     createProduct,
     updateProduct,
     updateStatusProduct,
+    bestSellingProducts,
 }

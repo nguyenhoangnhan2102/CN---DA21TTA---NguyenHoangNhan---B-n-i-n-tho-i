@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import Carouseles from "../../share/component/Carousel";
 import "../style/Home.scss";
@@ -12,6 +11,7 @@ const Home = () => {
     const [manufacturers, setListManufacturer] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedManufacturer, setSelectedManufacturer] = useState("");
+    const [visibleCount, setVisibleCount] = useState(10); // Số lượng sản phẩm hiển thị ban đầu
 
     useEffect(() => {
         fetchListProduct();
@@ -23,8 +23,6 @@ const Home = () => {
             const response = await getAllProducts();
             if (response.EC === 1) {
                 setListProduct(response.DT.activeProducts);
-                console.log("setListProduct", response.DT.activeProducts)
-
             } else {
                 console.error("Failed to fetch");
             }
@@ -38,8 +36,6 @@ const Home = () => {
             const response = await getAllManufacturer();
             if (response.EC === 1) {
                 setListManufacturer(response.DT.activeManufacturer);
-                console.log("setSelectedManufacturer", response.DT.activeManufacturer)
-
             } else {
                 console.error("Failed to fetch");
             }
@@ -48,11 +44,19 @@ const Home = () => {
         }
     };
 
-    const filteredProducts = products.filter(item => {
-        const matchesCategory = selectedManufacturer ? item.tenthuonghieu === selectedManufacturer : true;
-        const matchesSearch = item.tensanpham.toLowerCase().includes(searchTerm.toLowerCase());
+    const filteredProducts = products.filter((item) => {
+        const matchesCategory = selectedManufacturer
+            ? item.tenthuonghieu === selectedManufacturer
+            : true;
+        const matchesSearch = item.tensanpham
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
         return matchesCategory && matchesSearch;
     });
+
+    const handleShowMore = () => {
+        setVisibleCount((prev) => prev + 10); // Tăng số lượng sản phẩm hiển thị thêm 10
+    };
 
     return (
         <>
@@ -75,38 +79,58 @@ const Home = () => {
                             className="form-select"
                         >
                             <option value="">Thể loại</option>
-                            {manufacturers && manufacturers.map((manu, index) => (
-                                <option key={index} value={manu.tenthuonghieu}>{manu.tenthuonghieu}</option>
-                            ))}
+                            {manufacturers &&
+                                manufacturers.map((manu, index) => (
+                                    <option key={index} value={manu.tenthuonghieu}>
+                                        {manu.tenthuonghieu}
+                                    </option>
+                                ))}
                         </select>
                     </div>
                 </div>
 
                 <div className="product-list">
-                    {filteredProducts && filteredProducts.length > 0 ? (filteredProducts.map((product, index) => (
-                        <Link to={`/product-details/${product.masanpham}`} className="text-decoration-none ">
-                            <div key={product.masanpham} className="product-card">
-
-                                <img
-                                    src={`${imgURL}${product.hinhanhchinh}`}
-                                    className="product-image"
-                                    alt={product.tensanpham || "Hình ảnh sản phẩm"}
-                                />
-                                <h3 className="product-name mt-2">{product.tensanpham}</h3>
-                                <p className="product-price mt-2">
-                                    <span className="current-price">{product.giasanpham}đ</span>
-                                </p>
-                                <button className="text-decoration-none  buy-now-button w-100">
-                                    Mua ngay
-                                </button>
-                            </div>
-                        </Link>
-                    ))
+                    {filteredProducts && filteredProducts.length > 0 ? (
+                        filteredProducts.slice(0, visibleCount).map((product, index) => (
+                            <Link
+                                to={`/product-details/${product.masanpham}`}
+                                className="text-decoration-none "
+                                key={product.masanpham}
+                            >
+                                <div className="product-card">
+                                    <img
+                                        src={`${imgURL}${product.hinhanhchinh}`}
+                                        className="product-image"
+                                        alt={product.tensanpham || "Hình ảnh sản phẩm"}
+                                    />
+                                    <h3 className="product-name mt-2">{product.tensanpham}</h3>
+                                    <p className="product-price mt-2">
+                                        <span className="current-price">
+                                            {product.giasanpham}đ
+                                        </span>
+                                    </p>
+                                    <button className="text-decoration-none buy-now-button w-100">
+                                        Mua ngay
+                                    </button>
+                                </div>
+                            </Link>
+                        ))
                     ) : (
                         <div className="col-12">"Không có sản phẩm"</div>
-                    )
-                    }
+                    )}
                 </div>
+                {visibleCount < filteredProducts.length && (
+                    <div className="text-center">
+                        <div
+                            className="pb-4"
+                            style={{ fontSize: '18px' }}
+                            onClick={handleShowMore}
+                        >
+                            Xem thêm
+                            <i class="fa-solid fa-caret-down ms-2"></i>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     );
