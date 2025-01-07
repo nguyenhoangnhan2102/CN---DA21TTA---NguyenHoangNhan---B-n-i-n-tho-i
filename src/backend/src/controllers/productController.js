@@ -360,29 +360,30 @@ const updateStatusProduct = async (req, res) => {
 };
 
 const bestSellingProducts = async (req, res) => {
-    try {
-        const bestSellingProducts = await ChiTietDonHang.findAll({
-            attributes: [
-                'masanpham',
-                [Sequelize.fn('SUM', Sequelize.col('soluong')), 'totalSold']
-            ],
-            include: [{
-                model: SanPham,
-                attributes: ['tensanpham', 'giasanpham', 'hinhanhchinh'],
-            }],
-            group: ['masanpham'],
-            order: [[Sequelize.fn('SUM', Sequelize.col('soluong')), 'DESC']],
-            limit: 10, // Lấy top 10 sản phẩm bán chạy nhất
-        });
+    const query = `
+        SELECT 
+            sp.masanpham, 
+            sp.tensanpham, 
+            sp.giasanpham, 
+            SUM(ctdh.soluong) AS total_sold 
+        FROM 
+            CHITIETDONHANG ctdh
+        JOIN 
+            SANPHAM sp ON ctdh.masanpham = sp.masanpham
+        GROUP BY 
+            sp.masanpham, sp.tensanpham, sp.giasanpham
+        ORDER BY 
+            total_sold DESC;
+    `;
 
-        res.json({
-            success: true,
-            data: bestSellingProducts,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Lỗi khi lấy dữ liệu:', err);
+            res.status(500).json({ error: 'Lỗi khi lấy dữ liệu' });
+            return;
+        }
+        res.json(results);
+    });
 }
 
 module.exports = {

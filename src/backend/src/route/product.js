@@ -15,4 +15,6 @@ router.delete("/:masanpham", productController.deleteProduct);
 
 router.put("/:masanpham/trangthai", productController.updateStatusProduct);
 
+router.get("/best-selling-products", productController.bestSellingProducts)
+
 module.exports = router;
