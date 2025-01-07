@@ -14,17 +14,20 @@ import {
     DialogActions,
 } from "@mui/material";
 import { toast } from 'react-toastify';
+import { getAllManufacturer } from "../../service/manufacturerService";
 
 const imgURL = process.env.REACT_APP_IMG_URL;
 
 const Product = () => {
     const [products, setProducts] = useState([]);
+    const [manufacturers, setListManufacturer] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [oldImgUrl, setImgUrl] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const [isDelete, checkDelete] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
+    const [selectedManufacturer, setSelectedManufacturer] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
@@ -32,6 +35,7 @@ const Product = () => {
 
     useEffect(() => {
         getAllProductData();
+        getAllManufacturerData();
     }, []);
 
     const getAllProductData = async () => {
@@ -45,6 +49,21 @@ const Product = () => {
             }
         } catch (err) {
             console.error("Đã xảy ra lỗi", err);
+        }
+    };
+
+    const getAllManufacturerData = async () => {
+        try {
+            const response = await getAllManufacturer();
+            if (response.EC === 1) {
+                setListManufacturer(response.DT.activeManufacturer);
+                console.log("setListManufacturer", response.DT.activeManufacturer)
+
+            } else {
+                console.error("Failed to fetch");
+            }
+        } catch (err) {
+            console.error("Error occurred", err);
         }
     };
 
@@ -127,15 +146,25 @@ const Product = () => {
         setCurrentPage(1);
     };
 
+    const handleFilterByManufacturer = (e) => {
+        setSelectedManufacturer(e.target.value);
+        setCurrentPage(1);
+    };
+
+
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
     const currentProducts = products
-        .filter(
-            (product) =>
-                product.tensanpham.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        .filter((product) => {
+            const matchesSearchTerm = product.tensanpham.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesManufacturer = selectedManufacturer
+                ? product.tenthuonghieu === selectedManufacturer
+                : true;
+            return matchesSearchTerm && matchesManufacturer;
+        })
         .slice(indexOfFirstProduct, indexOfLastProduct);
+
 
     const totalPages = Math.ceil(products.length / productsPerPage);
 
@@ -167,26 +196,41 @@ const Product = () => {
                 </Dialog>
                 <div className="group-header">
                     <h2>Danh sách</h2>
-                    <div className="filterGroup" style={{ position: 'relative' }}>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Tìm kiếm"
-                            value={searchTerm}
-                            onChange={handleSearch}
-                            style={{ paddingRight: '30px' }} // Chừa khoảng trống cho icon
-                        />
-                        <i
-                            className="fa-solid fa-magnifying-glass"
-                            style={{
-                                position: 'absolute',
-                                right: '10px',
-                                top: '50%',
-                                transform: 'translateY(-50%)',
-                                pointerEvents: 'none',
-                                color: '#000'
-                            }}
-                        ></i>
+                    <div className="d-flex gap-2">
+                        <div className="filterGroup w-100" style={{ position: 'relative' }}>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Tìm kiếm"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                                style={{ paddingRight: '30px' }} // Chừa khoảng trống cho icon
+                            />
+                            <i
+                                className="fa-solid fa-magnifying-glass"
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    pointerEvents: 'none',
+                                    color: '#000'
+                                }}
+                            ></i>
+                        </div>
+                        <div className="w-75">
+                            <select
+                                value={selectedManufacturer}
+                                onChange={handleFilterByManufacturer}
+                                className="form-select"
+                            >
+                                <option value="">Thương hiệu</option>
+                                {manufacturers && manufacturers.map((manu, index) => (
+                                    <option key={index} value={manu.tenthuonghieu}>{manu.tenthuonghieu}</option>
+                                ))}
+                            </select>
+
+                        </div>
                     </div>
                 </div>
                 <div className="btn-header-table">

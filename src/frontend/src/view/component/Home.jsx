@@ -11,7 +11,7 @@ const Home = () => {
     const [products, setListProduct] = useState([]);
     const [manufacturers, setListManufacturer] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedManufacturer, setSelectedManufacturer] = useState("");
 
     useEffect(() => {
         fetchListProduct();
@@ -38,7 +38,7 @@ const Home = () => {
             const response = await getAllManufacturer();
             if (response.EC === 1) {
                 setListManufacturer(response.DT.activeManufacturer);
-                console.log("setListManufacturer", response.DT.activeManufacturer)
+                console.log("setSelectedManufacturer", response.DT.activeManufacturer)
 
             } else {
                 console.error("Failed to fetch");
@@ -49,7 +49,7 @@ const Home = () => {
     };
 
     const filteredProducts = products.filter(item => {
-        const matchesCategory = selectedCategory ? item.tenthuonghieu === selectedCategory : true;
+        const matchesCategory = selectedManufacturer ? item.tenthuonghieu === selectedManufacturer : true;
         const matchesSearch = item.tensanpham.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesCategory && matchesSearch;
     });
@@ -68,10 +68,10 @@ const Home = () => {
                             className="form-control col-2"
                         />
                     </div>
-                    <div className="col-1 ilter-category mt-2">
+                    <div className="col-2 mt-2">
                         <select
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            value={selectedManufacturer}
+                            onChange={(e) => setSelectedManufacturer(e.target.value)}
                             className="form-select"
                         >
                             <option value="">Thể loại</option>
@@ -83,9 +83,10 @@ const Home = () => {
                 </div>
 
                 <div className="product-list">
-                    {filteredProducts.map((product, index) => (
-                        <div key={product.masanpham} className="product-card">
-                            <Link to={`/product-details/${product.masanpham}`} className="text-decoration-none ">
+                    {filteredProducts && filteredProducts.length > 0 ? (filteredProducts.map((product, index) => (
+                        <Link to={`/product-details/${product.masanpham}`} className="text-decoration-none ">
+                            <div key={product.masanpham} className="product-card">
+
                                 <img
                                     src={`${imgURL}${product.hinhanhchinh}`}
                                     className="product-image"
@@ -98,10 +99,13 @@ const Home = () => {
                                 <button className="text-decoration-none  buy-now-button w-100">
                                     Mua ngay
                                 </button>
-                            </Link>
-                        </div>
-
-                    ))}
+                            </div>
+                        </Link>
+                    ))
+                    ) : (
+                        <div className="col-12">"Không có sản phẩm"</div>
+                    )
+                    }
                 </div>
             </div>
         </>

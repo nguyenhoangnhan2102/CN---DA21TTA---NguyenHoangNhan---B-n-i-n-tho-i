@@ -189,15 +189,15 @@ function Cart() {
                                                     style={{ border: "1px solid #ccc", height: "40px" }}
                                                 >
                                                     <button
-                                                        className="btn me-2"
+                                                        className="p-3"
                                                         onClick={() => handleDecrease(item.mamau)}
                                                         style={{ border: "none", background: "none" }}
                                                     >
                                                         -
                                                     </button>
-                                                    <span className="item-soluong">{item.soluong}</span>
+                                                    <span className="item-soluong p-3">{item.soluong}</span>
                                                     <button
-                                                        className="ms-2"
+                                                        className="p-3"
                                                         onClick={() => handleIncrease(item.mamau)}
                                                         style={{ border: "none", background: "none" }}
                                                     >
@@ -217,7 +217,7 @@ function Cart() {
                 {/* Phần thông tin người mua và tóm tắt */}
                 <div className="col-md-4">
                     <div className="card p-3 shadow-sm mb-3">
-                        <h4 className="text-center mb-3">Thông Tin Người Mua</h4>
+                        <h4 className="text-center mb-3">Thông tin người mua</h4>
                         <form>
                             <TextField
                                 fullWidth
@@ -251,7 +251,7 @@ function Cart() {
                         </form>
                     </div>
                     <div className="card p-3 shadow-sm">
-                        <h4 className="text-center mb-3">Tóm Tắt Đơn Hàng</h4>
+                        <h4 className="text-center mb-3">Tóm tắt đơn hàng</h4>
                         <p>
                             <strong>Số lượng sản phẩm:</strong> {totalQuantity}
                         </p>

@@ -83,7 +83,7 @@ const Order = () => {
         <div>
             <div className="group-header">
                 <h2>Danh sách</h2>
-                <div className="filterGroup">
+                <div className="filterGroup" style={{ position: 'relative' }}>
                     <input
                         type="text"
                         className="form-control"
@@ -91,6 +91,17 @@ const Order = () => {
                         value={searchTerm}
                         onChange={handleSearch}
                     />
+                    <i
+                        className="fa-solid fa-magnifying-glass"
+                        style={{
+                            position: 'absolute',
+                            right: '10px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            pointerEvents: 'none',
+                            color: '#000'
+                        }}
+                    ></i>
                 </div>
             </div>
             <table className="table table-hover">

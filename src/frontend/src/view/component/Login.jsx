@@ -38,14 +38,15 @@ const Login = () => {
             Cookies.set("accessToken", accessToken, { expires: 1 }); // Token tồn tại trong 1 ngày
             loginIs(); // Cập nhật trạng thái đăng nhập
 
-            // Kiểm tra role và điều hướng
-            if (user.role === 1) {
-                toast.success("Đăng nhập thành công");
-                navigate("/admin"); // Điều hướng đến trang quản trị
-            } else {
-                toast.success("Đăng nhập thành công");
-                navigate("/"); // Điều hướng đến trang chủ
-            }
+            // if (user.role === 1) {
+            //     toast.success("Đăng nhập thành công");
+            //     navigate("/admin"); // Điều hướng đến trang quản trị
+            // } else {
+            //     toast.success("Đăng nhập thành công");
+            //     navigate("/"); // Điều hướng đến trang chủ
+
+            toast.success("Đăng nhập thành công");
+            navigate("/"); // Điều hướng đến trang quản trị
         } catch (error) {
             setErrorMessage(error.response?.data?.EM || "Đăng nhập thất bại");
         }

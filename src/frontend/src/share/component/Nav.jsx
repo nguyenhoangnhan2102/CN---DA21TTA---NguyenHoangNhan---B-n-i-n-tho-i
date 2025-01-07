@@ -1,5 +1,5 @@
 import { Container, Form, Nav, Navbar } from 'react-bootstrap/';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MdOutlineSmartphone } from "react-icons/md";
 import { Avatar, Menu, MenuItem, Button } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
@@ -18,6 +18,7 @@ const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [UserData, setUserData] = useState("");
     const { isLoggedIn, logoutIs } = useAuth();
+    const location = useLocation();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -88,12 +89,14 @@ const Header = () => {
                             navbarScroll
                         >
                         </Nav>
-                        <Form className="d-flex align-items-center">
+                        <Form className="d-flex align-items-center justify-content-center">
                             <Link
                                 to={`/cart`}
-                                className="text-decoration-none text-dark">
+                                className="text-decoration-none text-dark button-cart "
+                                style={{ border: 'none', backgroundColor: 'none' }}
+                            >
                                 <i
-                                    className="fa-solid fa-cart-shopping me-4 d-flex align-items-center"
+                                    className="fa-solid fa-cart-shopping me-4 d-flex align-items-center justify-content-center"
                                     style={{ fontSize: "25px", cursor: 'pointer' }}>
                                 </i>
                             </Link>
@@ -122,8 +125,9 @@ const Header = () => {
                             ) : (
                                 <>
                                     <div className="nav navbar-right col-3 w-75">
-                                        <Link to={`/login`} className='btn btn-primary'>Đăng nhập</Link>
-                                    </div></>
+                                        <Link to={`/login`} className='button-login text-dark'>Đăng nhập</Link>
+                                    </div>
+                                </>
                             )}
                         </Form>
                     </Navbar.Collapse>
