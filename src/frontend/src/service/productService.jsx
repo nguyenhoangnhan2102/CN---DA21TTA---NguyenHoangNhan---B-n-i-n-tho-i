@@ -38,12 +38,12 @@ export const updateProduct = async (masanpham, product) => {
     }
 };
 
-const updateStatus = async (masanpham, trangthai) => {
+export const updateStatus = async (masanpham, status) => {
     try {
-        const response = await axiosInstance.put(`${apiProduct}/${masanpham}/trangthai`, { trangthai }); // Đảm bảo rằng { trangthai } có giá trị là 0 hoặc true/false
+        const response = await axiosInstance.put(`${apiProduct}/${masanpham}/trangthai`, { trangthai: status });
         return response.data;
     } catch (error) {
-        console.error("Error updating product status:", error);
+        console.error('Error updating order status:', error);
         throw error;
     }
 };

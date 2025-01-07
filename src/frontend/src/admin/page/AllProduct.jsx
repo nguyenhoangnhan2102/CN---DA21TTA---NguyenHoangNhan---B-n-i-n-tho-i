@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllProducts } from "../../service/productService";
+import { getAllProducts, updateStatus } from "../../service/productService";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../css/product.scss';
 import {
@@ -23,6 +23,9 @@ const AllProduct = () => {
     const [currentInactiveProductPage, setInactiveProductCurrentPage] = useState(1);
     const [searchInactiveProduct, setSearchInactiveProduct] = useState("");
     const inactiveProductsPerPage = 10;
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [newStatus, setNewStatus] = useState(null);
 
     useEffect(() => {
         getAllProductData();
@@ -53,20 +56,49 @@ const AllProduct = () => {
         }
     };
 
-    const handleUpdateStatus = async (productId, newStatus) => {
+    const handleActivateProduct = async (masanpham) => {
         try {
-            const response = await updateSta(productId, newStatus); // newStatus sẽ là 0
-            if (response) {
-                toast.success("Cập nhật trạng thái sản phẩm thành công!");
-                getAllProductData(); // Làm mới danh sách sản phẩm
+            const response = await updateStatus(masanpham, 1); // Assuming 1 is for active status
+            if (response.EC === 1) {
+                toast.success("Sản phẩm đã được kích hoạt.");
+                getAllProductData();  // Reload product data
+            } else {
+                toast.error("Lỗi kích hoạt sản phẩm.");
             }
         } catch (error) {
-            toast.error("Đã xảy ra lỗi khi cập nhật trạng thái sản phẩm");
+            toast.error("Có lỗi xảy ra khi kích hoạt sản phẩm.");
         }
     };
 
+    const handleUpdateStatus = (inactiveproducts, status) => {
+        setSelectedOrder(inactiveproducts);
+        setNewStatus(status);
+        setOpenModal(true);
+    };
 
+    const handleUpdateStatusActive = (activeproduct, status) => {
+        setSelectedOrder(activeproduct);
+        setNewStatus(status);
+        setOpenModal(true);
+    };
 
+    const confirmUpdateStatus = async () => {
+        if (selectedOrder && newStatus !== null) {
+            try {
+                const response = await updateStatus(selectedOrder.masanpham, newStatus);
+                if (response.EC === 1) {
+                    toast.success(response.EM); // Hiển thị thông báo thành công
+                    getAllProductData(); // Lấy lại danh sách đơn hàng sau khi cập nhật
+                    setOpenModal(false); // Đóng modal
+                } else {
+                    toast.error(response.EM); // Hiển thị thông báo lỗi
+                }
+            } catch (err) {
+                toast.error("Lỗi cập nhật trạng thái đơn hàng"); // Hiển thị thông báo lỗi khi gọi API
+                console.error("Error occurred", err);
+            }
+        }
+    };
 
     const handleSearchActiveProduct = (e) => {
         setSearchActiveProduct(e.target.value);
@@ -105,29 +137,6 @@ const AllProduct = () => {
     return (
         <>
             <div>
-                {/* <Dialog open={openDelete} onClose={handleCloseDelete}>
-                    <DialogTitle>Xác nhận xóa sản phẩm</DialogTitle>
-                    <DialogContent>
-                        <Typography>
-                            Bạn có chắc chắn muốn xóa "{selectedProduct?.tensanpham}" không?
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <div
-                            // onClick={handleCloseDelete}
-                            color="primary"
-                            className="btn btn-danger"
-                        >
-                            <i className="fa-solid fa-x"></i> Không
-                        </div>
-                        <div
-                            // onClick={handleDeleteProduct}
-                            className="btn btn-success"
-                        >
-                            <i className="fa-solid fa-check"></i> Có
-                        </div>
-                    </DialogActions>
-                </Dialog> */}
                 <div className="group-header">
                     <h2>Danh sách sản phẩm đang hoạt động</h2>
                     <div className="filterGroup" style={{ position: 'relative' }}>
@@ -152,12 +161,6 @@ const AllProduct = () => {
                         ></i>
                     </div>
                 </div>
-                {/* <div className="btn-header-table">
-                    <button className="btn btn-sm btn-success mr-2" onClick={handleCreate}>
-                        <i className="fa-solid fa-plus"></i> Thêm mới
-                    </button>
-                </div> */}
-
                 <table className="table table-hover">
                     <thead className="thead-dark">
                         <tr className="table-title">
@@ -170,6 +173,7 @@ const AllProduct = () => {
                             <th scope="col">RAM</th>
                             <th scope="col">Dung lượng</th>
                             <th scope="col">Hình ảnh</th>
+                            <th scope="col">Chức năng</th>
                             {/* <th scope="col">Hành động</th> */}
                         </tr>
                     </thead>
@@ -193,29 +197,14 @@ const AllProduct = () => {
                                             alt={activeproduct.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    {/* <td className="d-flex align-items-center justify-content-between gap-1">
+                                    <td className="d-flex justify-content-center" style={{ border: 'none' }}>
                                         <button
-                                            className="btn btn-sm btn-info"
-                                            style={{ padding: "0.5rem", width: '70px' }}
-                                            onClick={() => handleViewDetails(activeproduct)}
+                                            className="btn btn-sm btn-success w-75"
+                                            onClick={() => handleUpdateStatusActive(activeproduct, 1)}
                                         >
-                                            <i className="fa-regular fa-eye"></i>
+                                            Ẩn
                                         </button>
-                                        <button
-                                            className="btn btn-sm btn-primary"
-                                            style={{ padding: "0.5rem", width: '70px' }}
-                                            onClick={() => handleEdit(activeproduct)}
-                                        >
-                                            <i className="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-danger"
-                                            style={{ padding: "0.5rem", width: '70px' }}
-                                            onClick={() => openModalDelete(activeproduct)}
-                                        >
-                                            <i className="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td> */}
+                                    </td>
                                 </tr>
                             ))
                         ) : (
@@ -268,21 +257,6 @@ const AllProduct = () => {
                     </ul>
                 </nav>
             </div>
-            {/* <ModalProduct
-                activeproduct={selectedProduct}
-                open={openModal}
-                onSave={handleSave}
-                onClose={() => setOpenModal(false)}
-            />
-            <ProductDetailModal
-                activeproduct={selectedProduct}
-                open={openDetailModal}
-                onClose={() => setOpenDetailModal(false)}
-            /> */}
-
-
-
-
 
             <div className="mt-5">
                 <div className="group-header">
@@ -345,12 +319,12 @@ const AllProduct = () => {
                                             alt={inactiveproduct.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
-                                    <td>
+                                    <td className="d-flex justify-content-center" style={{ border: 'none' }}>
                                         <button
-                                            className="btn btn-sm btn-success"
-                                            onClick={() => handleUpdateStatus(inactiveproduct.masanpham, 0)} // Gửi giá trị 0
+                                            className="btn btn-sm btn-success w-75 "
+                                            onClick={() => handleUpdateStatus(inactiveproduct, 0)}
                                         >
-                                            Kích hoạt
+                                            Hiện
                                         </button>
                                     </td>
 
@@ -406,6 +380,28 @@ const AllProduct = () => {
                     </ul>
                 </nav>
             </div>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+                <DialogTitle>Xác nhận cập nhật trạng thái</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1">
+                        Bạn chắc chắn muốn <strong>{newStatus === 0 ? 'Hiện' : 'Ẩn'}</strong> sản phẩm này không?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <button
+                        onClick={() => setOpenModal(false)}
+                        className="btn btn-danger"
+                    >
+                        Hủy
+                    </button>
+                    <button
+                        onClick={confirmUpdateStatus}
+                        className="btn btn-primary"
+                    >
+                        Xác nhận
+                    </button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

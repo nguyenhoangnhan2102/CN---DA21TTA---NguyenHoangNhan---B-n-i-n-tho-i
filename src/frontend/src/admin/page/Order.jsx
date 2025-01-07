@@ -160,7 +160,7 @@ const Order = () => {
                                         )}
                                     </span>
                                 </td>
-                                <td className="d-flex gap-2 btn-status">
+                                <td className="d-flex gap-2 btn-status" style={{ border: 'none' }}>
                                     <button
                                         className="btn btn-primary btn-sm"
                                         style={{ width: '50px', height: '35px' }}

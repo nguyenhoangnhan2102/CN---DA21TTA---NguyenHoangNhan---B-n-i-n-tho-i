@@ -332,27 +332,40 @@ const updateStatusProduct = async (req, res) => {
     const { masanpham } = req.params; // Product ID
     const { trangthai } = req.body; // New status
 
-    console.log("Received data:", req.body); // Xem dữ liệu nhận được từ frontend
-
-    // Validate input
-    if (typeof trangthai !== 'boolean' && trangthai !== 0 && trangthai !== 1) {
-        return res.status(400).json({ message: 'Invalid trangthai value. Must be true, false, 0, or 1.' });
+    if (trangthai === undefined || !Number.isInteger(trangthai)) {
+        return res.status(400).json({
+            EM: "Trạng thái sản phẩm không hợp lệ",
+            EC: -1,
+            DT: [],
+        });
     }
+    try {
+        // Update query
+        const [updateResult] = await connection.execute(
+            "UPDATE SANPHAM SET trangthai = ? WHERE masanpham = ?",
+            [trangthai, masanpham]
+        );
 
-    // Update query
-    const query = 'UPDATE SANPHAM SET trangthai = ?, update_at = NOW() WHERE masanpham = ?';
-    connection.query(query, [trangthai, masanpham], (err, results) => {
-        if (err) {
-            console.error('Error updating product status:', err);
-            return res.status(500).json({ message: 'Internal server error' });
+        if (updateResult.affectedRows === 0) {
+            return res.status(404).json({
+                EM: "Không tìm thấy sản phẩm",
+                EC: 0,
+                DT: [],
+            });
         }
 
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        res.status(200).json({ message: 'Product status updated successfully' });
-    });
+        return res.status(200).json({
+            EM: "Cập nhật trạng thái thành công",
+            EC: 1,
+            DT: updateResult,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            EM: `Lỗi cập nhật trạng thái: ${err.message}`,
+            EC: -1,
+            DT: [],
+        });
+    }
 };
 
 
