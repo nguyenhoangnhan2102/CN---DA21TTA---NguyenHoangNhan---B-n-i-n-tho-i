@@ -44,6 +44,7 @@ const orderRouter = require("./src/route/order");
 const fileRouter = require("./src/route/fileService");
 const colorProductRouter = require("./src/route/colorProduct");
 const cartRouter = require("./src/route/cart");
+const revenueRouter = require("./src/route/revenue");
 
 app.use("/api", userRouter);
 app.use("/api", fileRouter);
@@ -52,6 +53,7 @@ app.use("/api/manufactureres", manufacturerRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/colorproducts", colorProductRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/revenue", revenueRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

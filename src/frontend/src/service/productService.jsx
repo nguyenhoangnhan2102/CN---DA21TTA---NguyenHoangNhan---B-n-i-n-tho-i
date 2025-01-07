@@ -38,6 +38,17 @@ export const updateProduct = async (masanpham, product) => {
     }
 };
 
+const updateStatus = async (masanpham, trangthai) => {
+    try {
+        const response = await axiosInstance.put(`${apiProduct}/${masanpham}/trangthai`, { trangthai }); // Đảm bảo rằng { trangthai } có giá trị là 0 hoặc true/false
+        return response.data;
+    } catch (error) {
+        console.error("Error updating product status:", error);
+        throw error;
+    }
+};
+
+
 export const deleteProduct = async (masanpham) => {
     try {
         const response = await axiosInstance.delete(`${apiProduct}/${masanpham}`);

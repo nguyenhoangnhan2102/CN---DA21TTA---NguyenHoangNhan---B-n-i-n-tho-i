@@ -13,4 +13,6 @@ router.put("/:masanpham", productController.updateProduct);
 
 router.delete("/:masanpham", productController.deleteProduct);
 
+router.put("/:masanpham/trangthai", productController.updateStatusProduct);
+
 module.exports = router;

@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllProducts, deleteProduct, createProduct, updateProduct } from "../../service/productService";
-import ModalProduct from "../../modal/modalProduct";
-import ProductDetailModal from "../../modal/detailProduct";
-import { uploadSingleFile } from "../../service/fileService";
+import { getAllProducts } from "../../service/productService";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../css/product.scss';
 import {
@@ -55,6 +52,21 @@ const AllProduct = () => {
             console.error("Đã xảy ra lỗi", err);
         }
     };
+
+    const handleUpdateStatus = async (productId, newStatus) => {
+        try {
+            const response = await updateSta(productId, newStatus); // newStatus sẽ là 0
+            if (response) {
+                toast.success("Cập nhật trạng thái sản phẩm thành công!");
+                getAllProductData(); // Làm mới danh sách sản phẩm
+            }
+        } catch (error) {
+            toast.error("Đã xảy ra lỗi khi cập nhật trạng thái sản phẩm");
+        }
+    };
+
+
+
 
     const handleSearchActiveProduct = (e) => {
         setSearchActiveProduct(e.target.value);
@@ -309,6 +321,7 @@ const AllProduct = () => {
                             <th scope="col">RAM</th>
                             <th scope="col">Dung lượng</th>
                             <th scope="col">Hình ảnh</th>
+                            <th scope="col">Chức năng</th>
                             {/* <th scope="col">Hành động</th> */}
                         </tr>
                     </thead>
@@ -332,6 +345,15 @@ const AllProduct = () => {
                                             alt={inactiveproduct.tensanpham || "Hình ảnh sản phẩm"}
                                         />
                                     </td>
+                                    <td>
+                                        <button
+                                            className="btn btn-sm btn-success"
+                                            onClick={() => handleUpdateStatus(inactiveproduct.masanpham, 0)} // Gửi giá trị 0
+                                        >
+                                            Kích hoạt
+                                        </button>
+                                    </td>
+
                                 </tr>
                             ))
                         ) : (

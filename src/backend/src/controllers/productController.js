@@ -328,6 +328,33 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const updateStatusProduct = async (req, res) => {
+    const { masanpham } = req.params; // Product ID
+    const { trangthai } = req.body; // New status
+
+    console.log("Received data:", req.body); // Xem dữ liệu nhận được từ frontend
+
+    // Validate input
+    if (typeof trangthai !== 'boolean' && trangthai !== 0 && trangthai !== 1) {
+        return res.status(400).json({ message: 'Invalid trangthai value. Must be true, false, 0, or 1.' });
+    }
+
+    // Update query
+    const query = 'UPDATE SANPHAM SET trangthai = ?, update_at = NOW() WHERE masanpham = ?';
+    connection.query(query, [trangthai, masanpham], (err, results) => {
+        if (err) {
+            console.error('Error updating product status:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ message: 'Product status updated successfully' });
+    });
+};
+
 
 
 module.exports = {
@@ -336,4 +363,5 @@ module.exports = {
     deleteProduct,
     createProduct,
     updateProduct,
+    updateStatusProduct,
 }
