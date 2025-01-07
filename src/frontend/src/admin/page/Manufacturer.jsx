@@ -193,7 +193,9 @@ const Manufacturer = () => {
                     <tbody>
                         {currentManufacuter && currentManufacuter.length > 0 ? (
                             currentManufacuter.map((manufacturer, index) => {
-                                const isDisabled = manufacturer.trangthaithuonghieu === 1
+                                const isDisabled = manufacturer.trangthaithuonghieu === 1;
+                                const products = manufacturer.sanpham ? manufacturer.sanpham.split(',') : [];
+
                                 return (
                                     <tr
                                         key={manufacturer.mathuonghieu}
@@ -204,8 +206,14 @@ const Manufacturer = () => {
                                         <td>
                                             {manufacturer.trangthaithuonghieu === 0 ? "Hoạt động" : "Không hoạt động"}
                                         </td>
-                                        <td>{manufacturer.sanpham || "Không có sản phẩm"}</td>
-                                        <td className="d-flex gap-2" style={{ border: 'none' }}>
+                                        <td>
+                                            {products.length > 0 ? (
+                                                products.map((product, productIndex) => (
+                                                    <span key={productIndex}>{product},<br /></span>
+                                                ))
+                                            ) : "Không có sản phẩm"}
+                                        </td>
+                                        <td className="d-flex gap-2" style={{ border: 'none', height: '100%' }}>
                                             <button
                                                 className="btn btn-sm btn-primary"
                                                 style={{ padding: "0.5rem", width: '100px' }}
@@ -231,6 +239,7 @@ const Manufacturer = () => {
                                 </td>
                             </tr>
                         )}
+
                     </tbody>
                 </table>
                 <nav aria-label="Page navigation example">

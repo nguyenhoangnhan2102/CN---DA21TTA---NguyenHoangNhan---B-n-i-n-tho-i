@@ -31,9 +31,6 @@ const getAllOrders = async (req, res) => {
         LEFT JOIN 
             MAUSACSANPHAM ms ON ctdh.mamau = ms.mamau
         ORDER BY 
-            (d.trangthaidonhang = 0) DESC,
-            (d.trangthaidonhang = 1) DESC,
-            (d.trangthaidonhang = 2) DESC,
             d.created_at DESC
     `);
         res.json(rows);

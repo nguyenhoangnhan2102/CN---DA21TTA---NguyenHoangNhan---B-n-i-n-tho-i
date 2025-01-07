@@ -82,9 +82,11 @@ const Product = () => {
             };
             if (selectedProduct) {
                 await updateProduct(selectedProduct.masanpham, productData); // Gọi API cập nhật
+                toast.success("Cập nhật thành công!!!")
 
             } else {
                 await createProduct(productData); // Gọi API tạo mới
+                toast.success("Tạo mới thành công!!!")
             }
             setSelectedProduct(null);
             setOpenModal(false);
