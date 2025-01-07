@@ -4,13 +4,18 @@ import Carouseles from "../../share/component/Carousel";
 import "../style/Home.scss";
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../../service/productService";
+import { getAllManufacturer } from "../../service/manufacturerService";
 const imgURL = process.env.REACT_APP_IMG_URL;
 
 const Home = () => {
     const [products, setListProduct] = useState([]);
+    const [manufacturers, setListManufacturer] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     useEffect(() => {
         fetchListProduct();
+        fetchListManufacturer();
     }, []);
 
     const fetchListProduct = async () => {
@@ -28,12 +33,57 @@ const Home = () => {
         }
     };
 
+    const fetchListManufacturer = async () => {
+        try {
+            const response = await getAllManufacturer();
+            if (response.EC === 1) {
+                setListManufacturer(response.DT.activeManufacturer);
+                console.log("setListManufacturer", response.DT.activeManufacturer)
+
+            } else {
+                console.error("Failed to fetch");
+            }
+        } catch (err) {
+            console.error("Error occurred", err);
+        }
+    };
+
+    const filteredProducts = products.filter(item => {
+        const matchesCategory = selectedCategory ? item.tenthuonghieu === selectedCategory : true;
+        const matchesSearch = item.tensanpham.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
+
     return (
         <>
             <Carouseles />
             <div className="container product-container my-4">
+                <div className="d-flex gap-3 my-4">
+                    <div className="col-1" style={{ width: "15%" }}>
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="form-control col-2"
+                        />
+                    </div>
+                    <div className="filter-category mb-2">
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="form-select"
+                        >
+                            <option value="">Thể loại</option>
+                            {manufacturers && manufacturers.map((manu, index) => (
+                                <option key={index} value={manu.tenthuonghieu}>{manu.tenthuonghieu}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
                 <div className="product-list">
-                    {products.map((product, index) => (
+                    {filteredProducts.map((product, index) => (
                         <div key={product.masanpham} className="product-card">
                             <Link to={`/product-details/${product.masanpham}`} className="text-decoration-none ">
                                 <img

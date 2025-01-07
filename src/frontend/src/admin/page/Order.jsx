@@ -100,6 +100,7 @@ const Order = () => {
                         <th scope="col">Mã</th>
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Tên người mua</th>
+                        <th scope="col">Địa chỉ</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Hình ảnh</th>
@@ -119,6 +120,7 @@ const Order = () => {
                                 <td>{order.madonhang || "Không có"}</td>
                                 <td>{order.tensanpham || "Không có"}</td>
                                 <td>{order.hotenkhachhang || "Không có"}</td>
+                                <td>{order.diachigiaohang || "Không có"}</td>
                                 <td>{order.soluong || "Không có"}</td>
                                 <td>{order.tongtien ? new Intl.NumberFormat('vi-VN', { currency: 'VND' }).format(order.tongtien) : "Không có"}đ</td>
                                 <td>
