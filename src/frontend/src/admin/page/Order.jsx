@@ -82,7 +82,7 @@ const Order = () => {
     return (
         <div>
             <div className="group-header">
-                <h2>Danh sách</h2>
+                <h2>Danh sách đơn hàng</h2>
                 <div className="filterGroup" style={{ position: 'relative' }}>
                     <input
                         type="text"

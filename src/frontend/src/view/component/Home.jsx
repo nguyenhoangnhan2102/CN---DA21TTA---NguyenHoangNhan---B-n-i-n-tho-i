@@ -107,7 +107,7 @@ const Home = () => {
                                     <h3 className="product-name mt-2">{product.tensanpham}</h3>
                                     <p className="product-price mt-2">
                                         <span className="current-price">
-                                            {product.giasanpham}đ
+                                            {product.giasanpham.toLocaleString("vi-VN")}<sup> <u>đ</u></sup>
                                         </span>
                                     </p>
                                     <button className="text-decoration-none buy-now-button w-100">

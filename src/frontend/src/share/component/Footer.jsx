@@ -63,8 +63,8 @@ const Footer = () => {
                     </div>
                 </section>
                 <div className="text-center p-4" style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
-                    © 2024 Copyright:
-                    <label className="text-reset fw-bold ms-1">Shophone.com</label>
+                    ©2025 Copyright:
+                    <label className="text-reset fw-bold ms-1">Nguyễn Hoàng Nhân - DA21TTA - 110121071</label>
                 </div>
             </footer>
         </>

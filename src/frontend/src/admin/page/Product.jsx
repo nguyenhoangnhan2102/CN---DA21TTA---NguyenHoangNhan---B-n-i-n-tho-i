@@ -195,7 +195,7 @@ const Product = () => {
                     </DialogActions>
                 </Dialog>
                 <div className="group-header">
-                    <h2>Danh sách</h2>
+                    <h2>Danh sách sản phẩm</h2>
                     <div className="d-flex gap-2">
                         <div className="filterGroup w-100" style={{ position: 'relative' }}>
                             <input
@@ -248,8 +248,8 @@ const Product = () => {
                             <th scope="col">Giá</th>
                             <th scope="col">Số lượng</th>
                             <th scope="col">Hệ điều hành</th>
-                            <th scope="col">Hình ảnh</th>
                             <th scope="col">Trạng thái</th>
+                            <th scope="col">Hình ảnh</th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
