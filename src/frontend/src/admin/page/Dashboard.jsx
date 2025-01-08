@@ -22,17 +22,17 @@ const Dashboard = () => {
         <>
             <div className="sidebar">
                 <Link to={`/`} style={{ textDecoration: 'none' }}>
-                    <h2 className="text-white">Dashboard</h2>
+                    <h2 className="text-white"><b>SHOPPHONE</b></h2>
                 </Link>
                 <ul>
-                    <li
+                    {/* <li
                         onClick={(e) => {
                             e.preventDefault();
                             onNavigateRouter("/admin/thongke");
                         }}
                     >
                         <a href="">Thống kê</a>
-                    </li>
+                    </li> */}
                     <li
                         onClick={(e) => {
                             e.preventDefault();
@@ -57,14 +57,6 @@ const Dashboard = () => {
                     >
                         <a href="">Thương hiệu</a>
                     </li>
-                    {/* <li
-                        onClick={(e) => {
-                            e.preventDefault();
-                            onNavigateRouter("/admin/orders");
-                        }}
-                    >
-                        <a href="">Đơn hàng</a>
-                    </li> */}
                     <li
                         onClick={(e) => {
                             e.preventDefault();
@@ -101,12 +93,11 @@ const Dashboard = () => {
             </div>
             <div className="main-content">
                 <div className="admin-header">
-                    {/* <h1>Chào mừng đến với trang quản trị</h1> */}
                 </div>
                 <section>
                     <div className="admin-content">
                         <div className="container-admin-content">
-                            <Outlet /> {/* Vị trí render các route con */}
+                            <Outlet />
                         </div>
                     </div>
                 </section>

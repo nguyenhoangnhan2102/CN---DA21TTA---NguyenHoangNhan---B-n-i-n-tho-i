@@ -63,16 +63,17 @@ const Home = () => {
             <Carouseles />
             <div className="container product-container my-4">
                 <div className="d-flex gap-3 my-4">
-                    <div className="col-2 mt-2">
+                    <div className="col-2 mt-4 ms-4">
                         <input
                             type="text"
                             placeholder="Tìm kiếm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="form-control col-2"
+                            style={{ marginLeft: '18px' }}
                         />
                     </div>
-                    <div className="col-2 mt-2">
+                    <div className="col-2 mt-4 ms-3">
                         <select
                             value={selectedManufacturer}
                             onChange={(e) => setSelectedManufacturer(e.target.value)}
