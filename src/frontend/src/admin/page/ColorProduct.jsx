@@ -27,7 +27,7 @@ const ColorProduct = () => {
 
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
     const [searchTerm, setSearchTerm] = useState(""); // State cho từ khóa tìm kiếm
-    const colorProductsPerPage = 5; // Số phim hiển thị mỗi trang
+    const colorProductsPerPage = 10; // Số phim hiển thị mỗi trang
 
     useEffect(() => {
         getAllColorProductData();

@@ -184,7 +184,7 @@ const Manufacturer = () => {
                     <thead className="thead-dark">
                         <tr className="table-title">
                             <th scope="col">STT</th>
-                            <th scope="col">Tên nhà sản xuất</th>
+                            <th scope="col">Tên thương hiệu</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Sản phẩm thuộc</th>
                             <th scope="col">Hành động</th>

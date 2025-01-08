@@ -17,7 +17,9 @@ const getAllColorProduct = async (req, res) => {
         INNER JOIN
             SANPHAM
         ON
-            MAUSACSANPHAM.masanpham = SANPHAM.masanpham;
+            MAUSACSANPHAM.masanpham = SANPHAM.masanpham
+        ORDER BY 
+            MAUSACSANPHAM.created_at DESC
             `;
         //Thêm đường dẫn đầy đủ cho mỗi sản phẩm
         const [results] = await connection.query(query);

@@ -78,7 +78,7 @@ const Home = () => {
                             onChange={(e) => setSelectedManufacturer(e.target.value)}
                             className="form-select"
                         >
-                            <option value="">Thể loại</option>
+                            <option value="">Thương hiệu</option>
                             {manufacturers &&
                                 manufacturers.map((manu, index) => (
                                     <option key={index} value={manu.tenthuonghieu}>
