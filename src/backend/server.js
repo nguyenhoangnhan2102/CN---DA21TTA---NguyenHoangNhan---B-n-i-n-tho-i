@@ -1,5 +1,3 @@
-//app-config
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -11,11 +9,7 @@ const path = require('path');
 dotenv.config();
 require("./src/config/dataBase");
 const port = process.env.PORT || 8081;
-// Load environment variables
-
 const app = express();
-
-// Middleware setup
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -27,7 +21,7 @@ app.use(
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
     })
 );
-//end
+
 app.use(
     cors({
         origin: process.env.URL_REACT,
