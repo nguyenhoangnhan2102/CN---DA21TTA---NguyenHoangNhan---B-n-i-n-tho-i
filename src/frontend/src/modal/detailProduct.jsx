@@ -306,18 +306,6 @@ const ProductDetailModal = ({ product, open, onClose }) => {
                             />
                         ))}
                 </div>
-                <div className="d-flex align-items-center justify-content-between text-center mb-3">
-                    <label>Hình ảnh khác</label>
-                    {Array.isArray(form.danhsachhinhanh) &&
-                        form.danhsachhinhanh.map((img, index) => (
-                            <img
-                                key={index}
-                                src={`${imgURL}/${img}`}
-                                alt={`Màu sản phẩm ${index + 1}`}
-                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                            />
-                        ))}
-                </div>
             </Box>
         </Modal >
     );

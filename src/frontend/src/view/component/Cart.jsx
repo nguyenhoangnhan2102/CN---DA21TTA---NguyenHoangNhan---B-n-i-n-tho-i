@@ -139,6 +139,7 @@ function Cart() {
         }));
     };
 
+    console.log("cartItems", cartItems)
     return (
         <div className="container py-5">
             <h2 className="text-center mb-4">Giỏ Hàng</h2>
@@ -170,6 +171,9 @@ function Cart() {
                                                     <i className="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
+                                            <p className="my-1">
+                                                <b>Màu {item.tenmausanpham}</b>
+                                            </p>
                                             <p className="card-text text-muted ">
                                                 Giá: {parseFloat(item.gia).toLocaleString()} VND
                                             </p>
