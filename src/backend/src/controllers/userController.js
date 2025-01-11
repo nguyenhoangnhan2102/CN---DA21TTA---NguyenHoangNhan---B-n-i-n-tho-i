@@ -139,7 +139,6 @@ const loginUser = async (req, res) => {
 const getUserProfile = async (req, res) => {
     try {
         const userId = req.body.makhachhang; // Lấy ID từ req.body
-        console.log("User ID:", userId);
 
         const results = await connection.query(
             "SELECT makhachhang, email, password, role, hoten, sodienthoai, diachi FROM `KHACHHANG` WHERE makhachhang = ?",
