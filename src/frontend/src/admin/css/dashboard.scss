@@ -125,15 +125,15 @@
 }
 
 .sidebar h2 b {
-    color         : black;
-    text-align    : center;
-    padding-bottom: 15px;
-    font-family   : "Titillium Web", sans-serif;
-    margin-left   : 5px;
+    color      : black;
+    font-size  : 22px;
+    text-align : center;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 5px;
 }
 
 hr {
-    border: 1px solid black;
+    border: 2px solid black;
 }
 
 .sidebar ul {
@@ -149,9 +149,7 @@ hr {
 .sidebar ul li a {
     color          : rgb(0, 0, 0);
     text-decoration: none;
-    font-family    : "Titillium Web",
-        sans-serif;
-    display: block;
+    display        : block;
 }
 
 .sidebar ul li:hover {

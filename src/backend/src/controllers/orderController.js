@@ -51,6 +51,7 @@ const getOrderDetails = async (req, res) => {
                 sp.tensanpham,
                 ctdh.soluong,
                 ctdh.giatien,
+                ms.tenmausanpham,
                 ms.mausachinhanh
             FROM DONHANG dh
             JOIN KHACHHANG kh ON dh.makhachhang = kh.makhachhang
@@ -70,6 +71,7 @@ const getOrderDetails = async (req, res) => {
             soluong: row.soluong,
             giatien: row.giatien,
             mausachinhanh: row.mausachinhanh,
+            tenmausanpham: row.tenmausanpham,
         }));
 
         const orderDetails = {

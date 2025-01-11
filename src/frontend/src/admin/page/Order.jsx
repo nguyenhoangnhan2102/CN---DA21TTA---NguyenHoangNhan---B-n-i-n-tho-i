@@ -199,7 +199,7 @@ const Order = () => {
                                             onClick={() => handleUpdateStatus(order, 2)}
                                             disabled={order.trangthaidonhang === 1 || order.trangthaidonhang === 2}
                                         >
-                                            Hủy
+                                            <i class="fa-solid fa-x"></i> Hủy
                                         </button>
                                     </td>
                                 </tr>
