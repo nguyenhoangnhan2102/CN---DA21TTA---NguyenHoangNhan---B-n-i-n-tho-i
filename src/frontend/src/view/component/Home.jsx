@@ -137,7 +137,7 @@ const Home = () => {
                             onClick={handleShowMore}
                         >
                             Xem thêm
-                            <i class="fa-solid fa-caret-down ms-2"></i>
+                            <i className="fa-solid fa-caret-down ms-2"></i>
                         </div>
                     </div>
                 )}

@@ -144,7 +144,7 @@ const Order = () => {
                             currentOrders.map((order, index) => (
                                 <tr
                                     key={order.mahoadon}
-                                    className={order.trangthaidonhang === 2 ? "disabled-row" : ""}
+                                // className={order.trangthaidonhang === 2 ? "disabled-row" : ""}
                                 >
                                     <td>{(currentPage - 1) * ordersPerPage + index + 1}</td>
                                     <td>{order.hotenkhachhang || "Không có"}</td>
@@ -192,14 +192,14 @@ const Order = () => {
                                             onClick={() => handleUpdateStatus(order, 1)}
                                             disabled={order.trangthaidonhang === 1 || order.trangthaidonhang === 2}
                                         >
-                                            <i class="fa-solid fa-truck"></i> Giao
+                                            <i className="fa-solid fa-truck"></i> Giao
                                         </button>
                                         <button
                                             className="btn btn-danger btn-sm"
                                             onClick={() => handleUpdateStatus(order, 2)}
                                             disabled={order.trangthaidonhang === 1 || order.trangthaidonhang === 2}
                                         >
-                                            <i class="fa-solid fa-x"></i> Hủy
+                                            <i className="fa-solid fa-x"></i> Hủy
                                         </button>
                                     </td>
                                 </tr>
@@ -256,7 +256,7 @@ const Order = () => {
                             onClick={() => setOpenModal(false)}
                             className="btn btn-danger"
                         >
-                            Hủy
+                            Đóng
                         </button>
                         <button
                             onClick={confirmUpdateStatus}

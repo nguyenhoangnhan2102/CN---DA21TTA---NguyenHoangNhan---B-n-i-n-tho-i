@@ -5,6 +5,7 @@ import {
     Modal,
     FormControl,
     TextField,
+    FormLabel,
 } from "@mui/material"; // Ensure these are imported
 import moment from "moment";
 
@@ -99,6 +100,7 @@ const OrderDetails = ({ open, onClose, order }) => {
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px',
+                                    fontWeight: 'bold',
                                 },
                             }}
                         />
@@ -141,7 +143,7 @@ const OrderDetails = ({ open, onClose, order }) => {
                                             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.soluong * product.giatien)}
                                         </td>
                                         <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>{product.tenmausanpham}</td>
-                                        <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
+                                        <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }} >
                                             <img
                                                 width="70px"
                                                 height="70px"
@@ -165,5 +167,6 @@ const OrderDetails = ({ open, onClose, order }) => {
         </>
     );
 };
+
 
 export default OrderDetails;
