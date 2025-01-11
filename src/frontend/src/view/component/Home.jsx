@@ -104,7 +104,16 @@ const Home = () => {
                                         className="product-image"
                                         alt={product.tensanpham || "Hình ảnh sản phẩm"}
                                     />
-                                    <h3 className="product-name mt-2">{product.tensanpham}</h3>
+                                    <label className="product-name mt-2"
+                                        style={{
+                                            padding: '8px',
+                                            maxWidth: '200px', // Điều chỉnh chiều rộng của cột
+                                            whiteSpace: 'nowrap', // Ngăn chặn tên sản phẩm xuống dòng
+                                            overflow: 'hidden', // Ẩn phần thừa
+                                            textOverflow: 'ellipsis', // Thêm dấu "..."
+                                            cursor: 'pointer'
+                                        }}
+                                    >{product.tensanpham}</label>
                                     <p className="product-price mt-2">
                                         <span className="current-price">
                                             {product.giasanpham.toLocaleString("vi-VN")}<sup> <u>đ</u></sup>

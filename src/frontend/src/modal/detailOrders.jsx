@@ -109,6 +109,8 @@ const OrderDetails = ({ open, onClose, order }) => {
                                 <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #ddd' }}>Tên sản phẩm</th>
                                 <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #ddd' }}>Số lượng</th>
                                 <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #ddd' }}>Giá</th>
+                                <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #ddd' }}>Tổng tiền</th>
+                                <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #ddd' }}>Màu</th>
                                 <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #ddd' }}>Hình ảnh</th>
                             </tr>
                         </thead>
@@ -120,13 +122,13 @@ const OrderDetails = ({ open, onClose, order }) => {
                                             style={{
                                                 padding: '8px',
                                                 borderBottom: '1px solid #ddd',
-                                                maxWidth: '200px', // Điều chỉnh chiều rộng của cột
-                                                whiteSpace: 'nowrap', // Ngăn chặn tên sản phẩm xuống dòng
-                                                overflow: 'hidden', // Ẩn phần thừa
-                                                textOverflow: 'ellipsis', // Thêm dấu "..."
+                                                maxWidth: '200px',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
                                                 cursor: 'pointer'
                                             }}
-                                            title={product.tensanpham} // Hiển thị tên đầy đủ khi hover
+                                            title={product.tensanpham}
                                         >
                                             {product.tensanpham}
                                         </td>
@@ -134,6 +136,11 @@ const OrderDetails = ({ open, onClose, order }) => {
                                         <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
                                             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.giatien)}
                                         </td>
+                                        <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
+                                            {/* Tính tổng tiền */}
+                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.soluong * product.giatien)}
+                                        </td>
+                                        <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>{product.tenmausanpham}</td>
                                         <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
                                             <img
                                                 width="70px"
@@ -146,7 +153,7 @@ const OrderDetails = ({ open, onClose, order }) => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="4" style={{ textAlign: 'center', padding: '8px', borderBottom: '1px solid #ddd' }}>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '8px', borderBottom: '1px solid #ddd' }}>
                                         Không có sản phẩm trong đơn hàng
                                     </td>
                                 </tr>
@@ -158,6 +165,5 @@ const OrderDetails = ({ open, onClose, order }) => {
         </>
     );
 };
-
 
 export default OrderDetails;
