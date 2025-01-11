@@ -39,7 +39,6 @@ const getOrderDetails = async (req, res) => {
         const [rows] = await connection.query(`
             SELECT 
                 dh.madonhang,
-                kh.hoten AS tenkhachhang,
                 dh.ngaydat,
                 dh.trangthaidonhang,
                 dh.tongtien,
@@ -76,7 +75,7 @@ const getOrderDetails = async (req, res) => {
 
         const orderDetails = {
             madonhang: rows[0].madonhang,
-            tenkhachhang: rows[0].tenkhachhang,
+            hotenkhachhang: rows[0].hotenkhachhang,
             ngaydat: rows[0].ngaydat,
             trangthaidonhang: rows[0].trangthaidonhang,
             tongtien: rows[0].tongtien,

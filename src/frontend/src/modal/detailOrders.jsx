@@ -34,20 +34,20 @@ const OrderDetails = ({ open, onClose, order }) => {
                 aria-labelledby="modal-title"
                 aria-describedby="modal-description"
             >
-                <Box sx=
-                    {{
-                        ...modalStyle,
-                        maxHeight: '95vh',
-                        height: '95vh',
-                    }}>
+                <Box sx={{
+                    ...modalStyle,
+                    maxHeight: '95vh',
+                    height: '95vh',
+                    overflow: 'auto', // Thêm dòng này để cuộn nếu vượt quá chiều cao
+                }}>
                     <Typography madonhang="modal-title" variant="h6" component="h2">
                         Chi tiết đơn hàng
                     </Typography>
                     <FormControl fullWidth margin="normal">
                         <TextField
                             madonhang="product-text-field"
-                            value={order.tenkhachhang}
-                            label="Số điện thoại"
+                            value={order.hotenkhachhang}
+                            label="Họ tên"
                             sx={{
                                 '& .MuiInputBase-input': {
                                     height: '10px',
@@ -94,7 +94,7 @@ const OrderDetails = ({ open, onClose, order }) => {
                     <FormControl fullWidth margin="normal">
                         <TextField
                             madonhang="product-text-field"
-                            value={new Intl.NumberFormat('vi-VN', { currency: 'VND' }).format(order.tongtien) + "đ"}
+                            value={new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.tongtien)}
                             label="Tổng tiền"
                             sx={{
                                 '& .MuiInputBase-input': {
