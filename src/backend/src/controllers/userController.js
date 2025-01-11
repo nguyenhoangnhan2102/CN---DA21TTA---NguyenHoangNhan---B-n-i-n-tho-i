@@ -200,7 +200,7 @@ const updateUser = async (req, res) => {
         ]);
 
         return res.status(200).json({
-            EM: "Cập nhật người dùng thành công",
+            EM: "Cập nhật thành công",
             EC: 200,
             DT: null,
         });
