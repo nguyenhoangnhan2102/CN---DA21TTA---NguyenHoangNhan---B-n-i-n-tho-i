@@ -24,6 +24,7 @@ const Dashboard = () => {
                 <Link to={`/`} style={{ textDecoration: 'none' }}>
                     <h2 className="text-white"><b>SHOPPHONE</b></h2>
                 </Link>
+                <hr />
                 <ul>
                     {/* <li
                         onClick={(e) => {

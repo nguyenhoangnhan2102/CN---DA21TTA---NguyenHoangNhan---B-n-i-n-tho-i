@@ -14,6 +14,17 @@ export const getAllOrders = async () => {
     }
 }
 
+// orderService.js
+export const getOrderDetails = async (madonhang) => {
+    try {
+        const response = await axiosInstance.get(`${apiOrders}/${madonhang}`);
+        return response.data; // Trả về dữ liệu chi tiết đơn hàng
+    } catch (error) {
+        throw new Error('Lỗi khi lấy chi tiết đơn hàng');
+    }
+};
+
+
 export const updateStatus = async (madonhang, status) => {
     try {
         const response = await axiosInstance.put(`${apiOrders}/${madonhang}`, { trangthaidonhang: status });

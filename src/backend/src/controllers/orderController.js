@@ -50,11 +50,13 @@ const getOrderDetails = async (req, res) => {
                 dh.update_at,
                 sp.tensanpham,
                 ctdh.soluong,
-                ctdh.giatien
+                ctdh.giatien,
+                ms.mausachinhanh
             FROM DONHANG dh
             JOIN KHACHHANG kh ON dh.makhachhang = kh.makhachhang
             JOIN CHITIETDONHANG ctdh ON dh.madonhang = ctdh.madonhang
             JOIN SANPHAM sp ON ctdh.masanpham = sp.masanpham
+            JOIN MAUSACSANPHAM ms ON ctdh.mamau = ms.mamau
             WHERE dh.madonhang = ?
         `, [madonhang]);
 
@@ -62,17 +64,34 @@ const getOrderDetails = async (req, res) => {
             return res.status(404).json({ message: 'Không tìm thấy đơn hàng.' });
         }
 
+        // Aggregate product data into an array
+        const products = rows.map(row => ({
+            tensanpham: row.tensanpham,
+            soluong: row.soluong,
+            giatien: row.giatien,
+            mausachinhanh: row.mausachinhanh,
+        }));
+
+        const orderDetails = {
+            madonhang: rows[0].madonhang,
+            tenkhachhang: rows[0].tenkhachhang,
+            ngaydat: rows[0].ngaydat,
+            trangthaidonhang: rows[0].trangthaidonhang,
+            tongtien: rows[0].tongtien,
+            sdtkhachhang: rows[0].sdtkhachhang,
+            diachigiaohang: rows[0].diachigiaohang,
+            products: products,
+        };
+
         res.status(200).json({
             success: true,
-            data: rows,
+            data: orderDetails,
         });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi server.' });
     }
 };
-
-
 
 const confirmOrder = async (req, res) => {
     const { makhachhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, chiTietSanPham } = req.body;

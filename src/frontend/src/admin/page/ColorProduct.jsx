@@ -141,7 +141,7 @@ const ColorProduct = () => {
 
     return (
         <>
-            <div>
+            <div className="admin_container">
                 <Dialog open={openDelete} onClose={handleCloseDelete}>
                     <DialogTitle>Xác nhận xóa sản phẩm</DialogTitle>
                     <DialogContent>
@@ -233,14 +233,12 @@ const ColorProduct = () => {
                                     <td className="d-flex gap-2" style={{ border: 'none' }}>
                                         <button
                                             className="btn btn-sm btn-primary"
-                                            style={{ padding: "0.5rem", width: '100px' }}
                                         // onClick={() => handleEdit(colorproduct)}
                                         >
                                             <i className="fa-solid fa-pen-to-square"></i> Sửa
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            style={{ width: '100px' }}
                                         //onClick={() => openModalDelete(colorproduct)}
                                         >
                                             <i className="fa-solid fa-trash"></i> Xóa

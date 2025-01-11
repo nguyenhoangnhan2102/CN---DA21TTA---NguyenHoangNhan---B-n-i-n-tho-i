@@ -216,14 +216,12 @@ const Manufacturer = () => {
                                         <td className="d-flex gap-2" style={{ border: 'none', height: '100%' }}>
                                             <button
                                                 className="btn btn-sm btn-primary"
-                                                style={{ padding: "0.5rem", width: '100px' }}
                                                 onClick={() => handleEdit(manufacturer)}
                                             >
                                                 <i className="fa-solid fa-pen-to-square"></i> Sửa
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-danger"
-                                                style={{ width: '100px' }}
                                                 onClick={() => openModalDelete(manufacturer)}
                                             >
                                                 <i className="fa-solid fa-trash"></i> Xóa

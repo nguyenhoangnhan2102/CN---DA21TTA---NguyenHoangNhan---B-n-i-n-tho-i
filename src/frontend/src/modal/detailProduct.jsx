@@ -13,10 +13,6 @@ import {
 } from "@mui/material";
 
 import { getDetailProduct } from "../service/productService";
-// import { getRoomTypes } from "../service/roomTypeService";
-// import { getServices } from "../service/servicesService";
-// import { getPromotions } from "../service/promotionsService";
-// import { getDevices } from "../service/deviceService";
 const modalStyle = {
     position: "absolute",
     top: "50%",

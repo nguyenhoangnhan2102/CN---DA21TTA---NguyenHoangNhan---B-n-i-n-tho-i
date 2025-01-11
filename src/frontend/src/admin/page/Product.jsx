@@ -275,21 +275,18 @@ const Product = () => {
                                     <td className="d-flex align-items-center justify-content-between gap-1 func-button" style={{ border: 'none' }}>
                                         <button
                                             className="btn btn-sm btn-secondary"
-                                            style={{ padding: "0.5rem", width: '70px', height: '100%' }}
                                             onClick={() => handleViewDetails(product)}
                                         >
                                             <i className="fa-regular fa-eye"></i> Xem
                                         </button>
                                         <button
                                             className="btn btn-sm btn-primary"
-                                            style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => handleEdit(product)}
                                         >
                                             <i className="fa-solid fa-pen-to-square"></i> Sửa
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            style={{ padding: "0.5rem", width: '70px' }}
                                             onClick={() => openModalDelete(product)}
                                         >
                                             <i className="fa-solid fa-trash"></i> Xóa
