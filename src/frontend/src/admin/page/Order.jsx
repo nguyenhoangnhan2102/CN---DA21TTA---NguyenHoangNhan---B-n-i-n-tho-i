@@ -108,13 +108,10 @@ const Order = () => {
                 <thead className="thead-dark">
                     <tr>
                         <th scope="col">STT</th>
-                        <th scope="col">Mã</th>
-                        <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Tên người mua</th>
+                        <th scope="col">Số điện thoại</th>
                         <th scope="col">Địa chỉ</th>
-                        <th scope="col">Số lượng</th>
                         <th scope="col">Tổng tiền</th>
-                        <th scope="col">Hình ảnh</th>
                         <th scope="col">Ngày đặt</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Chức năng</th>
@@ -128,20 +125,10 @@ const Order = () => {
                                 className={order.trangthaidonhang === 2 ? "disabled-row" : ""}
                             >
                                 <td>{(currentPage - 1) * ordersPerPage + index + 1}</td>
-                                <td>{order.madonhang || "Không có"}</td>
-                                <td>{order.tensanpham || "Không có"}</td>
                                 <td>{order.hotenkhachhang || "Không có"}</td>
+                                <td>{order.sdtkhachhang || "Không có"}</td>
                                 <td>{order.diachigiaohang || "Không có"}</td>
-                                <td>{order.soluong || "Không có"}</td>
                                 <td>{order.tongtien ? new Intl.NumberFormat('vi-VN', { currency: 'VND' }).format(order.tongtien) : "Không có"}đ</td>
-                                <td>
-                                    <img
-                                        width="70px"
-                                        height="70px"
-                                        src={`${imgURL}/${order.mausachinhanh}`}
-                                        alt={order.tensanpham || "Hình ảnh sản phẩm"}
-                                    />
-                                </td>
                                 <td>{moment(order.ngaydat).utcOffset(12 * 60).format('HH:mm:ss DD/MM/YYYY')}</td>
                                 <td>
                                     <span
