@@ -3,29 +3,23 @@ const connection = require("../config/dataBase");
 
 const getRevenueByDay = async (req, res) => {
 
-    const { date } = req.query;
-
-    const query = `
-    SELECT 
-      sp.tensanpham,
-      SUM(ctdh.soluong * ctdh.giatien) AS total_revenue,
-      SUM(ctdh.soluong) AS total_quantity
-    FROM CHITIETDONHANG ctdh
-    JOIN SANPHAM sp ON ctdh.masanpham = sp.masanpham
-    JOIN DONHANG dh ON ctdh.madonhang = dh.madonhang
+  const { ngay } = req.query; // Ngày theo định dạng YYYY-MM-DD
+  const query = `
+    SELECT SUM(ctgd.giatien * ctgd.soluong) AS doanhthu
+    FROM DONHANG dh
+    JOIN CHITIETDONHANG ctgd ON dh.madonhang = ctgd.madonhang
     WHERE DATE(dh.ngaydat) = ?
-    GROUP BY sp.masanpham;
   `;
 
-    connection.query(query, [date], (err, results) => {
-        if (err) {
-            console.error('Lỗi truy vấn:', err);
-            return res.status(500).send('Lỗi máy chủ.');
-        }
-        res.json(results);
-    });
+  connection.execute(query, [ngay], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Lỗi truy vấn dữ liệu' });
+      return;
+    }
+    res.json({ doanhthu: results[0].doanhthu || 0 });
+  });
 }
 
 module.exports = {
-    getRevenueByDay
+  getRevenueByDay
 }

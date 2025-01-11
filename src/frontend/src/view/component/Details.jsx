@@ -46,7 +46,12 @@ const ProductDetails = () => {
             try {
                 const response = await axiosInstance.get(`${apiProductUrl}/${masanpham}`);
                 setProductDetails(response.data.DT);
-                console.log("setProductDetails", response.data.DT)
+                console.log("setProductDetails", response.data.DT);
+
+                // Mặc định chọn màu đầu tiên nếu có màu sắc
+                if (response.data.DT.danhsachmamau && response.data.DT.danhsachmamau.length > 0) {
+                    setSelectedColor(response.data.DT.danhsachmamau[0]);
+                }
             } catch (err) {
                 console.error("Error occurred", err);
             }
@@ -173,7 +178,7 @@ const ProductDetails = () => {
                         />
                     </div>
                     <div className="d-flex my-4 product-color">
-                        {productdetails.danhsachmamau && // Lấy danh sách màu từ `danhsachmamau`
+                        {productdetails.danhsachmamau &&
                             productdetails.danhsachmamau.map((colorId, index) => (
                                 <div className="row" key={index}>
                                     <div className="my-2 d-flex me-2">
@@ -181,15 +186,15 @@ const ProductDetails = () => {
                                             type="radio"
                                             id={`color-${index}`}
                                             name="productColor"
-                                            value={parseInt(colorId)} // Sử dụng parseInt để đảm bảo giá trị là số nguyên
-                                            checked={selectedColor === parseInt(colorId)} // Kiểm tra nếu màu đã chọn là chính xác
-                                            onChange={() => handleColorChange(parseInt(colorId))} // Cập nhật khi chọn màu
+                                            value={parseInt(colorId)}
+                                            checked={selectedColor === parseInt(colorId)}
+                                            onChange={() => handleColorChange(parseInt(colorId))}
                                             style={{
                                                 marginRight: '10px',
                                             }}
                                         />
                                         <img
-                                            src={`${imgURL}${productdetails.danhsachmausacsanpham.split(',')[index]}`} // Lấy hình ảnh màu từ `danhsachmausacsanpham`
+                                            src={`${imgURL}${productdetails.danhsachmausacsanpham.split(',')[index]}`}
                                             alt={`Màu sản phẩm ${index + 1}`}
                                             style={{
                                                 width: '100px',
@@ -197,14 +202,17 @@ const ProductDetails = () => {
                                                 marginRight: '10px',
                                                 borderRadius: '5px',
                                                 border: '1px solid #ccc',
+                                                padding: '5px',
+                                                cursor: 'pointer' // Thêm con trỏ để dễ nhận diện là có thể click
                                             }}
+                                            onClick={() => handleColorChange(parseInt(colorId))} // Cập nhật màu khi click vào ảnh
                                         />
                                     </div>
                                 </div>
                             ))
                         }
-
                     </div>
+
                     <div className="my-4 p-3 commit">
                         <h5>Shopphone cam kết</h5>
                         <ul className="row">
