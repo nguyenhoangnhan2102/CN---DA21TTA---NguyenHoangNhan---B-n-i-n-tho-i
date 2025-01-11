@@ -1,44 +1,71 @@
 const connection = require("../config/dataBase");
 const moment = require('moment-timezone');
 
+// const getAllOrders = async (req, res) => {
+//     try {
+//         const [rows, fields] = await connection.query(`
+//         SELECT
+//             d.madonhang,
+//             d.makhachhang,
+//             d.ngaydat,
+//             d.trangthaidonhang,
+//             d.tongtien,
+//             d.hotenkhachhang,
+//             d.sdtkhachhang,
+//             d.diachigiaohang,
+//             d.created_at,
+//             d.update_at,
+//             ctdh.masanpham,
+//             ctdh.mamau,
+//             ctdh.giatien,
+//             ctdh.soluong,
+//             s.tensanpham,
+//             ms.tenmausanpham,
+//             ms.mausachinhanh
+//         FROM
+//             DONHANG d
+//         LEFT JOIN
+//             CHITIETDONHANG ctdh ON d.madonhang = ctdh.madonhang
+//         LEFT JOIN
+//             SANPHAM s ON ctdh.masanpham = s.masanpham
+//         LEFT JOIN
+//             MAUSACSANPHAM ms ON ctdh.mamau = ms.mamau
+//         ORDER BY
+//             d.created_at DESC
+//     `);
+//         res.json(rows);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Server Error');
+//     }
+// };
+
 const getAllOrders = async (req, res) => {
     try {
         const [rows, fields] = await connection.query(`
-        SELECT 
-            d.madonhang, 
-            d.makhachhang, 
-            d.ngaydat, 
-            d.trangthaidonhang, 
-            d.tongtien, 
-            d.hotenkhachhang, 
-            d.sdtkhachhang, 
-            d.diachigiaohang, 
-            d.created_at, 
-            d.update_at,
-            ctdh.masanpham, 
-            ctdh.mamau, 
-            ctdh.giatien, 
-            ctdh.soluong,
-            s.tensanpham, 
-            ms.tenmausanpham,
-            ms.mausachinhanh
-        FROM 
-            DONHANG d
-        LEFT JOIN 
-            CHITIETDONHANG ctdh ON d.madonhang = ctdh.madonhang
-        LEFT JOIN 
-            SANPHAM s ON ctdh.masanpham = s.masanpham
-        LEFT JOIN 
-            MAUSACSANPHAM ms ON ctdh.mamau = ms.mamau
-        ORDER BY 
-            d.created_at DESC
-    `);
-        res.json(rows);
+            SELECT 
+            dh.madonhang,
+            kh.hoten AS tenkhachhang,
+            dh.ngaydat,
+            dh.trangthaidonhang,
+            dh.tongtien,
+            dh.hotenkhachhang,
+            dh.sdtkhachhang,
+            dh.diachigiaohang,
+            dh.created_at,
+            dh.update_at
+        FROM DONHANG dh
+        JOIN KHACHHANG kh ON dh.makhachhang = kh.makhachhang
+        ORDER BY dh.created_at DESC
+        `);
+
+        res.status(200).json(rows);
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
     }
 };
+
 
 const confirmOrder = async (req, res) => {
     const { makhachhang, hotenkhachhang, sdtkhachhang, diachigiaohang, tongtien, chiTietSanPham } = req.body;
