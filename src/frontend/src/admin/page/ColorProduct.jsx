@@ -10,7 +10,7 @@ import {
     DialogContent,
     DialogActions,
 } from "@mui/material";
-import { createColorProduct, getAllColorProduct, updateColorProduct } from "../../service/colorProductService";
+import { createColorProduct, deleteColorProduct, getAllColorProduct, updateColorProduct } from "../../service/colorProductService";
 import ModalColorProduct from "../../modal/modalColorProduct";
 import { uploadSingleFile } from "../../service/fileService";
 import "../css/dashboard.scss";
@@ -104,23 +104,22 @@ const ColorProduct = () => {
         setOpenDelete(false);
     };
 
-    // const handleDeleteManufacturer = async () => {
-    //     try {
-    //         const response = await deleteManufacturer(selectedColorProduct.mathuonghieu);
-    //         if (response.EC === 1) {
-    //             toast.success("Xóa thành công!");
-    //             // Lấy lại danh sách từ server để đảm bảo dữ liệu chính xác
-    //             getAllManufacturerData();
-    //         } else {
-    //             console.error(response.EM);
-    //             alert("Xóa thất bại: " + response.EM);
-    //         }
-    //         setOpenDelete(false);
-    //     } catch (error) {
-    //         console.error("Error deleting category:", error);
-    //         setOpenDelete(false);
-    //     }
-    // };
+    const handleDelete = async () => {
+        try {
+            const response = await deleteColorProduct(selectedColorProduct.mamau);
+            if (response.EC === 1) {
+                toast.success("Xóa thành công!");
+                getAllColorProductData();
+            } else {
+                console.error(response.EM);
+                alert("Xóa thất bại: " + response.EM);
+            }
+            setOpenDelete(false);
+        } catch (error) {
+            console.error("Error deleting category:", error);
+            setOpenDelete(false);
+        }
+    };
 
 
     const handleSearch = (e) => {
@@ -141,12 +140,12 @@ const ColorProduct = () => {
 
     return (
         <>
-            <div className="admin_container">
+            <div>
                 <Dialog open={openDelete} onClose={handleCloseDelete}>
                     <DialogTitle>Xác nhận xóa sản phẩm</DialogTitle>
                     <DialogContent>
                         <Typography>
-                            Bạn có chắc chắn muốn xóa "{selectedColorProduct?.mamau}" không?
+                            Bạn có chắc chắn muốn xóa mã màu "<b>{selectedColorProduct?.mamau}</b>" không?
                         </Typography>
                     </DialogContent>
                     <DialogActions>
@@ -158,7 +157,7 @@ const ColorProduct = () => {
                             Không
                         </div>
                         <div
-                            //onClick={handleDeleteManufacturer}
+                            onClick={handleDelete}
                             className="btn btn-success"
                         >
                             Có
@@ -233,13 +232,13 @@ const ColorProduct = () => {
                                     <td className="d-flex gap-2" style={{ border: 'none' }}>
                                         <button
                                             className="btn btn-sm btn-primary"
-                                        // onClick={() => handleEdit(colorproduct)}
+                                            onClick={() => handleEdit(colorproduct)}
                                         >
                                             <i className="fa-solid fa-pen-to-square"></i> Sửa
                                         </button>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                        //onClick={() => openModalDelete(colorproduct)}
+                                            onClick={() => openModalDelete(colorproduct)}
                                         >
                                             <i className="fa-solid fa-trash"></i> Xóa
                                         </button>

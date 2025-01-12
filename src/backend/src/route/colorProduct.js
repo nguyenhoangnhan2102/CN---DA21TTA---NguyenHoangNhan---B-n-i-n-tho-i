@@ -7,8 +7,8 @@ router.get("/", colorProductController.getAllColorProduct);
 
 router.post("/", colorProductController.createColorProduct);
 
-// router.put("/:mathuonghieu", manufacturerController.updateManufacture);
+router.put("/:mamau", colorProductController.updateColorProduct);
 
-// router.delete("/:mathuonghieu", manufacturerController.deleteManufacture);
+router.delete("/:mamau", colorProductController.deleteColorProduct);
 
 module.exports = router;

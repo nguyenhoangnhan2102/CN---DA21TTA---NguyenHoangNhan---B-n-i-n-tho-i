@@ -74,110 +74,70 @@ const createColorProduct = async (req, res) => {
 };
 
 
-// const updateColorProduct = async (req, res) => {
-//     const { masanpham } = req.params;
-//     const {
-//         mathuonghieu,
-//         tensanpham,
-//         giasanpham,
-//         soluongsanpham,
-//         hedieuhanh,
-//         cpu,
-//         gpu,
-//         ram,
-//         dungluong,
-//         cameratruoc,
-//         camerasau,
-//         congnghemanhinh,
-//         dophangiaimanhinh,
-//         pin,
-//         motasanpham,
-//         hinhanhchinh
-//     } = req.body;
+const updateColorProduct = async (req, res) => {
+    const { mamau } = req.params;
+    const {
+        masanpham,
+        tenmausanpham,
+        mausachinhanh,
+    } = req.body;
 
-//     try {
-//         const result = await connection.query(
-//             `
-//                 UPDATE SANPHAM
-//                 SET
-//                 mathuonghieu = ?,
-//                 tensanpham = ?,
-//                 giasanpham = ?,
-//                 soluongsanpham = ?,
-//                 hedieuhanh = ?,
-//                 cpu = ?,
-//                 gpu = ?,
-//                 ram = ?,
-//                 dungluong = ?,
-//                 cameratruoc = ?,
-//                 camerasau = ?,
-//                 congnghemanhinh = ?,
-//                 dophangiaimanhinh = ?,
-//                 pin = ?,
-//                 motasanpham = ?,
-//                 hinhanhchinh = ?
-//                 WHERE masanpham = ?
-//             `,
-//             [
-//                 mathuonghieu,
-//                 tensanpham,
-//                 giasanpham,
-//                 soluongsanpham,
-//                 hedieuhanh,
-//                 cpu,
-//                 gpu,
-//                 ram,
-//                 dungluong,
-//                 cameratruoc,
-//                 camerasau,
-//                 congnghemanhinh,
-//                 dophangiaimanhinh,
-//                 pin,
-//                 motasanpham,
-//                 hinhanhchinh,
-//                 masanpham
-//             ]
-//         );
+    try {
+        const result = await connection.query(
+            `
+                UPDATE MAUSACSANPHAM
+                SET
+                masanpham = ?,
+                tenmausanpham = ?,
+                mausachinhanh = ?
+                WHERE mamau = ?
+            `,
+            [
+                masanpham,
+                tenmausanpham,
+                mausachinhanh,
+                mamau
+            ]
+        );
 
-//         if (result[0].affectedRows > 0) {
-//             res.json({ message: "Product updated" });
-//         } else {
-//             res.status(404).json({ message: "product not found" });
-//         }
-//     } catch (err) {
-//         console.error("Error updating product:", err.message);
-//         res.status(500).json({ message: err.message });
-//     }
-// }
+        if (result[0].affectedRows > 0) {
+            res.json({ message: "Color product updated" });
+        } else {
+            res.status(404).json({ message: "color product not found" });
+        }
+    } catch (err) {
+        console.error("Error updating color product:", err.message);
+        res.status(500).json({ message: err.message });
+    }
+}
 
-// const deleteColorProduct = async (req, res) => {
-//     try {
-//         const query = "DELETE FROM SANPHAM WHERE masanpham = ?";
-//         const [result] = await connection.query(query, [req.params.masanpham]);
-//         console.log("result", result);
-//         if (result.affectedRows === 0) {
-//             return res.status(400).json({
-//                 EM: "Product not found",
-//                 EC: 0,
-//                 DT: [],
-//             });
-//         }
-//         const [data_deleted, filed_data] = await connection.query(`SELECT * FROM SANPHAM`);
-//         console.log("data_deleted", data_deleted);
-//         return res.status(200).json({
-//             EM: "Xóa sản phẩm thành công",
-//             EC: 1,
-//             DT: data_deleted,
-//         });
-//     } catch (err) {
-//         console.error("Error deleting product:", err);
-//         return res.status(500).json({
-//             EM: `Lỗi controller deleteMovieById: ${err.message}`,
-//             EC: -1,
-//             DT: [],
-//         });
-//     }
-// };
+const deleteColorProduct = async (req, res) => {
+    try {
+        const query = "UPDATE MAUSACSANPHAM SET trangthaimau = 1, update_at = CURRENT_TIMESTAMP WHERE mamau = ?";
+        const [result] = await connection.query(query, [req.params.mamau]);
+        if (result.affectedRows === 0) {
+            return res.status(400).json({
+                EM: "Không tìm thấy sản phẩm",
+                EC: 0,
+                DT: [],
+            });
+        }
+
+        const [data] = await connection.query("SELECT * FROM MAUSACSANPHAM WHERE trangthaimau = 0");
+        return res.status(200).json({
+            EM: "Ẩn màu sản phẩm thành công",
+            EC: 1,
+            DT: data,
+        });
+    } catch (err) {
+        console.error("Lỗi ẩn sản phẩm:", err);
+        return res.status(500).json({
+            EM: `Lỗi xóa sản phẩm: ${err.message}`,
+            EC: -1,
+            DT: [],
+        });
+    }
+};
 
 
 
@@ -185,6 +145,6 @@ const createColorProduct = async (req, res) => {
 module.exports = {
     getAllColorProduct,
     createColorProduct,
-    // updateColorProduct,
-    // deleteColorProduct,
+    updateColorProduct,
+    deleteColorProduct,
 }

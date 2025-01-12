@@ -29,13 +29,12 @@ export const updateColorProduct = async (mamau, colorproduct) => {
     }
 };
 
-// export const deleteManufacturer = async (mamau) => {
-//     console.log("mamau", mamau)
-//     try {
-//         const response = await axiosInstance.delete(`${apiColorProduct}/${mamau}`);
-//         return response.data;
-//     } catch (error) {
-//         console.error(`Error deleting colorproduct with makhachhang ${mamau}:`, error);
-//         throw error;
-//     }
-// };
+export const deleteColorProduct = async (mamau) => {
+    try {
+        const response = await axiosInstance.delete(`${apiColorProduct}/${mamau}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Lỗi xóa sản phẩm có mamau = ${mamau}:`, error);
+        throw error;
+    }
+};
