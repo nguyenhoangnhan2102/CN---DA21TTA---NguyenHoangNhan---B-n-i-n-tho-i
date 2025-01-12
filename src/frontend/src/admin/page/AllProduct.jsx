@@ -229,7 +229,7 @@ const AllProduct = () => {
                                 Trước
                             </button>
                         </li>
-                        {[...Array(totalPagesInactiveProduct)].map((_, index) => (
+                        {[...Array(totalPages)].map((_, index) => (
                             <li
                                 key={index}
                                 className={`page-item ${currentActiveProductPage === index + 1 ? "active" : ""}`}

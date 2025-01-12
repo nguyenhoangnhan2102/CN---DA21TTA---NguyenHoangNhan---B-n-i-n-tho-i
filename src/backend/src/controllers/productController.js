@@ -17,10 +17,11 @@ const getAllProduct = async (req, res) => {
         LEFT JOIN
             MAUSACSANPHAM ms ON sp.masanpham = ms.masanpham
         WHERE
-            sp.trangthai = 0
+            sp.trangthai = 0 AND sp.soluongsanpham > 0
         GROUP BY
             sp.masanpham
         ORDER BY
+            sp.update_at DESC,
             sp.created_at DESC;
         `;
 
