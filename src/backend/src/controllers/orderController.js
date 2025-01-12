@@ -226,10 +226,82 @@ const updateOrders = async (req, res) => {
     }
 };
 
+const getAllOrdersByCustomer = async (req, res) => {
+    const { makhachhang } = req.params;
+
+    try {
+        // Truy vấn lấy thông tin đơn hàng
+        const [orders] = await connection.query(
+            `SELECT dh.madonhang, dh.ngaydat, dh.trangthaidonhang, dh.tongtien, dh.hotenkhachhang, dh.sdtkhachhang, dh.diachigiaohang,
+                    ctdh.masanpham, ctdh.mamau, ctdh.giatien, ctdh.soluong,
+                    sp.tensanpham, msp.tenmausanpham, msp.mausachinhanh
+             FROM DONHANG dh
+             LEFT JOIN CHITIETDONHANG ctdh ON dh.madonhang = ctdh.madonhang
+             LEFT JOIN SANPHAM sp ON ctdh.masanpham = sp.masanpham
+             LEFT JOIN MAUSACSANPHAM msp ON ctdh.mamau = msp.mamau
+             WHERE dh.makhachhang = ?`,
+            [makhachhang]
+        );
+
+        if (orders.length === 0) {
+            return res.status(404).json({
+                EM: "Không có đơn hàng nào được tìm thấy cho khách hàng này",
+                EC: 0,
+                DT: []
+            });
+        }
+
+        // Định dạng dữ liệu trả về
+        const formattedOrders = orders.reduce((acc, order) => {
+            const existingOrder = acc.find(o => o.madonhang === order.madonhang);
+
+            const orderItem = {
+                masanpham: order.masanpham,
+                tensanpham: order.tensanpham,
+                mamau: order.mamau,
+                tenmausanpham: order.tenmausanpham,
+                mausachinhanh: order.mausachinhanh,
+                giatien: order.giatien,
+                soluong: order.soluong
+            };
+
+            if (existingOrder) {
+                existingOrder.chitiet.push(orderItem);
+            } else {
+                acc.push({
+                    madonhang: order.madonhang,
+                    ngaydat: order.ngaydat,
+                    trangthaidonhang: order.trangthaidonhang,
+                    tongtien: order.tongtien,
+                    hotenkhachhang: order.hotenkhachhang,
+                    sdtkhachhang: order.sdtkhachhang,
+                    diachigiaohang: order.diachigiaohang,
+                    chitiet: [orderItem]
+                });
+            }
+
+            return acc;
+        }, []);
+
+        return res.status(200).json({
+            EM: "Lấy danh sách đơn hàng thành công",
+            EC: 1,
+            DT: formattedOrders
+        });
+    } catch (err) {
+        console.error("Lỗi khi lấy danh sách đơn hàng:", err);
+        return res.status(500).json({
+            EM: `Lỗi server: ${err.message}`,
+            EC: -1,
+            DT: []
+        });
+    }
+};
 
 module.exports = {
     getAllOrders,
     confirmOrder,
     updateOrders,
     getOrderDetails,
+    getAllOrdersByCustomer,
 }

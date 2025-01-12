@@ -5,6 +5,7 @@ const orderController = require("../controllers/orderController");
 
 router.get("/", orderController.getAllOrders);
 router.get("/:madonhang", orderController.getOrderDetails);
+router.get("/khachhang/:makhachhang", orderController.getAllOrdersByCustomer);
 router.post("/", orderController.confirmOrder);
 router.put("/:madonhang", orderController.updateOrders);
 

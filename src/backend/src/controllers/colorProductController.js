@@ -10,6 +10,7 @@ const getAllColorProduct = async (req, res) => {
             MAUSACSANPHAM.tenmausanpham,
             MAUSACSANPHAM.mausachinhanh,
             MAUSACSANPHAM.masanpham,
+            MAUSACSANPHAM.trangthaimau,
             SANPHAM.tensanpham,
             SANPHAM.hinhanhchinh
         FROM
@@ -18,6 +19,8 @@ const getAllColorProduct = async (req, res) => {
             SANPHAM
         ON
             MAUSACSANPHAM.masanpham = SANPHAM.masanpham
+        WHERE
+            MAUSACSANPHAM.trangthaimau = 0
         ORDER BY 
             MAUSACSANPHAM.created_at DESC
             `;

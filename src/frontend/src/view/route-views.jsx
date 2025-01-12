@@ -5,6 +5,7 @@ import Profile from "./component/Profile";
 import Cart from "./component/Cart";
 import Login from "./component/Login";
 import Register from "./component/Register";
+import Orders from "./component/Order";
 
 const RouterView = () => {
     const element = useRoutes([
@@ -31,6 +32,10 @@ const RouterView = () => {
         {
             path: "/register",
             element: <Register />,
+        },
+        {
+            path: "/orders",
+            element: <Orders />,
         },
         {
             path: "*",

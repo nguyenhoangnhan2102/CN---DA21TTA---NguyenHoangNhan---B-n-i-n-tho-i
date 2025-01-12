@@ -65,6 +65,9 @@ const Header = () => {
         } else if (option === "Profile") {
             navigate("/profile");
         }
+        else if (option === "Orders") {
+            navigate("/orders");
+        }
         handleClose();
     };
 
@@ -140,6 +143,9 @@ const Header = () => {
                         >
                             <MenuItem onClick={() => handleOptionClick("Profile")}>
                                 Thông tin
+                            </MenuItem>
+                            <MenuItem onClick={() => handleOptionClick("Orders")}>
+                                Đơn hàng
                             </MenuItem>
                             <MenuItem onClick={() => handleOptionClick("Logout")}>
                                 Đăng xuất
