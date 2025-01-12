@@ -141,7 +141,7 @@ function Cart() {
 
     console.log("cartItems", cartItems)
     return (
-        <div className="container py-5">
+        <div className="container py-2">
             <h2 className="text-center mb-4">Giỏ Hàng</h2>
             <div className="row">
                 {/* Phần thông tin sản phẩm */}
@@ -209,7 +209,7 @@ function Cart() {
                 </div>
 
                 {/* Phần thông tin người mua và tóm tắt */}
-                <div className="col-md-4">
+                <div className="col-md-4 info-user">
                     <div className="card p-3 shadow-sm mb-3">
                         <h4 className="text-center mb-3">Thông tin người mua</h4>
                         <form>
@@ -244,7 +244,7 @@ function Cart() {
                             />
                         </form>
                     </div>
-                    <div className="card p-3 shadow-sm">
+                    <div className="card p-3 shadow-sm checkout-button">
                         <h4 className="text-center mb-3">Tóm tắt đơn hàng</h4>
                         <p>
                             <strong>Số lượng sản phẩm:</strong> {totalQuantity}

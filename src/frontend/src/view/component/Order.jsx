@@ -156,13 +156,78 @@ const Orders = () => {
                         <Modal.Title>Chi tiết đơn hàng{selectedOrder.madonhang}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p><strong>Họ tên khách hàng:</strong> {selectedOrder.hotenkhachhang}</p>
-                        <p><strong>Địa chỉ giao hàng:</strong> {selectedOrder.diachigiaohang}</p>
-                        <p><strong>Ngày đặt:</strong> {moment(selectedOrder.ngaydat).format("HH:mm:ss DD/MM/YYYY")}</p>
-                        <p><strong>Tổng tiền:</strong> {selectedOrder.tongtien}đ</p>
-                        <p><strong>Trạng thái:</strong> {selectedOrder.trangthaidonhang === 0 ? "Đang giao hàng" : selectedOrder.trangthaidonhang === 1 ? "Đã giao" : "Hủy"}</p>
-                        <hr />
-                        <h5>Danh sách sản phẩm</h5>
+                        <FormControl fullWidth margin="normal">
+                            <TextField
+                                madonhang="product-text-field"
+                                value={selectedOrder.hotenkhachhang}
+                                label="Họ tên"
+                                sx={{
+                                    '& .MuiInputBase-input': {
+                                        height: '10px',
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                            <TextField
+                                madonhang="product-text-field"
+                                value={selectedOrder.sdtkhachhang}
+                                label="Số điện thoại"
+                                sx={{
+                                    '& .MuiInputBase-input': {
+                                        height: '10px',
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                            <TextField
+                                madonhang="product-text-field"
+                                value={selectedOrder.diachigiaohang}
+                                label="Địa chỉ giao hàng"
+                                sx={{
+                                    '& .MuiInputBase-input': {
+                                        height: '10px',
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                            <TextField
+                                madonhang="product-text-field"
+                                value={moment(selectedOrder.ngaydat).format("HH:mm:ss DD/MM/YYYY")}
+                                label="Ngày đặt"
+                                sx={{
+                                    '& .MuiInputBase-input': {
+                                        height: '10px',
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                            <TextField
+                                madonhang="product-text-field"
+                                value={new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(selectedOrder.tongtien)}
+                                label="Tổng tiền"
+                                sx={{
+                                    '& .MuiInputBase-input': {
+                                        height: '10px',
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                            <TextField
+                                madonhang="product-text-field"
+                                value={selectedOrder.trangthaidonhang === 0 ? "Đang giao hàng" : selectedOrder.trangthaidonhang === 1 ? "Đã giao" : "Hủy"}
+                                label="Trạng thái"
+                                sx={{
+                                    '& .MuiInputBase-input': {
+                                        height: '10px',
+                                    },
+                                }}
+                            />
+                        </FormControl>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }} className="table table-hover">
                             <thead>
                                 <tr>
@@ -221,11 +286,6 @@ const Orders = () => {
                             </tbody>
                         </table>
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
-                            Đóng
-                        </Button>
-                    </Modal.Footer>
                 </Modal>
             )}
         </div>
