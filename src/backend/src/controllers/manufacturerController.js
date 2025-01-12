@@ -55,30 +55,38 @@ const getAllManufacturer = async (req, res) => {
 
 
 const createManufacture = async (req, res) => {
-    const {
-        tenthuonghieu,
-        trangthaithuonghieu,
-    } = req.body;
+    const { tenthuonghieu, trangthaithuonghieu } = req.body;
 
     try {
-        const result = await connection.query
-            (
-                `INSERT INTO THUONGHIEU (tenthuonghieu, trangthaithuonghieu) VALUES(?, trangthaithuonghieu) `,
-                [tenthuonghieu, trangthaithuonghieu]
-            );
-        // res.status(201).json({ message: "Product created", masanpham: result[0].insertId });
+        // Kiểm tra xem thương hiệu đã tồn tại chưa
+        const [existingManufacturer] = await connection.query(
+            `SELECT * FROM THUONGHIEU WHERE tenthuonghieu = ?`,
+            [tenthuonghieu]
+        );
+
+        if (existingManufacturer.length > 0) {
+            return res.status(400).json({ message: "Tên thương hiệu đã tồn tại" });
+        }
+
+        // Thêm mới thương hiệu nếu chưa tồn tại
+        const [result] = await connection.query(
+            `INSERT INTO THUONGHIEU (tenthuonghieu, trangthaithuonghieu) VALUES (?, ?)`,
+            [tenthuonghieu, trangthaithuonghieu]
+        );
+
         return res.status(201).json({
-            message: 'Thương hiệu đã được tạo thành công',
+            message: "Thương hiệu đã được tạo thành công",
             manufacturer: {
-                mathuonghieu: result[0].insertId,
+                mathuonghieu: result.insertId,
                 tenthuonghieu,
-            }
+            },
         });
     } catch (err) {
         console.error("Error creating manufacturer:", err.message);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "Lỗi trong quá trình tạo thương hiệu" });
     }
-}
+};
+
 
 const updateManufacture = async (req, res) => {
     const { mathuonghieu } = req.params;

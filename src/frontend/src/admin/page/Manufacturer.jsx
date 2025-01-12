@@ -23,7 +23,7 @@ const Manufacturer = () => {
 
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
     const [searchTerm, setSearchTerm] = useState(""); // State cho từ khóa tìm kiếm
-    const manufacturersPerPage = 5; // Số phim hiển thị mỗi trang
+    const manufacturersPerPage = 10; // Số phim hiển thị mỗi trang
 
     useEffect(() => {
         getAllManufacturerData();
@@ -55,27 +55,31 @@ const Manufacturer = () => {
 
     const handleSave = async (manufacturer) => {
         try {
-
             const manufacturerData = {
                 ...manufacturer,
             };
 
             if (selectedManufacturer) {
-                await updateManufacturer(selectedManufacturer.mathuonghieu, manufacturerData); // Gọi API cập nhật
-                toast.success("Cập nhật thành công!!!")
-
+                await updateManufacturer(selectedManufacturer.mathuonghieu, manufacturerData);
+                toast.success("Cập nhật thành công!!!");
             } else {
-                await createManufacturer(manufacturerData); // Gọi API tạo mới
-                toast.success("Tạo mới thành công!!!")
+                await createManufacturer(manufacturerData);
+                toast.success("Tạo mới thành công!!!");
             }
 
             setSelectedManufacturer(null);
             setOpenModal(false);
-            getAllManufacturerData(); // Lấy lại danh sách 
+            getAllManufacturerData();
         } catch (error) {
-            console.error("Error saving hotel:", error);
+            if (error.response && error.response.status === 400) {
+                toast.error(error.response.data.message);
+            } else {
+                console.error("Error saving manufacturer:", error);
+                toast.error("Có lỗi xảy ra!");
+            }
         }
     };
+
 
     const openModalDelete = (manufacturer) => {
         checkDelete(true);

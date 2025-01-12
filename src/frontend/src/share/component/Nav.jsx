@@ -1,7 +1,7 @@
 import { Container, Form, Nav, Navbar } from 'react-bootstrap/';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MdOutlineSmartphone } from "react-icons/md";
-import { Avatar, Menu, MenuItem, Button } from "@mui/material";
+import { Avatar, Menu, MenuItem } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import { useEffect, useState } from 'react';
@@ -38,7 +38,6 @@ const Header = () => {
     const fetchProfileUser = async () => {
         try {
             const token = Cookies.get("accessToken");
-
             if (token) {
                 const decodedToken = jwtDecode(token);
                 const response = await axiosInstance.post(`${userURL}/profile`, { makhachhang: decodedToken.makhachhang });
@@ -51,22 +50,21 @@ const Header = () => {
                 navigate("/login");
             }
         } catch (err) {
-            console.log(err.message); // Lưu thông báo lỗi vào trạng thái
-        } finally {
+            console.log(err.message);
         }
     };
 
     const handleOptionClick = (option) => {
         if (option === "Logout") {
-            // Xóa cookie khi đăng xuất
             Cookies.remove("accessToken", { path: "", expires: 1 });
-            logoutIs();  // Cập nhật trạng thái đăng nhập
-            navigate("/login");  // Chuyển hướng tới trang đăng nhập
+            logoutIs();
+            navigate("/login");
         } else if (option === "Profile") {
             navigate("/profile");
-        }
-        else if (option === "Orders") {
+        } else if (option === "Orders") {
             navigate("/orders");
+        } else if (option === "AdminManagement") {
+            navigate("/admin");
         }
         handleClose();
     };
@@ -119,12 +117,33 @@ const Header = () => {
                                                     </span>
                                                 </p>
                                             </li>
+                                            <Menu
+                                                anchorEl={anchorEl}
+                                                open={Boolean(anchorEl)}
+                                                onClose={handleClose}
+                                                style={{ marginLeft: '0', marginTop: '10px' }}
+                                            >
+                                                <MenuItem onClick={() => handleOptionClick("Profile")}>
+                                                    Thông tin
+                                                </MenuItem>
+                                                <MenuItem onClick={() => handleOptionClick("Orders")}>
+                                                    Đơn hàng
+                                                </MenuItem>
+                                                {UserData.role === 1 && (
+                                                    <MenuItem onClick={() => handleOptionClick("AdminManagement")}>
+                                                        Quản lý admin
+                                                    </MenuItem>
+                                                )}
+                                                <MenuItem onClick={() => handleOptionClick("Logout")}>
+                                                    Đăng xuất
+                                                </MenuItem>
+                                            </Menu>
                                         </>
                                     ) : (
                                         <>
-
                                         </>
-                                    )}</>
+                                    )}
+                                </>
                             ) : (
                                 <>
                                     <div className="nav navbar-right col-3 w-75">
@@ -134,27 +153,10 @@ const Header = () => {
                             )}
                         </Form>
                     </Navbar.Collapse>
-                    <div>
-                        <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                            style={{ marginLeft: '0', marginTop: '10px' }}
-                        >
-                            <MenuItem onClick={() => handleOptionClick("Profile")}>
-                                Thông tin
-                            </MenuItem>
-                            <MenuItem onClick={() => handleOptionClick("Orders")}>
-                                Đơn hàng
-                            </MenuItem>
-                            <MenuItem onClick={() => handleOptionClick("Logout")}>
-                                Đăng xuất
-                            </MenuItem>
-                        </Menu>
-                    </div>
                 </Container>
             </Navbar >
         </>
     );
-}
+};
+
 export default Header;

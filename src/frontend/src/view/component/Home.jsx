@@ -4,6 +4,7 @@ import "../style/Home.scss";
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../../service/productService";
 import { getAllManufacturer } from "../../service/manufacturerService";
+
 const imgURL = process.env.REACT_APP_IMG_URL;
 
 const Home = () => {
@@ -11,6 +12,7 @@ const Home = () => {
     const [manufacturers, setListManufacturer] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedManufacturer, setSelectedManufacturer] = useState("");
+    const [selectedPriceRange, setSelectedPriceRange] = useState("");
     const [visibleCount, setVisibleCount] = useState(8); // Số lượng sản phẩm hiển thị ban đầu
 
     useEffect(() => {
@@ -35,7 +37,7 @@ const Home = () => {
         try {
             const response = await getAllManufacturer();
             if (response.EC === 1) {
-                setListManufacturer(response.DT.activeManufacturer);
+                setListManufacturer(response.DT.allManufacturer);
             } else {
                 console.error("Failed to fetch");
             }
@@ -48,10 +50,22 @@ const Home = () => {
         const matchesCategory = selectedManufacturer
             ? item.tenthuonghieu === selectedManufacturer
             : true;
+
         const matchesSearch = item.tensanpham
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearch;
+
+        const matchesPrice = (() => {
+            if (selectedPriceRange === "under5") return item.giasanpham < 5000000;
+            if (selectedPriceRange === "5to10")
+                return item.giasanpham >= 5000000 && item.giasanpham <= 10000000;
+            if (selectedPriceRange === "10to15")
+                return item.giasanpham > 10000000 && item.giasanpham <= 15000000;
+            if (selectedPriceRange === "above15") return item.giasanpham > 15000000;
+            return true;
+        })();
+
+        return matchesCategory && matchesSearch && matchesPrice;
     });
 
     const handleShowMore = () => {
@@ -79,13 +93,26 @@ const Home = () => {
                             onChange={(e) => setSelectedManufacturer(e.target.value)}
                             className="form-select"
                         >
-                            <option value="">Thương hiệu</option>
+                            <option value="">Tất cả thương hiệu</option>
                             {manufacturers &&
                                 manufacturers.map((manu, index) => (
                                     <option key={index} value={manu.tenthuonghieu}>
                                         {manu.tenthuonghieu}
                                     </option>
                                 ))}
+                        </select>
+                    </div>
+                    <div className="col-2 mt-4 ms-3">
+                        <select
+                            value={selectedPriceRange}
+                            onChange={(e) => setSelectedPriceRange(e.target.value)}
+                            className="form-select"
+                        >
+                            <option value="">Tất cả giá</option>
+                            <option value="under5">Dưới 5 triệu</option>
+                            <option value="5to10">5 - 10 triệu</option>
+                            <option value="10to15">10 - 15 triệu</option>
+                            <option value="above15">Trên 15 triệu</option>
                         </select>
                     </div>
                 </div>
@@ -107,10 +134,10 @@ const Home = () => {
                                     <label className="product-name mt-2"
                                         style={{
                                             padding: '8px',
-                                            maxWidth: '200px', // Điều chỉnh chiều rộng của cột
-                                            whiteSpace: 'nowrap', // Ngăn chặn tên sản phẩm xuống dòng
-                                            overflow: 'hidden', // Ẩn phần thừa
-                                            textOverflow: 'ellipsis', // Thêm dấu "..."
+                                            maxWidth: '200px',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
                                             cursor: 'pointer'
                                         }}
                                     >{product.tensanpham}</label>
@@ -133,7 +160,7 @@ const Home = () => {
                     <div className="text-center">
                         <div
                             className="pb-4"
-                            style={{ fontSize: '18px' }}
+                            style={{ fontSize: '18px', cursor: 'pointer' }}
                             onClick={handleShowMore}
                         >
                             Xem thêm

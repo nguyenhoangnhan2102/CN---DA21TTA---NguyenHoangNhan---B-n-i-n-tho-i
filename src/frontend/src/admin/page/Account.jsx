@@ -6,7 +6,7 @@ const Accounts = () => {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const usersPerPage = 5;
+    const usersPerPage = 10;
 
     useEffect(() => {
         getAllUsersList();
