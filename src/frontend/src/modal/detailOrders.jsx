@@ -105,6 +105,18 @@ const OrderDetails = ({ open, onClose, order }) => {
                             }}
                         />
                     </FormControl>
+                    <FormControl fullWidth margin="normal">
+                        <TextField
+                            madonhang="product-text-field"
+                            value={order.trangthaidonhang === 0 ? "Đang giao hàng" : order.trangthaidonhang === 1 ? "Đã giao" : "Hủy"}
+                            label="Trạng thái"
+                            sx={{
+                                '& .MuiInputBase-input': {
+                                    height: '10px',
+                                },
+                            }}
+                        />
+                    </FormControl>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }} className="table table-hover">
                         <thead>
                             <tr>
