@@ -11,7 +11,7 @@ const Home = () => {
     const [manufacturers, setListManufacturer] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedManufacturer, setSelectedManufacturer] = useState("");
-    const [visibleCount, setVisibleCount] = useState(10); // Số lượng sản phẩm hiển thị ban đầu
+    const [visibleCount, setVisibleCount] = useState(8); // Số lượng sản phẩm hiển thị ban đầu
 
     useEffect(() => {
         fetchListProduct();

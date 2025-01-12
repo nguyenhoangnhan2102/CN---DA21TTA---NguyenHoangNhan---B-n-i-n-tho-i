@@ -50,6 +50,13 @@ export default function Profile() {
     };
 
     const handleSubmit = async () => {
+        // Kiểm tra số điện thoại
+        const phoneRegex = /^[0-9]{10}$/; // Regex kiểm tra số điện thoại chỉ chứa 10 chữ số
+        if (!phoneRegex.test(sodienthoai)) {
+            toast.error("Số điện thoại phải là số và chứa đúng 10 ký tự.");
+            return;
+        }
+
         try {
             const response = await axiosInstance.put(`${apiUrl}/update/${userInfo.makhachhang}`, {
                 hoten,
