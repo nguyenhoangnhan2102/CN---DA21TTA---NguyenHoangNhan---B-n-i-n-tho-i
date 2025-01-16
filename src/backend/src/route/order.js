@@ -9,5 +9,4 @@ router.get("/khachhang/:makhachhang", orderController.getAllOrdersByCustomer);
 router.post("/", orderController.confirmOrder);
 router.put("/:madonhang", orderController.updateOrders);
 
-
 module.exports = router;

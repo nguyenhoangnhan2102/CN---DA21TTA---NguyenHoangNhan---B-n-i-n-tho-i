@@ -143,7 +143,7 @@ const Order = () => {
                         {currentOrders.length > 0 ? (
                             currentOrders.map((order, index) => (
                                 <tr
-                                    key={order.mahoadon}
+                                    key={order.madonhang}
                                 // className={order.trangthaidonhang === 2 ? "disabled-row" : ""}
                                 >
                                     <td>{(currentPage - 1) * ordersPerPage + index + 1}</td>
