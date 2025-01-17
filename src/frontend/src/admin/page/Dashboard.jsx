@@ -22,7 +22,7 @@ const Dashboard = () => {
         <>
             <div className="sidebar">
                 <Link to={`/`} style={{ textDecoration: 'none' }}>
-                    <h2 className="text-white"><b>SHOPPHONE</b></h2>
+                    <h2 className="text-white"><b>PHONESHOPE</b></h2>
                 </Link>
                 <hr />
                 <ul>
